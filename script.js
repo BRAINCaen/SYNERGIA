@@ -4,8 +4,8 @@ const firebaseConfig = {
   authDomain: "synergia-app.firebaseapp.com",
   projectId: "synergia-app",
   storageBucket: "synergia-app.appspot.com",
-  messagingSenderId: "VOTRE_MESSAGING_ID",
-  appId: "VOTRE_APP_ID"
+  messagingSenderId: "201912738922",
+  appId: "f27e7"
 };
 
 // Initialiser Firebase
