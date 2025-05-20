@@ -1,332 +1,361 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SYNERGIA - Plateforme de Gestion Gamifiée</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNERGIA - Transformez votre travail d'équipe en aventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Page de Connexion/Inscription -->
-  <div id="login-page" class="page active">
-    <div class="login-container">
-      <div class="login-header">
-        <div class="logo">
-          <i class="fas fa-sync-alt"></i>
-          <h1>SYNERGIA</h1>
-        </div>
-        <p class="tagline">Transformez votre travail d'équipe en aventure</p>
-      </div>
-      
-      <div class="login-tabs">
-        <button class="tab-button active" data-tab="login-form">Connexion</button>
-        <button class="tab-button" data-tab="register-form">Inscription</button>
-      </div>
-      
-      <div id="login-form" class="form-container active">
-        <div class="input-group">
-          <label for="login-email">Email</label>
-          <input type="email" id="login-email" placeholder="votre@email.com">
-        </div>
-        <div class="input-group">
-          <label for="login-password">Mot de passe</label>
-          <input type="password" id="login-password" placeholder="Votre mot de passe">
-        </div>
-        <button id="login-button" class="btn-primary">Se connecter</button>
-        <div class="form-footer">
-          <p>Version de démonstration:<br>
-          Utilisateur: user@synergia.fr / user123<br>
-          Admin: admin@synergia.fr / admin123</p>
-        </div>
-      </div>
-      
-      <div id="register-form" class="form-container">
-        <div class="input-group">
-          <label for="register-name">Nom complet</label>
-          <input type="text" id="register-name" placeholder="Votre nom et prénom">
-        </div>
-        <div class="input-group">
-          <label for="register-email">Email</label>
-          <input type="email" id="register-email" placeholder="votre@email.com">
-        </div>
-        <div class="input-group">
-          <label for="register-password">Mot de passe</label>
-          <input type="password" id="register-password" placeholder="Créez un mot de passe">
-        </div>
-        <button id="register-button" class="btn-primary">Créer un compte</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Application principale -->
-  <div id="app" class="page">
-    <!-- Navigation -->
-    <nav class="main-nav">
-      <div class="nav-container">
-        <div class="logo">
-          <i class="fas fa-sync-alt"></i>
-          <span>SYNERGIA</span>
-        </div>
-        
-        <div class="nav-links">
-          <a href="#" class="nav-link active" data-page="dashboard">
-            <i class="fas fa-home"></i>
-            <span>Tableau de Bord</span>
-          </a>
-          <a href="#" class="nav-link" data-page="quests">
-            <i class="fas fa-tasks"></i>
-            <span>Quêtes</span>
-          </a>
-          <a href="#" class="nav-link" data-page="badges">
-            <i class="fas fa-medal"></i>
-            <span>Badges</span>
-          </a>
-          <a href="#" class="nav-link" data-page="planning">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Planning</span>
-          </a>
-          <a href="#" class="nav-link admin-only" data-page="admin">
-            <i class="fas fa-cog"></i>
-            <span>Administration</span>
-          </a>
-        </div>
-        
-        <div class="user-menu">
-          <div class="user-profile" id="user-profile-toggle">
-            <div class="avatar">
-              <img id="nav-avatar" src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
+    <!-- PAGE DE CONNEXION -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>SYNERGIA</h1>
+                <p>Transformez votre travail d'équipe en aventure</p>
             </div>
-            <div class="user-info">
-              <span id="nav-user-name">Utilisateur</span>
-              <span id="nav-user-level">Niveau 1</span>
+            
+            <form class="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Votre email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Mot de passe</label>
+                    <input type="password" id="login-password" placeholder="Votre mot de passe" required>
+                </div>
+                
+                <button id="login-button" type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Vous n'avez pas de compte ? <a href="#" id="signup-link">Créer un compte</a></p>
             </div>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-          
-          <div class="dropdown-menu" id="user-dropdown">
-            <a href="#" class="dropdown-item" data-page="profile">
-              <i class="fas fa-user"></i>
-              <span>Mon Profil</span>
-            </a>
-            <a href="#" class="dropdown-item" data-page="settings">
-              <i class="fas fa-cog"></i>
-              <span>Paramètres</span>
-            </a>
-            <a href="#" class="dropdown-item" id="logout-button">
-              <i class="fas fa-sign-out-alt"></i>
-              <span>Déconnexion</span>
-            </a>
-          </div>
         </div>
-        
-        <div class="hamburger-menu">
-          <i class="fas fa-bars"></i>
-        </div>
-      </div>
-    </nav>
-    
-    <!-- Menu mobile -->
-    <div class="mobile-menu">
-      <a href="#" class="mobile-nav-link" data-page="dashboard">
-        <i class="fas fa-home"></i>
-        <span>Tableau de Bord</span>
-      </a>
-      <a href="#" class="mobile-nav-link" data-page="quests">
-        <i class="fas fa-tasks"></i>
-        <span>Quêtes</span>
-      </a>
-      <a href="#" class="mobile-nav-link" data-page="badges">
-        <i class="fas fa-medal"></i>
-        <span>Badges</span>
-      </a>
-      <a href="#" class="mobile-nav-link" data-page="planning">
-        <i class="fas fa-calendar-alt"></i>
-        <span>Planning</span>
-      </a>
-      <a href="#" class="mobile-nav-link admin-only" data-page="admin">
-        <i class="fas fa-cog"></i>
-        <span>Administration</span>
-      </a>
-      <a href="#" class="mobile-nav-link" data-page="profile">
-        <i class="fas fa-user"></i>
-        <span>Mon Profil</span>
-      </a>
-      <a href="#" class="mobile-nav-link" id="mobile-logout">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Déconnexion</span>
-      </a>
     </div>
     
-    <!-- Contenu Principal -->
-    <main id="main-content">
-      <!-- Dashboard -->
-      <div id="dashboard" class="content-page active">
-        <div class="page-header">
-          <h1>Tableau de Bord</h1>
-          <div class="xp-display">
-            <div class="xp-info">
-              <span id="current-level">Niveau 1</span>
-              <span id="xp-counter">50/100 XP</span>
+    <!-- APPLICATION PRINCIPALE -->
+    <div id="app" class="page hidden">
+        <!-- BARRE LATÉRALE -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>SYNERGIA</h1>
             </div>
-            <div class="xp-bar">
-              <div class="xp-progress" style="width: 50%;"></div>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    <img src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
+                </div>
+                <div class="user-info">
+                    <div class="user-name">Utilisateur</div>
+                    <div class="user-level">Niveau 1</div>
+                </div>
             </div>
-          </div>
-        </div>
+            
+            <nav class="main-menu">
+                <ul>
+                    <li><a href="#" class="menu-link active" data-target="dashboard-page"><i class="fas fa-home"></i> Tableau de Bord</a></li>
+                    <li><a href="#" class="menu-link" data-target="stats-page"><i class="fas fa-chart-line"></i> Statistiques</a></li>
+                    <li><a href="#" class="menu-link" data-target="alter-ego-page"><i class="fas fa-user-astronaut"></i> Mon Alter Ego</a></li>
+                    <li><a href="#" class="menu-link" data-target="quests-page"><i class="fas fa-tasks"></i> Quêtes</a></li>
+                    <li><a href="#" class="menu-link" data-target="team-page"><i class="fas fa-users"></i> Équipe</a></li>
+                    <li><a href="#" class="menu-link" data-target="badges-page"><i class="fas fa-award"></i> Badges</a></li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logout-button" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+            </div>
+        </aside>
         
-        <div class="dashboard-grid">
-          <!-- Statistiques -->
-          <div class="dashboard-card stats-card">
-            <div class="card-header">
-              <h2><i class="fas fa-chart-line"></i> Statistiques</h2>
-            </div>
-            <div class="card-content">
-              <div class="stat-item">
-                <i class="fas fa-tasks"></i>
-                <div class="stat-info">
-                  <span class="stat-label">Quêtes complétées</span>
-                  <span class="stat-value" id="completed-quests">3</span>
-                </div>
-              </div>
-              <div class="stat-item">
-                <i class="fas fa-medal"></i>
-                <div class="stat-info">
-                  <span class="stat-label">Badges obtenus</span>
-                  <span class="stat-value" id="earned-badges">2</span>
-                </div>
-              </div>
-              <div class="stat-item">
-                <i class="fas fa-star"></i>
-                <div class="stat-info">
-                  <span class="stat-label">Points de compétence</span>
-                  <span class="stat-value" id="skill-points">15</span>
-                </div>
-              </div>
-              <div class="stat-item">
-                <i class="fas fa-users"></i>
-                <div class="stat-info">
-                  <span class="stat-label">Position d'équipe</span>
-                  <span class="stat-value" id="team-rank">4/12</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Alter ego -->
-          <div class="dashboard-card alter-ego-card">
-            <div class="card-header">
-              <h2><i class="fas fa-user-astronaut"></i> Mon Alter Ego</h2>
-            </div>
-            <div class="card-content">
-              <div class="alter-ego-summary">
-                <div class="alter-ego-avatar">
-                  <img id="dashboard-avatar" src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
-                </div>
-                <div class="alter-ego-info">
-                  <h3 id="alter-ego-name">Nom de l'Alter Ego</h3>
-                  <div class="skill-tags">
-                    <span class="skill-tag">Technique</span>
-                    <span class="skill-tag">Communication</span>
-                    <span class="skill-tag">Créativité</span>
-                  </div>
-                </div>
-              </div>
-              <div class="alter-ego-actions">
-                <button class="btn-secondary" data-page="profile">
-                  <i class="fas fa-pen"></i> Modifier
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Quêtes en cours -->
-          <div class="dashboard-card quests-card">
-            <div class="card-header">
-              <h2><i class="fas fa-tasks"></i> Quêtes en cours</h2>
-              <a href="#" class="link-more" data-page="quests">Voir tout</a>
-            </div>
-            <div class="card-content">
-              <div class="quest-list" id="active-quests-list">
-                <div class="quest-item">
-                  <div class="quest-info">
-                    <h4>Optimiser le processus de communication</h4>
-                    <div class="progress-bar">
-                      <div class="progress" style="width: 75%"></div>
+        <!-- CONTENU PRINCIPAL -->
+        <main class="main-content">
+            <!-- PAGE TABLEAU DE BORD -->
+            <div id="dashboard-page" class="content-page active">
+                <header class="page-header">
+                    <h2>Tableau de Bord</h2>
+                </header>
+                
+                <div class="dashboard-grid">
+                    <!-- Résumé des statistiques -->
+                    <div class="dashboard-card stats-card">
+                        <h3>Statistiques</h3>
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Quêtes complétées</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Badges obtenus</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">15</div>
+                                <div class="stat-label">Points de compétence</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">4/12</div>
+                                <div class="stat-label">Position d'équipe</div>
+                            </div>
+                        </div>
                     </div>
-                    <span class="progress-text">75% - Étape 3/4</span>
-                  </div>
-                  <div class="quest-actions">
-                    <button class="btn-small">Continuer</button>
-                  </div>
-                </div>
-                <div class="quest-item">
-                  <div class="quest-info">
-                    <h4>Préparer la réunion mensuelle</h4>
-                    <div class="progress-bar">
-                      <div class="progress" style="width: 30%"></div>
+                    
+                    <!-- Alter Ego -->
+                    <div class="dashboard-card alter-ego-card">
+                        <h3>Mon Alter Ego</h3>
+                        <div class="alter-ego-preview">
+                            <div class="avatar large">
+                                <img src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
+                            </div>
+                            <h4 class="alter-ego-name">Nom de l'Alter Ego</h4>
+                            <div class="skills-container">
+                                <div class="skill-item">
+                                    <div class="skill-label">Technique</div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item">
+                                    <div class="skill-label">Communication</div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="skill-item">
+                                    <div class="skill-label">Créativité</div>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <span class="progress-text">30% - Étape 1/3</span>
-                  </div>
-                  <div class="quest-actions">
-                    <button class="btn-small">Continuer</button>
-                  </div>
+                    
+                    <!-- Quêtes en cours -->
+                    <div class="dashboard-card quests-card">
+                        <div class="card-header">
+                            <h3>Quêtes en cours</h3>
+                            <a href="#" class="card-link" data-target="quests-page">Voir tout</a>
+                        </div>
+                        <div class="quests-container">
+                            <div class="quest-item">
+                                <h4>Optimiser le processus de communication</h4>
+                                <div class="quest-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%"></div>
+                                    </div>
+                                    <div class="progress-text">75% - Étape 3/4</div>
+                                </div>
+                            </div>
+                            <div class="quest-item">
+                                <h4>Préparer la réunion mensuelle</h4>
+                                <div class="quest-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 30%"></div>
+                                    </div>
+                                    <div class="progress-text">30% - Étape 1/3</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="no-quests-message hidden">
+                            <p>Vous n'avez pas de quêtes en cours. Commencez-en une !</p>
+                            <button class="btn btn-primary">Nouvelle quête</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Activité de l'équipe -->
+                    <div class="dashboard-card team-activity-card">
+                        <h3>Activité de l'Équipe</h3>
+                        <div class="activity-feed">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">
+                                        <span class="username">Sophie Martin</span> a terminé la quête <span class="highlight">Formation des nouveaux</span>
+                                    </div>
+                                    <div class="activity-time">Il y a 2 heures</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">
+                                        <span class="username">Thomas Bernard</span> a obtenu le badge <span class="highlight">Expert en Communication</span>
+                                    </div>
+                                    <div class="activity-time">Il y a 3 heures</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">
+                                        <span class="username">Julie Dupont</span> a commencé la quête <span class="highlight">Création du planning</span>
+                                    </div>
+                                    <div class="activity-time">Il y a 5 heures</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="empty-state hidden">
-                <i class="fas fa-scroll"></i>
-                <p>Vous n'avez pas de quêtes en cours.<br>Commencez-en une !</p>
-                <button class="btn-secondary" data-page="quests">Trouver une quête</button>
-              </div>
             </div>
-          </div>
-          
-          <!-- Activité de l'équipe -->
-          <div class="dashboard-card activity-card">
-            <div class="card-header">
-              <h2><i class="fas fa-users"></i> Activité de l'Équipe</h2>
+            
+            <!-- PAGE STATISTIQUES -->
+            <div id="stats-page" class="content-page">
+                <header class="page-header">
+                    <h2>Statistiques</h2>
+                </header>
+                
+                <div class="stats-grid">
+                    <!-- Contenu détaillé des statistiques ici -->
+                    <div class="stats-card">
+                        <h3>Progression globale</h3>
+                        <div class="stats-container">
+                            <!-- Contenu des statistiques -->
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-content">
-              <div class="activity-feed" id="team-activity-feed">
-                <div class="activity-item">
-                  <div class="activity-avatar">
-                    <img src="https://placehold.co/150/green/white?text=S" alt="User avatar">
-                  </div>
-                  <div class="activity-content">
-                    <p><strong>Sophie Martin</strong> a terminé la quête <a href="#">Formation des nouveaux</a></p>
-                    <span class="activity-time">Il y a 2 heures</span>
-                  </div>
+            
+            <!-- PAGE ALTER EGO -->
+            <div id="alter-ego-page" class="content-page">
+                <header class="page-header">
+                    <h2>Mon Alter Ego</h2>
+                </header>
+                
+                <div class="alter-ego-content">
+                    <div class="alter-ego-preview large">
+                        <div class="avatar x-large">
+                            <img src="https://placehold.co/300/blue/white?text=User" alt="Avatar">
+                        </div>
+                        <h3 class="alter-ego-name">Nom de l'Alter Ego</h3>
+                        
+                        <div class="skills-container large">
+                            <div class="skill-item">
+                                <div class="skill-label">Technique</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 60%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-label">Communication</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-label">Créativité</div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alter-ego-customization">
+                        <h3>Personnalisation</h3>
+                        <!-- Formulaire de personnalisation ici -->
+                    </div>
                 </div>
-                <div class="activity-item">
-                  <div class="activity-avatar">
-                    <img src="https://placehold.co/150/red/white?text=T" alt="User avatar">
-                  </div>
-                  <div class="activity-content">
-                    <p><strong>Thomas Bernard</strong> a obtenu le badge <a href="#">Expert en Communication</a></p>
-                    <span class="activity-time">Il y a 3 heures</span>
-                  </div>
-                </div>
-                <div class="activity-item">
-                  <div class="activity-avatar">
-                    <img src="https://placehold.co/150/purple/white?text=J" alt="User avatar">
-                  </div>
-                  <div class="activity-content">
-                    <p><strong>Julie Dupont</strong> a commencé la quête <a href="#">Création du planning</a></p>
-                    <span class="activity-time">Il y a 5 heures</span>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Autres pages -->
-      <!-- Profile Page, Quests Page, etc... -->
-    </main>
-  </div>
+            
+            <!-- PAGE QUÊTES -->
+            <div id="quests-page" class="content-page">
+                <header class="page-header">
+                    <h2>Quêtes</h2>
+                </header>
+                
+                <div class="quests-tabs">
+                    <button class="tab-button active" data-tab="active-quests">En cours</button>
+                    <button class="tab-button" data-tab="available-quests">Disponibles</button>
+                    <button class="tab-button" data-tab="completed-quests">Complétées</button>
+                </div>
+                
+                <div class="quests-content">
+                    <div id="active-quests" class="tab-content active">
+                        <div class="quests-container">
+                            <!-- Quêtes actives ici -->
+                        </div>
+                        <div class="no-quests-message hidden">
+                            <p>Vous n'avez pas de quêtes en cours. Commencez-en une !</p>
+                            <button class="btn btn-primary">Nouvelle quête</button>
+                        </div>
+                    </div>
+                    
+                    <div id="available-quests" class="tab-content">
+                        <!-- Quêtes disponibles ici -->
+                    </div>
+                    
+                    <div id="completed-quests" class="tab-content">
+                        <!-- Quêtes complétées ici -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PAGE ÉQUIPE -->
+            <div id="team-page" class="content-page">
+                <header class="page-header">
+                    <h2>Équipe</h2>
+                </header>
+                
+                <div class="team-content">
+                    <!-- Contenu équipe ici -->
+                </div>
+            </div>
+            
+            <!-- PAGE BADGES -->
+            <div id="badges-page" class="content-page">
+                <header class="page-header">
+                    <h2>Badges</h2>
+                </header>
+                
+                <div class="badges-grid">
+                    <!-- Contenu badges ici -->
+                </div>
+            </div>
+        </main>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- Scripts Firebase -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Configuration Firebase fournie
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
+            authDomain: "synergia-app-f27e7.firebaseapp.com",
+            projectId: "synergia-app-f27e7",
+            storageBucket: "synergia-app-f27e7.firebasestorage.app",
+            messagingSenderId: "201912738922",
+            appId: "1:201912738922:web:96a9f0a6ffadf9cf899613",
+            measurementId: "G-S5WPV574KJ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Exposez Firebase pour le fichier script.js
+        window.firebaseApp = app;
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+    </script>
+
+    <!-- Votre script principal -->
+    <script src="script.js"></script>
 </body>
 </html>
