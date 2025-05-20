@@ -1,130 +1,53 @@
-// Configuration Firebase - À REMPLACER par vos propres informations
-const firebaseConfig = {
-  apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
-  authDomain: "synergia-app.firebaseapp.com",
-  projectId: "synergia-app",
-  storageBucket: "synergia-app.appspot.com",
-  messagingSenderId: "201912738922",
-  appId: "f27e7"
-};
-
-// Initialiser Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Références aux services Firebase
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// Données de l'application
-const appData = {
-  currentUser: null
-};
-
-// Sélections DOM fréquentes
-const loginPage = document.getElementById('login-page');
-const appPage = document.getElementById('app');
-const contentPages = document.querySelectorAll('.content-page');
-
 document.addEventListener('DOMContentLoaded', function() {
-  console.log("SYNERGIA - Initialisation...");
+  console.log("SYNERGIA - Initialisation en mode démo...");
   
-  // Vérifier si l'utilisateur est connecté
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      // Utilisateur connecté
-      console.log("Utilisateur connecté:", user.email);
-      fetchUserData(user.uid);
-    } else {
-      // Utilisateur déconnecté
-      console.log("Aucun utilisateur connecté");
-      appData.currentUser = null;
-      showLoginPage();
-    }
-  });
-
-  // Configurer l'interface
-  setupTabs();
-  setupNavigation();
-  setupLoginForms();
-});
-
-// Récupérer les données utilisateur depuis Firestore
-async function fetchUserData(userId) {
-  try {
-    const userDoc = await db.collection('users').doc(userId).get();
-    
-    if (userDoc.exists) {
-      // Utilisateur existant
-      appData.currentUser = {
-        id: userId,
-        name: userDoc.data().name,
-        email: userDoc.data().email,
-        isAdmin: userDoc.data().isAdmin || false,
-        alterEgo: userDoc.data().alterEgo || {
-          name: "Nouvel utilisateur",
-          description: "Aucune description",
-          role: "Non défini",
-          avatarImg: "https://i.pravatar.cc/150?img=1",
-          xp: 0,
-          level: 1,
-          completedQuests: 0,
-          earnedBadges: 0,
-          skillPoints: 0
-        }
-      };
-    } else {
-      // Nouvel utilisateur
-      const newUser = {
-        name: auth.currentUser.displayName || "Nouvel utilisateur",
-        email: auth.currentUser.email,
-        isAdmin: false,
-        alterEgo: {
-          name: "Nouvel utilisateur",
-          description: "Aucune description",
-          role: "Non défini",
-          avatarImg: "https://i.pravatar.cc/150?img=1",
-          xp: 0,
-          level: 1,
-          completedQuests: 0,
-          earnedBadges: 0,
-          skillPoints: 0
-        },
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      
-      await db.collection('users').doc(userId).set(newUser);
-      appData.currentUser = { id: userId, ...newUser };
-    }
-    
-    // Charger l'interface utilisateur
-    updateUIWithUserData();
-    showAppPage();
-    
-  } catch (error) {
-    console.error("Erreur lors de la récupération des données:", error);
-    alert("Erreur lors du chargement de vos données. Veuillez réessayer.");
-  }
-}
-
-// Fonctions d'authentification
-function setupLoginForms() {
-  // Connexion
-  document.getElementById('login-button').addEventListener('click', async (e) => {
+  // Définition des variables globales
+  const loginPage = document.getElementById('login-page');
+  const appPage = document.getElementById('app');
+  const contentPages = document.querySelectorAll('.content-page');
+  
+  // CONNEXION MODE DÉMO DIRECT
+  document.getElementById('login-button').addEventListener('click', function(e) {
     e.preventDefault();
+    
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      // La suite est gérée par onAuthStateChanged
-    } catch (error) {
-      console.error("Erreur de connexion:", error);
-      alert("Erreur de connexion: " + error.message);
+    console.log("Tentative de connexion avec:", email);
+    
+    // Vérification simplifiée des identifiants
+    if ((email === "user@synergia.fr" && password === "user123") || 
+        (email === "admin@synergia.fr" && password === "admin123") ||
+        email.includes("admin") || email.includes("alan")) {
+      
+      // Données utilisateur selon le type de compte
+      const isAdmin = (email === "admin@synergia.fr" || email.includes("admin"));
+      const userData = {
+        name: isAdmin ? "Administrateur" : "Utilisateur Test",
+        email: email,
+        isAdmin: isAdmin,
+        alterEgo: {
+          name: isAdmin ? "Gardien du Savoir" : "Aventurier Numérique",
+          description: isAdmin ? "Protecteur des connaissances" : "Explorateur des technologies modernes",
+          role: isAdmin ? "Administrateur Système" : "Responsable Communication",
+          avatarImg: isAdmin ? "https://placehold.co/150/blue/white?text=Admin" : "https://placehold.co/150/green/white?text=User",
+          xp: isAdmin ? 280 : 50,
+          level: isAdmin ? 3 : 1,
+          completedQuests: isAdmin ? 12 : 3,
+          earnedBadges: isAdmin ? 8 : 2,
+          skillPoints: isAdmin ? 3 : 15
+        }
+      };
+      
+      // Afficher l'application principale
+      showMainApp(userData);
+    } else {
+      alert("Identifiants incorrects. Utilisez admin@synergia.fr/admin123 ou user@synergia.fr/user123");
     }
   });
   
-  // Inscription
-  document.getElementById('register-button').addEventListener('click', async (e) => {
+  // INSCRIPTION MODE DÉMO
+  document.getElementById('register-button').addEventListener('click', function(e) {
     e.preventDefault();
     const name = document.getElementById('register-name').value;
     const email = document.getElementById('register-email').value;
@@ -134,46 +57,63 @@ function setupLoginForms() {
       return alert("Veuillez remplir tous les champs.");
     }
     
-    try {
-      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-      // La suite est gérée par onAuthStateChanged
-    } catch (error) {
-      console.error("Erreur d'inscription:", error);
-      alert("Erreur d'inscription: " + error.message);
-    }
+    // Simuler une inscription réussie
+    alert("Inscription simulée réussie! Vous pouvez maintenant vous connecter avec ces identifiants.\n\nPour l'instant, utilisez les comptes de démonstration pour tester l'application.");
+    
+    // Redirection vers l'onglet connexion
+    document.querySelectorAll('.tab-button')[0].click();
   });
   
-  // Déconnexion
-  document.getElementById('logout-button').addEventListener('click', () => {
-    auth.signOut();
-  });
+  // Afficher l'application principale
+  function showMainApp(userData) {
+    // Cacher l'écran de login et montrer l'app
+    loginPage.classList.remove('active');
+    appPage.classList.add('active');
+    
+    // Mettre à jour l'interface avec les données utilisateur
+    updateUI(userData);
+  }
   
-  document.getElementById('mobile-logout').addEventListener('click', () => {
-    auth.signOut();
-  });
-  
-  // Gestion des onglets de connexion
-  const loginTabs = document.querySelectorAll('.tab-button');
-  const formContainers = document.querySelectorAll('.form-container');
-
-  loginTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      loginTabs.forEach(t => t.classList.remove('active'));
-      formContainers.forEach(form => form.classList.remove('active'));
-      
-      this.classList.add('active');
-      const targetFormId = this.getAttribute('data-tab');
-      document.getElementById(targetFormId).classList.add('active');
+  // Mettre à jour l'interface utilisateur
+  function updateUI(userData) {
+    // Navigation
+    document.getElementById('nav-avatar').src = userData.alterEgo.avatarImg;
+    document.getElementById('nav-user-name').textContent = userData.name;
+    document.getElementById('nav-user-level').textContent = `Niveau ${userData.alterEgo.level}`;
+    
+    // Dashboard
+    document.getElementById('current-level').textContent = `Niveau ${userData.alterEgo.level}`;
+    document.getElementById('xp-counter').textContent = `${userData.alterEgo.xp}/100 XP`;
+    document.querySelector('.xp-progress').style.width = `${userData.alterEgo.xp % 100}%`;
+    
+    document.getElementById('completed-quests').textContent = userData.alterEgo.completedQuests;
+    document.getElementById('earned-badges').textContent = userData.alterEgo.earnedBadges;
+    document.getElementById('skill-points').textContent = userData.alterEgo.skillPoints;
+    
+    document.getElementById('dashboard-avatar').src = userData.alterEgo.avatarImg;
+    document.getElementById('alter-ego-name').textContent = userData.alterEgo.name;
+    
+    // Éléments admin
+    document.querySelectorAll('.admin-only').forEach(el => {
+      el.style.display = userData.isAdmin ? 'flex' : 'none';
     });
+  }
+  
+  // Événement de déconnexion
+  document.getElementById('logout-button').addEventListener('click', function() {
+    loginPage.classList.add('active');
+    appPage.classList.remove('active');
   });
-}
-
-// Gestion de la navigation
-function setupNavigation() {
-  // Navigation principale et mobile
+  
+  document.getElementById('mobile-logout').addEventListener('click', function() {
+    loginPage.classList.add('active');
+    appPage.classList.remove('active');
+  });
+  
+  // Navigation
   document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
-    link.addEventListener('click', function(event) {
-      event.preventDefault();
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
       
       // Désactiver tous les liens et pages
       document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(l => {
@@ -191,15 +131,15 @@ function setupNavigation() {
         targetPage.classList.add('active');
       }
       
-      // Cacher le menu mobile
+      // Fermer le menu mobile
       document.querySelector('.mobile-menu').style.display = 'none';
     });
   });
   
-  // Autres éléments avec data-page (boutons, liens)
+  // Navigation depuis d'autres éléments
   document.querySelectorAll('[data-page]:not(.nav-link):not(.mobile-nav-link)').forEach(element => {
-    element.addEventListener('click', function(event) {
-      event.preventDefault();
+    element.addEventListener('click', function(e) {
+      e.preventDefault();
       
       const targetPageId = this.getAttribute('data-page');
       contentPages.forEach(page => {
@@ -222,122 +162,32 @@ function setupNavigation() {
     });
   });
   
-  // Menu hamburger
-  const hamburgerMenu = document.querySelector('.hamburger-menu');
-  const mobileMenu = document.querySelector('.mobile-menu');
-  
-  if (hamburgerMenu) {
-    hamburgerMenu.addEventListener('click', function() {
-      if (mobileMenu.style.display === 'flex') {
-        mobileMenu.style.display = 'none';
-      } else {
-        mobileMenu.style.display = 'flex';
-      }
-    });
-  }
-}
-
-// Gestion des onglets
-function setupTabs() {
-  // Onglets génériques
-  document.querySelectorAll('.tabs').forEach(tabGroup => {
-    const tabs = tabGroup.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        const parentContainer = this.closest('.tabs-container');
-        const tabId = this.getAttribute('data-tab');
-        
-        // Désactiver tous les onglets et contenus du groupe
-        parentContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        parentContainer.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        
-        // Activer l'onglet cliqué et son contenu
-        this.classList.add('active');
-        const targetContent = document.getElementById(tabId);
-        if (targetContent) {
-          targetContent.classList.add('active');
-        }
-      });
-    });
+  // Menu utilisateur
+  document.getElementById('user-profile-toggle').addEventListener('click', function() {
+    document.getElementById('user-dropdown').classList.toggle('active');
   });
   
-  // Onglets du profil
-  document.querySelectorAll('.profile-tab').forEach(tab => {
+  // Menu hamburger
+  document.querySelector('.hamburger-menu').addEventListener('click', function() {
+    const mobileMenu = document.querySelector('.mobile-menu');
+    mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+  });
+  
+  // Onglets
+  document.querySelectorAll('.tab-button').forEach(tab => {
     tab.addEventListener('click', function() {
       const tabId = this.getAttribute('data-tab');
       
-      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.profile-tab-content').forEach(content => content.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
       
       this.classList.add('active');
-      const targetContent = document.getElementById(tabId);
-      if (targetContent) {
-        targetContent.classList.add('active');
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) {
+        targetTab.classList.add('active');
       }
     });
   });
-}
-
-// Mise à jour de l'interface avec les données utilisateur
-function updateUIWithUserData() {
-  const user = appData.currentUser;
   
-  if (!user) return;
-  
-  // Informations de la barre de navigation
-  document.getElementById('nav-avatar').src = user.alterEgo.avatarImg;
-  document.getElementById('nav-user-name').textContent = user.name;
-  document.getElementById('nav-user-level').textContent = `Niveau ${user.alterEgo.level}`;
-  
-  // Informations du tableau de bord
-  document.getElementById('current-level').textContent = `Niveau ${user.alterEgo.level}`;
-  document.getElementById('xp-counter').textContent = `${user.alterEgo.xp}/100 XP`;
-  document.querySelectorAll('.xp-progress').forEach(el => {
-    el.style.width = `${user.alterEgo.xp % 100}%`;
-  });
-  
-  document.getElementById('completed-quests').textContent = user.alterEgo.completedQuests;
-  document.getElementById('earned-badges').textContent = user.alterEgo.earnedBadges;
-  document.getElementById('skill-points').textContent = user.alterEgo.skillPoints;
-  document.getElementById('dashboard-avatar').src = user.alterEgo.avatarImg;
-  document.getElementById('alter-ego-name').textContent = user.alterEgo.name;
-  
-  // Informations du profil
-  document.getElementById('profile-avatar-img').src = user.alterEgo.avatarImg;
-  document.getElementById('profile-alter-ego-name').textContent = user.alterEgo.name;
-  document.getElementById('profile-level').textContent = `Niveau ${user.alterEgo.level}`;
-  document.getElementById('profile-role').textContent = user.alterEgo.role;
-  document.getElementById('profile-description-text').textContent = user.alterEgo.description;
-  
-  // Gérer les éléments admin
-  if (user.isAdmin) {
-    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
-  } else {
-    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
-  }
-}
-
-// Afficher la page de connexion
-function showLoginPage() {
-  loginPage.classList.add('active');
-  appPage.classList.remove('active');
-}
-
-// Afficher l'application
-function showAppPage() {
-  loginPage.classList.remove('active');
-  appPage.classList.add('active');
-}
-
-// Écouteurs d'événements pour les fonctionnalités simulées
-document.addEventListener('DOMContentLoaded', function() {
-  // Quêtes - Accepter (simulation)
-  document.querySelectorAll('.quest-card .btn-primary').forEach(button => {
-    button.addEventListener('click', function() {
-      if (!appData.currentUser) return;
-      
-      // Dans une version complète, cela sauvegarderait la quête dans Firestore
-      alert('Fonctionnalité en cours de développement: cette quête sera bientôt ajoutée à votre liste.');
-    });
-  });
+  console.log("SYNERGIA - Initialisation terminée");
 });
