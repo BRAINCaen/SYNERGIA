@@ -5,6 +5,163 @@
   box-sizing: border-box;
 }
 
+/* Tooltips pour le menu mobile */
+@media (max-width: 768px) {
+  .menu-link {
+    position: relative;
+  }
+  
+  .menu-link:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #4f46e5;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+  
+  .menu-link:hover:after {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+
+/* RESPONSIVE AMÉLIORÉ - MENU MOBILE */
+@media (max-width: 768px) {
+  /* Réduire la taille de la sidebar */
+  .sidebar {
+    width: 60px; /* Réduit de 280px à 60px */
+    overflow: hidden;
+  }
+  
+  /* Cacher le texte du titre SYNERGIA */
+  .sidebar-header h1 {
+    display: none;
+  }
+  
+  /* Cacher les infos utilisateur et le texte, garder uniquement l'avatar */
+  .user-profile {
+    padding: 10px;
+    justify-content: center;
+  }
+  
+  .user-info {
+    display: none;
+  }
+  
+  .avatar {
+    margin-right: 0;
+  }
+  
+  /* Ajuster les liens du menu pour n'afficher que les icônes */
+  .menu-link {
+    padding: 15px 0;
+    justify-content: center;
+  }
+  
+  .menu-link i {
+    margin-right: 0;
+    font-size: 1.4rem;
+  }
+  
+  /* Cacher le texte des liens du menu */
+  .menu-link span {
+    display: none;
+  }
+  
+  /* Ajuster le contenu principal */
+  .main-content {
+    margin-left: 60px;
+    padding: 20px 15px;
+  }
+  
+  /* Ajuster le bouton de déconnexion */
+  .sidebar-footer {
+    padding: 10px;
+  }
+  
+  .sidebar-footer .btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sidebar-footer .btn span {
+    display: none;
+  }
+  
+  .sidebar-footer .btn i {
+    margin: 0;
+  }
+  
+  /* Ajuster la mise en page des cartes sur mobile */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  /* Améliorer l'affichage des statistiques sur mobile */
+  .stats-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  .stat-item {
+    padding: 10px;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* Améliorations spécifiques pour très petits écrans */
+@media (max-width: 380px) {
+  /* Réduire davantage l'espace pour les très petits écrans */
+  .sidebar {
+    width: 50px;
+  }
+  
+  .main-content {
+    margin-left: 50px;
+    padding: 15px 10px;
+  }
+  
+  /* Simplifier les statistiques sur très petits écrans */
+  .stats-container {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Réduire l'espace dans les cartes */
+  .dashboard-card {
+    padding: 15px;
+  }
+  
+  /* Ajuster la taille des textes */
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+}
+
+
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: #f5f7fa;
