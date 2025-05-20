@@ -55,20 +55,34 @@
                 </div>
             </div>
             
-            <nav class="main-menu">
-                <ul>
-                    <li><a href="#" class="menu-link active" data-target="dashboard-page"><i class="fas fa-home"></i> Tableau de Bord</a></li>
-                    <li><a href="#" class="menu-link" data-target="stats-page"><i class="fas fa-chart-line"></i> Statistiques</a></li>
-                    <li><a href="#" class="menu-link" data-target="alter-ego-page"><i class="fas fa-user-astronaut"></i> Mon Alter Ego</a></li>
-                    <li><a href="#" class="menu-link" data-target="quests-page"><i class="fas fa-tasks"></i> Quêtes</a></li>
-                    <li><a href="#" class="menu-link" data-target="team-page"><i class="fas fa-users"></i> Équipe</a></li>
-                    <li><a href="#" class="menu-link" data-target="badges-page"><i class="fas fa-award"></i> Badges</a></li>
-                </ul>
-            </nav>
+<nav class="main-menu">
+  <ul>
+<li><a href="#" class="menu-link active" data-target="dashboard-page" data-tooltip="Tableau de Bord">
+  <i class="fas fa-home"></i> <span>Tableau de Bord</span>
+</a></li>
+    <li><a href="#" class="menu-link" data-target="stats-page">
+      <i class="fas fa-chart-line"></i> <span>Statistiques</span>
+    </a></li>
+    <li><a href="#" class="menu-link" data-target="alter-ego-page">
+      <i class="fas fa-user-astronaut"></i> <span>Mon Alter Ego</span>
+    </a></li>
+    <li><a href="#" class="menu-link" data-target="quests-page">
+      <i class="fas fa-tasks"></i> <span>Quêtes</span>
+    </a></li>
+    <li><a href="#" class="menu-link" data-target="team-page">
+      <i class="fas fa-users"></i> <span>Équipe</span>
+    </a></li>
+    <li><a href="#" class="menu-link" data-target="badges-page">
+      <i class="fas fa-award"></i> <span>Badges</span>
+    </a></li>
+  </ul>
+</nav>
             
-            <div class="sidebar-footer">
-                <button id="logout-button" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
-            </div>
+<div class="sidebar-footer">
+  <button id="logout-button" class="btn btn-outline">
+    <i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span>
+  </button>
+</div>
         </aside>
         
         <!-- CONTENU PRINCIPAL -->
@@ -325,37 +339,39 @@
     </div>
 
     <!-- Scripts Firebase -->
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+   <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configuration Firebase fournie
-        const firebaseConfig = {
-            apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
-            authDomain: "synergia-app-f27e7.firebaseapp.com",
-            projectId: "synergia-app-f27e7",
-            storageBucket: "synergia-app-f27e7.firebasestorage.app",
-            messagingSenderId: "201912738922",
-            appId: "1:201912738922:web:96a9f0a6ffadf9cf899613",
-            measurementId: "G-S5WPV574KJ"
-        };
+       // Configuration Firebase fournie
+  const firebaseConfig = {
+    apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
+    authDomain: "synergia-app-f27e7.firebaseapp.com",
+    projectId: "synergia-app-f27e7",
+    storageBucket: "synergia-app-f27e7.firebasestorage.app",
+    messagingSenderId: "201912738922",
+    appId: "1:201912738922:web:96a9f0a6ffadf9cf899613",
+    measurementId: "G-S5WPV574KJ"
+  };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+       // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-        // Exposez Firebase pour le fichier script.js
-        window.firebaseApp = app;
-        window.firebaseAuth = auth;
-        window.firebaseDb = db;
-    </script>
+  // Exposez Firebase pour le fichier script.js
+  window.firebaseApp = app;
+  window.firebaseAuth = auth;
+  window.firebaseDb = db;
+  window.firebaseAuthFunctions = { signInWithEmailAndPassword, onAuthStateChanged, signOut };
+  window.firebaseFirestoreFunctions = { collection, doc, getDoc, setDoc, updateDoc };
+</script>
 
-    <!-- Votre script principal -->
-    <script src="script.js"></script>
+<!-- Votre script principal -->
+<script src="script.js" type="module"></script>
 </body>
 </html>
