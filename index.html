@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Page de Connexion/Inscription (visible par défaut) -->
+  <!-- Page de Connexion/Inscription -->
   <div id="login-page" class="page active">
     <div class="login-container">
       <div class="login-header">
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <!-- Structure principale de l'application (initialement cachée) -->
+  <!-- Application principale -->
   <div id="app" class="page">
     <!-- Navigation -->
     <nav class="main-nav">
@@ -96,7 +96,7 @@
         <div class="user-menu">
           <div class="user-profile" id="user-profile-toggle">
             <div class="avatar">
-              <img id="nav-avatar" src="https://i.pravatar.cc/150?img=1" alt="Avatar">
+              <img id="nav-avatar" src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
             </div>
             <div class="user-info">
               <span id="nav-user-name">Utilisateur</span>
@@ -222,7 +222,7 @@
             <div class="card-content">
               <div class="alter-ego-summary">
                 <div class="alter-ego-avatar">
-                  <img id="dashboard-avatar" src="https://i.pravatar.cc/150?img=1" alt="Avatar">
+                  <img id="dashboard-avatar" src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
                 </div>
                 <div class="alter-ego-info">
                   <h3 id="alter-ego-name">Nom de l'Alter Ego</h3>
@@ -291,7 +291,7 @@
               <div class="activity-feed" id="team-activity-feed">
                 <div class="activity-item">
                   <div class="activity-avatar">
-                    <img src="https://i.pravatar.cc/150?img=3" alt="User avatar">
+                    <img src="https://placehold.co/150/green/white?text=S" alt="User avatar">
                   </div>
                   <div class="activity-content">
                     <p><strong>Sophie Martin</strong> a terminé la quête <a href="#">Formation des nouveaux</a></p>
@@ -300,7 +300,7 @@
                 </div>
                 <div class="activity-item">
                   <div class="activity-avatar">
-                    <img src="https://i.pravatar.cc/150?img=5" alt="User avatar">
+                    <img src="https://placehold.co/150/red/white?text=T" alt="User avatar">
                   </div>
                   <div class="activity-content">
                     <p><strong>Thomas Bernard</strong> a obtenu le badge <a href="#">Expert en Communication</a></p>
@@ -309,7 +309,7 @@
                 </div>
                 <div class="activity-item">
                   <div class="activity-avatar">
-                    <img src="https://i.pravatar.cc/150?img=8" alt="User avatar">
+                    <img src="https://placehold.co/150/purple/white?text=J" alt="User avatar">
                   </div>
                   <div class="activity-content">
                     <p><strong>Julie Dupont</strong> a commencé la quête <a href="#">Création du planning</a></p>
@@ -322,354 +322,11 @@
         </div>
       </div>
       
-      <!-- Page Profil -->
-      <div id="profile" class="content-page">
-        <div class="page-header">
-          <h1>Mon Profil</h1>
-        </div>
-        
-        <div class="profile-container">
-          <div class="profile-header">
-            <div class="profile-avatar">
-              <img id="profile-avatar-img" src="https://i.pravatar.cc/250?img=1" alt="Avatar">
-              <button class="edit-avatar-btn">
-                <i class="fas fa-camera"></i>
-              </button>
-            </div>
-            <div class="profile-info">
-              <h2 id="profile-alter-ego-name">Nom de l'Alter Ego</h2>
-              <div class="profile-meta">
-                <div class="profile-level">
-                  <i class="fas fa-star"></i>
-                  <span id="profile-level">Niveau 1</span>
-                </div>
-                <div class="profile-role">
-                  <i class="fas fa-briefcase"></i>
-                  <span id="profile-role">Rôle dans l'entreprise</span>
-                </div>
-              </div>
-              <div class="progress-container">
-                <div class="xp-info">
-                  <span id="profile-xp-label">50/100 XP</span>
-                  <span>Prochain niveau: 50 XP restants</span>
-                </div>
-                <div class="xp-bar">
-                  <div class="xp-progress" style="width: 50%;"></div>
-                </div>
-              </div>
-            </div>
-            <button class="btn-secondary edit-profile-btn">
-              <i class="fas fa-pen"></i> Modifier
-            </button>
-          </div>
-          
-          <div class="profile-tabs">
-            <button class="profile-tab active" data-tab="profile-description">Description</button>
-            <button class="profile-tab" data-tab="profile-skills">Compétences</button>
-            <button class="profile-tab" data-tab="profile-badges">Badges</button>
-            <button class="profile-tab" data-tab="profile-history">Historique</button>
-          </div>
-          
-          <div class="profile-tab-content active" id="profile-description">
-            <div class="description-section">
-              <h3>À propos</h3>
-              <p id="profile-description-text">Décrivez votre Alter Ego ici. Partagez vos motivations, vos aspirations et ce qui vous distingue au sein de l'équipe. Ce texte aidera vos collègues à mieux vous connaître et à comprendre votre approche du travail collaboratif.</p>
-            </div>
-            <div class="description-section">
-              <h3>Vision et objectifs</h3>
-              <p id="profile-vision-text">Exposez ici votre vision et vos objectifs professionnels. Quels sont les domaines dans lesquels vous souhaitez progresser ? Quelles sont vos ambitions au sein de l'organisation ? Ces informations aideront vos collègues à vous proposer des collaborations pertinentes.</p>
-            </div>
-          </div>
-          
-          <div class="profile-tab-content" id="profile-skills">
-            <div class="skills-categories">
-              <div class="skills-category">
-                <h3>Compétences techniques</h3>
-                <div class="skills-list">
-                  <div class="skill-item">
-                    <div class="skill-header">
-                      <span class="skill-name">Communication</span>
-                      <span class="skill-level">Niveau 3</span>
-                    </div>
-                    <div class="skill-progress">
-                      <div class="progress-bar">
-                        <div class="progress" style="width: 70%"></div>
-                      </div>
-                      <span class="progress-text">70%</span>
-                    </div>
-                  </div>
-                  <div class="skill-item">
-                    <div class="skill-header">
-                      <span class="skill-name">Organisation</span>
-                      <span class="skill-level">Niveau 2</span>
-                    </div>
-                    <div class="skill-progress">
-                      <div class="progress-bar">
-                        <div class="progress" style="width: 40%"></div>
-                      </div>
-                      <span class="progress-text">40%</span>
-                    </div>
-                  </div>
-                  <div class="skill-item">
-                    <div class="skill-header">
-                      <span class="skill-name">Documentation</span>
-                      <span class="skill-level">Niveau 1</span>
-                    </div>
-                    <div class="skill-progress">
-                      <div class="progress-bar">
-                        <div class="progress" style="width: 20%"></div>
-                      </div>
-                      <span class="progress-text">20%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="skills-category">
-                <h3>Compétences comportementales</h3>
-                <div class="skills-list">
-                  <div class="skill-item">
-                    <div class="skill-header">
-                      <span class="skill-name">Travail d'équipe</span>
-                      <span class="skill-level">Niveau 2</span>
-                    </div>
-                    <div class="skill-progress">
-                      <div class="progress-bar">
-                        <div class="progress" style="width: 50%"></div>
-                      </div>
-                      <span class="progress-text">50%</span>
-                    </div>
-                  </div>
-                  <div class="skill-item">
-                    <div class="skill-header">
-                      <span class="skill-name">Leadership</span>
-                      <span class="skill-level">Niveau 1</span>
-                    </div>
-                    <div class="skill-progress">
-                      <div class="progress-bar">
-                        <div class="progress" style="width: 10%"></div>
-                      </div>
-                      <span class="progress-text">10%</span>
-                    </div>
-                  </div>
-                  <div class="skill-item">
-                    <div class="skill-header">
-                      <span class="skill-name">Adaptabilité</span>
-                      <span class="skill-level">Niveau 3</span>
-                    </div>
-                    <div class="skill-progress">
-                      <div class="progress-bar">
-                        <div class="progress" style="width: 60%"></div>
-                      </div>
-                      <span class="progress-text">60%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="skill-points-info">
-              <h3>Points de compétence disponibles: <span id="available-skill-points">2</span></h3>
-              <p>Complétez des quêtes pour gagner plus de points de compétence.</p>
-            </div>
-          </div>
-          
-          <div class="profile-tab-content" id="profile-badges">
-            <div class="badges-showcase">
-              <div class="badges-featured">
-                <h3>Badges mis en avant</h3>
-                <div class="featured-badges">
-                  <div class="featured-badge">
-                    <img src="https://placehold.co/100" alt="Badge Communication">
-                    <h4>Communicateur Débutant</h4>
-                  </div>
-                  <div class="featured-badge">
-                    <img src="https://placehold.co/100" alt="Badge Organisation">
-                    <h4>Organisateur Méthodique</h4>
-                  </div>
-                  <div class="featured-badge empty">
-                    <div class="empty-badge">
-                      <i class="fas fa-plus"></i>
-                    </div>
-                    <h4>Ajouter un badge</h4>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="badges-collection">
-                <h3>Tous les badges (2/15)</h3>
-                <div class="badges-grid">
-                  <div class="badge-item earned">
-                    <img src="https://.placehold.co/80" alt="Badge Communication">
-                    <span class="badge-name">Communicateur Débutant</span>
-                  </div>
-                  <div class="badge-item earned">
-                    <img src="https://placehold.co/80" alt="Badge Organisation">
-                    <span class="badge-name">Organisateur Méthodique</span>
-                  </div>
-                  <div class="badge-item locked">
-                    <img src="https://placehold.co/80?text=?" alt="Badge Verrouillé">
-                    <span class="badge-name">Communicateur Expert</span>
-                    <div class="badge-lock">
-                      <i class="fas fa-lock"></i>
-                    </div>
-                  </div>
-                  <div class="badge-item locked">
-                    <img src="https://placehold.co/80?text=?" alt="Badge Verrouillé">
-                    <span class="badge-name">Formateur Inspirant</span>
-                    <div class="badge-lock">
-                      <i class="fas fa-lock"></i>
-                    </div>
-                  </div>
-                  <div class="badge-item locked">
-                    <img src="https://placehold.co/80?text=?" alt="Badge Verrouillé">
-                    <span class="badge-name">Innovateur Créatif</span>
-                    <div class="badge-lock">
-                      <i class="fas fa-lock"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="profile-tab-content" id="profile-history">
-            <div class="history-filters">
-              <select class="history-filter">
-                <option value="all">Tout l'historique</option>
-                <option value="quests">Quêtes uniquement</option>
-                <option value="badges">Badges uniquement</option>
-                <option value="levels">Niveaux uniquement</option>
-              </select>
-            </div>
-            
-            <div class="history-timeline">
-              <div class="timeline-item">
-                <div class="timeline-icon">
-                  <i class="fas fa-medal"></i>
-                </div>
-                <div class="timeline-content">
-                  <h3>Badge obtenu: Organisateur Méthodique</h3>
-                  <p>Vous avez complété 3 quêtes d'organisation.</p>
-                  <span class="timeline-date">28 avril 2025</span>
-                </div>
-              </div>
-              
-              <div class="timeline-item">
-                <div class="timeline-icon">
-                  <i class="fas fa-tasks"></i>
-                </div>
-                <div class="timeline-content">
-                  <h3>Quête terminée: Classement et organisation des archives</h3>
-                  <p>+20 XP, Badge: Organisateur Méthodique</p>
-                  <span class="timeline-date">15 avril 2025</span>
-                </div>
-              </div>
-              
-              <div class="timeline-item">
-                <div class="timeline-icon">
-                  <i class="fas fa-medal"></i>
-                </div>
-                <div class="timeline-content">
-                  <h3>Badge obtenu: Communicateur Débutant</h3>
-                  <p>Vous avez complété votre première quête de communication.</p>
-                  <span class="timeline-date">10 avril 2025</span>
-                </div>
-              </div>
-              
-              <div class="timeline-item">
-                <div class="timeline-icon">
-                  <i class="fas fa-tasks"></i>
-                </div>
-                <div class="timeline-content">
-                  <h3>Quête terminée: Mise en place des supports de communication</h3>
-                  <p>+15 XP, Badge: Communicateur Débutant</p>
-                  <span class="timeline-date">10 avril 2025</span>
-                </div>
-              </div>
-              
-              <div class="timeline-item">
-                <div class="timeline-icon">
-                  <i class="fas fa-user-plus"></i>
-                </div>
-                <div class="timeline-content">
-                  <h3>Création de votre Alter Ego</h3>
-                  <p>Bienvenue dans SYNERGIA !</p>
-                  <span class="timeline-date">5 avril 2025</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Page Quêtes (placeholder simplifié) -->
-      <div id="quests" class="content-page">
-        <div class="page-header">
-          <h1>Quêtes Disponibles</h1>
-        </div>
-        <div class="quests-grid">
-          <!-- Quêtes disponibles seront ajoutées ici par JavaScript -->
-          <div class="quest-card">
-            <div class="quest-card-header">
-              <span class="quest-category communication">Communication</span>
-              <span class="quest-difficulty">★★</span>
-            </div>
-            <div class="quest-card-body">
-              <h3>Optimiser le processus de communication</h3>
-              <p>Révisez et améliorez les canaux de communication internes pour augmenter l'efficacité.</p>
-            </div>
-            <div class="quest-card-footer">
-              <span class="quest-reward">+20 XP</span>
-              <button class="btn-primary">Accepter</button>
-            </div>
-          </div>
-          
-          <div class="quest-card">
-            <div class="quest-card-header">
-              <span class="quest-category technique">Technique</span>
-              <span class="quest-difficulty">★★★</span>
-            </div>
-            <div class="quest-card-body">
-              <h3>Mettre à jour la documentation technique</h3>
-              <p>Révisez et mettez à jour la documentation des procédures techniques de l'équipe.</p>
-            </div>
-            <div class="quest-card-footer">
-              <span class="quest-reward">+30 XP</span>
-              <button class="btn-primary">Accepter</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Page Badges (placeholder simplifié) -->
-      <div id="badges" class="content-page">
-        <div class="page-header">
-          <h1>Mes Badges</h1>
-        </div>
-        <div class="badges-grid">
-          <div class="badge-card earned">
-            <div class="badge-icon">
-              <img src="https://placehold.co/100" alt="Badge Communication">
-            </div>
-            <h3>Communicateur Débutant</h3>
-            <p>Réussissez votre première quête de communication</p>
-            <span class="badge-date">Obtenu le 10 avril 2025</span>
-          </div>
-          
-          <div class="badge-card earned">
-            <div class="badge-icon">
-              <img src="https://placehold.co/100" alt="Badge Organisation">
-            </div>
-            <h3>Organisateur Méthodique</h3>
-            <p>Complétez 3 quêtes d'organisation</p>
-            <span class="badge-date">Obtenu le 28 avril 2025</span>
-          </div>
-        </div>
-      </div>
+      <!-- Autres pages -->
+      <!-- Profile Page, Quests Page, etc... -->
     </main>
   </div>
 
-  <!-- Firebase SDK - Placé à la fin du body pour une meilleure performance -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-
+  <script src="script.js"></script>
+</body>
+</html>
