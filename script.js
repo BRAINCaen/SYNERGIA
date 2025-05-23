@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Récupération des objets Firebase exposés par le script dans index.html
   const auth = window.firebaseAuth;
   const db = window.firebaseDb;
+  
+  // Récupération des fonctions Firebase Auth
+  const { signInWithEmailAndPassword, onAuthStateChanged, signOut } = window.firebaseAuthFunctions;
+  
+  // Récupération des fonctions Firebase Firestore
+  const { collection, doc, getDoc, setDoc, updateDoc } = window.firebaseFirestoreFunctions;
 
   const loginPage = document.getElementById('login-page');
   const appPage = document.getElementById('app');
@@ -29,7 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
         getDoc(doc(db, 'users', user.uid))
           .then((docSnapshot) => {
             if (docSnapshot.exists()) {
+              console.log("Document utilisateur trouvé");
               const userData = docSnapshot.data();
+              console.log("Données utilisateur:", userData);
               // Afficher les données de l'utilisateur
               displayUserData(userData);
               
@@ -43,10 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 level: 1,
                 xp: 50,
                 completedQuests: 3,
-                badges: 2,
+                earnedBadges: 2, // Changé de "badges" à "earnedBadges" pour matcher la structure actuelle
                 skillPoints: 15,
                 teamPosition: "4/12",
-                alterEgoName: "Non défini",
+                alterEgoName: "Puck le nain",
+                name: "Boss", // Ajout du champ name
                 skills: {
                   technique: 3,
                   communication: 4,
@@ -99,82 +108,96 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Fonction pour afficher les données de l'utilisateur
   function displayUserData(userData) {
+    console.log("Affichage des données utilisateur:", userData);
+    
+    // Vérifier si les données utilisateur sont valides
+    if (!userData) {
+      console.error("Données utilisateur invalides");
+      return;
+    }
+    
     // Afficher le niveau
     const userLevelElements = document.querySelectorAll('.user-level');
     userLevelElements.forEach(el => {
-      el.textContent = "Niveau " + userData.level + " " + userData.xp + "/100 XP";
+      el.textContent = "Niveau " + (userData.level || "1") + " " + (userData.xp || "0") + "/100 XP";
     });
     
-    // Statistiques
+    // Statistiques (compatible avec les différentes structures de données)
     const statsElements = document.querySelectorAll('.stats-container');
     statsElements.forEach(el => {
       el.innerHTML = `
         <div class="stat-item">
-          <div class="stat-value">${userData.completedQuests}</div>
+          <div class="stat-value">${userData.completedQuests || "0"}</div>
           <div class="stat-label">Quêtes complétées</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">${userData.badges}</div>
+          <div class="stat-value">${userData.earnedBadges || userData.badges || "0"}</div>
           <div class="stat-label">Badges obtenus</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">${userData.skillPoints}</div>
+          <div class="stat-value">${userData.skillPoints || "0"}</div>
           <div class="stat-label">Points de compétence</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">${userData.teamPosition}</div>
+          <div class="stat-value">${userData.teamPosition || "0/0"}</div>
           <div class="stat-label">Position d'équipe</div>
         </div>
       `;
     });
     
-    // Nom de l'Alter Ego
+    // Nom de l'Alter Ego (avec différentes possibilités pour le champ)
     const alterEgoNameElements = document.querySelectorAll('.alter-ego-name');
     alterEgoNameElements.forEach(el => {
-      el.textContent = userData.alterEgoName || "Non défini";
+      el.textContent = userData.alterEgoName || userData.name || "Non défini";
     });
     
-    // Compétences
+    // Compétences avec vérification de l'existence des données
     const skillsContainers = document.querySelectorAll('.skills-container');
-    if (userData.skills) {
-      skillsContainers.forEach(container => {
-        container.innerHTML = `
-          <div class="skill-item">
-            <div class="skill-label">Technique</div>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: ${userData.skills.technique * 20}%"></div>
-            </div>
-          </div>
-          <div class="skill-item">
-            <div class="skill-label">Communication</div>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: ${userData.skills.communication * 20}%"></div>
-            </div>
-          </div>
-          <div class="skill-item">
-            <div class="skill-label">Créativité</div>
-            <div class="skill-bar">
-              <div class="skill-progress" style="width: ${userData.skills.creativite * 20}%"></div>
-            </div>
-          </div>
-        `;
-      });
-    }
+    const skills = userData.skills || { technique: 3, communication: 4, creativite: 2 };
     
-    // Quêtes en cours
+    skillsContainers.forEach(container => {
+      container.innerHTML = `
+        <div class="skill-item">
+          <div class="skill-label">Technique</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: ${Math.min((skills.technique || 3) * 10, 100)}%"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-label">Communication</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: ${Math.min((skills.communication || 4) * 10, 100)}%"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-label">Créativité</div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width: ${Math.min((skills.creativite || 2) * 10, 100)}%"></div>
+          </div>
+        </div>
+      `;
+    });
+    
+    // Quêtes en cours avec vérification des données et titres par défaut
     const questsContainers = document.querySelectorAll('.quests-container');
-    if (userData.activeQuests && userData.activeQuests.length > 0) {
+    const activeQuests = userData.activeQuests || [];
+    
+    if (activeQuests.length > 0) {
       questsContainers.forEach(container => {
         let questsHTML = '';
-        userData.activeQuests.forEach(quest => {
+        activeQuests.forEach((quest, index) => {
+          // Définir un titre par défaut si manquant
+          const questTitle = quest.title || 
+                             (index === 0 ? "Optimiser le processus de communication" : "Préparer la réunion mensuelle");
+          
           questsHTML += `
             <div class="quest-item">
-              <h4>${quest.title}</h4>
+              <h4>${questTitle}</h4>
               <div class="quest-progress">
                 <div class="progress-bar">
-                  <div class="progress-fill" style="width: ${quest.progress}%"></div>
+                  <div class="progress-fill" style="width: ${quest.progress || 0}%"></div>
                 </div>
-                <div class="progress-text">${quest.progress}% - Étape ${quest.currentStep}/${quest.totalSteps}</div>
+                <div class="progress-text">${quest.progress || 0}% - Étape ${quest.currentStep || 1}/${quest.totalSteps || 3}</div>
               </div>
             </div>
           `;
@@ -185,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Masquer les messages "Aucune quête"
       const noQuestsMessages = document.querySelectorAll('.no-quests-message');
       noQuestsMessages.forEach(message => {
-        message.classList.add('hidden');
+        if (message) message.classList.add('hidden');
       });
     } else {
       questsContainers.forEach(container => {
@@ -195,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Afficher les messages "Aucune quête"
       const noQuestsMessages = document.querySelectorAll('.no-quests-message');
       noQuestsMessages.forEach(message => {
-        message.classList.remove('hidden');
+        if (message) message.classList.remove('hidden');
       });
     }
   }
@@ -210,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
       getDoc(doc(db, 'users', user.uid))
         .then((docSnapshot) => {
           if (docSnapshot.exists()) {
+            console.log("Document utilisateur trouvé dans onAuthStateChanged");
             displayUserData(docSnapshot.data());
             
             // Afficher l'application
@@ -295,7 +319,10 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Ajouter la classe active au bouton et contenu sélectionnés
       this.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
+      const targetTab = document.getElementById(tabId);
+      if (targetTab) {
+        targetTab.classList.add('active');
+      }
     });
   });
 
@@ -414,25 +441,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Mettre à jour le nombre de quêtes complétées
-            const updatedCompletedQuestsCount = (userData.completedQuests || 0) + 1;
+            const updatedCompletedQuestsCount = (userData.completedQuests ? userData.completedQuests.length : 0) + 1;
             
             // Ajouter des points d'XP
-            const updatedXP = Math.min(userData.xp + 25, 100);
+            const updatedXP = Math.min((userData.xp || 0) + 25, 100);
             
             // Vérifier si l'utilisateur doit monter de niveau
-            let updatedLevel = userData.level;
+            let updatedLevel = userData.level || 1;
             if (updatedXP >= 100) {
               updatedLevel += 1;
             }
             
             // Mettre à jour Firestore
-            updateDoc(doc(db, 'users', user.uid), {
+            const updateData = {
               activeQuests: updatedActiveQuests,
               completedQuests: completedQuests,
-              completedQuestsCount: updatedCompletedQuestsCount,
               xp: updatedXP,
               level: updatedLevel
-            })
+            };
+            
+            // Utiliser earnedBadges ou badges selon ce qui existe déjà
+            if (typeof userData.earnedBadges !== 'undefined') {
+              updateData.earnedBadges = updatedCompletedQuestsCount;
+            } else {
+              updateData.badges = updatedCompletedQuestsCount;
+            }
+            
+            // Utiliser completedQuests ou completedQuestsCount selon ce qui existe déjà
+            if (typeof userData.completedQuestsCount !== 'undefined') {
+              updateData.completedQuestsCount = updatedCompletedQuestsCount;
+            }
+            
+            updateDoc(doc(db, 'users', user.uid), updateData)
               .then(() => {
                 console.log("Quête complétée avec succès");
                 // Mettre à jour l'affichage
@@ -441,6 +481,8 @@ document.addEventListener('DOMContentLoaded', function() {
                   activeQuests: updatedActiveQuests,
                   completedQuests: completedQuests,
                   completedQuestsCount: updatedCompletedQuestsCount,
+                  earnedBadges: updateData.earnedBadges,
+                  badges: updateData.badges,
                   xp: updatedXP,
                   level: updatedLevel
                 });
@@ -486,4 +528,80 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
   }
+
+  // Fonction de débogage des données utilisateur
+  window.debugUserData = function() {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Aucun utilisateur connecté");
+      return;
+    }
+    
+    getDoc(doc(db, 'users', user.uid))
+      .then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          console.log("Données utilisateur complètes:", docSnapshot.data());
+        } else {
+          console.log("Aucun document utilisateur trouvé");
+        }
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des données:", error);
+      });
+  };
+
+  // Bouton pour forcer la mise à jour des quêtes
+  window.fixQuests = function() {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error("Aucun utilisateur connecté");
+      return;
+    }
+    
+    getDoc(doc(db, 'users', user.uid))
+      .then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          if (userData.activeQuests && userData.activeQuests.length > 0) {
+            const updatedQuests = userData.activeQuests.map((quest, index) => {
+              // Ajouter le titre s'il manque
+              if (!quest.title) {
+                return {
+                  ...quest,
+                  title: index === 0 ? 
+                    "Optimiser le processus de communication" : 
+                    "Préparer la réunion mensuelle"
+                };
+              }
+              return quest;
+            });
+            
+            updateDoc(doc(db, 'users', user.uid), {
+              activeQuests: updatedQuests
+            })
+              .then(() => {
+                console.log("Quêtes mises à jour avec succès");
+                displayUserData({
+                  ...userData,
+                  activeQuests: updatedQuests
+                });
+              })
+              .catch(error => {
+                console.error("Erreur lors de la mise à jour des quêtes:", error);
+              });
+          }
+        }
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des données utilisateur:", error);
+      });
+  };
+
+  // Exécuter le débogage après un délai pour s'assurer que l'authentification est prête
+  setTimeout(() => {
+    if (auth.currentUser) {
+      console.log("Exécution du débogage automatique");
+      window.debugUserData();
+    }
+  }, 2000);
 });
