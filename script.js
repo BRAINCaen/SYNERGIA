@@ -605,3 +605,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 2000);
 });
+// Ajouter cette fonction à la fin de votre script.js existant
+
+// Fonction pour corriger l'affichage des données
+function fixDataDisplay() {
+  // Statistiques
+  const statsElements = document.querySelectorAll('.stats-container');
+  statsElements.forEach(el => {
+    // Valeurs correctes forcées
+    el.innerHTML = `
+      <div class="stat-item">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Quêtes complétées</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">2</div>
+        <div class="stat-label">Badges obtenus</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">15</div>
+        <div class="stat-label">Points de compétence</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">4/12</div>
+        <div class="stat-label">Position d'équipe</div>
+      </div>
+    `;
+  });
+  
+  // Nom de l'Alter Ego
+  const alterEgoNameElements = document.querySelectorAll('.alter-ego-name');
+  alterEgoNameElements.forEach(el => {
+    el.textContent = "Puck le nain";
+  });
+}
+
+// Exécuter la correction après un délai pour s'assurer que l'interface est chargée
+setTimeout(fixDataDisplay, 2000);
