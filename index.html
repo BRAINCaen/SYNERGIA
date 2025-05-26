@@ -3,375 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNERGIA - Transformez votre travail d'équipe en aventure</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <title>SYNERGIA - Gestion d'équipe gamifiée</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- PAGE DE CONNEXION -->
-    <div id="login-page" class="page active">
-        <div class="login-container">
-            <div class="login-header">
-                <h1>SYNERGIA</h1>
-                <p>Transformez votre travail d'équipe en aventure</p>
+    <!-- Écran de chargement -->
+    <div id="loading-screen">
+        <div class="loading-container">
+            <img src="images/synergia-logo.png" alt="SYNERGIA Logo" class="pulse">
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
             </div>
-            
-            <form class="login-form">
-                <div class="form-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" placeholder="Votre email" required>
+            <p>Chargement de l'aventure...</p>
+        </div>
+    </div>
+
+    <!-- Écran de connexion -->
+    <div id="login-screen">
+        <div class="login-container">
+            <img src="images/synergia-logo.png" alt="SYNERGIA Logo">
+            <h1>SYNERGIA</h1>
+            <p>L'aventure commence ici</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email" required>
                 </div>
-                
-                <div class="form-group">
-                    <label for="login-password">Mot de passe</label>
-                    <input type="password" id="login-password" placeholder="Votre mot de passe" required>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Mot de passe" required>
                 </div>
-                
-                <button id="login-button" type="submit" class="btn btn-primary">Se connecter</button>
+                <button type="submit" class="btn-primary">Se connecter</button>
             </form>
-            
-            <div class="login-footer">
-                <p>Vous n'avez pas de compte ? <a href="#" id="signup-link">Créer un compte</a></p>
+            <p class="login-help">Problème de connexion ? Contacte Allan !</p>
+        </div>
+    </div>
+
+    <!-- Interface principale -->
+    <div id="app" class="hidden">
+        <!-- En-tête -->
+        <header>
+            <div class="user-info">
+                <img id="user-avatar" src="" alt="Avatar">
+                <div>
+                    <h2 id="user-name"></h2>
+                    <div class="xp-bar">
+                        <div id="xp-progress"></div>
+                        <span id="xp-text">0 XP</span>
+                    </div>
+                </div>
+            </div>
+            <button id="notifications-btn" class="icon-btn">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" class="badge hidden">0</span>
+            </button>
+        </header>
+
+        <!-- Contenu principal (changera selon la navigation) -->
+        <main id="main-content">
+            <!-- Sera rempli dynamiquement -->
+        </main>
+
+        <!-- Navigation du bas -->
+        <nav>
+            <button class="nav-btn active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </button>
+            <button class="nav-btn" data-page="quests">
+                <i class="fas fa-tasks"></i>
+                <span>Quêtes</span>
+            </button>
+            <button class="nav-btn" data-page="team">
+                <i class="fas fa-users"></i>
+                <span>Équipe</span>
+            </button>
+            <button class="nav-btn" data-page="calendar">
+                <i class="fas fa-calendar"></i>
+                <span>Planning</span>
+            </button>
+            <button class="nav-btn" data-page="chat">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+                <span id="chat-badge" class="badge hidden">0</span>
+            </button>
+        </nav>
+
+        <!-- Panneau de notifications (caché par défaut) -->
+        <div id="notifications-panel" class="panel hidden">
+            <div class="panel-header">
+                <h3>Notifications</h3>
+                <button id="close-notifications" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="panel-content" id="notifications-list">
+                <!-- Sera rempli dynamiquement -->
             </div>
         </div>
     </div>
-    
-    <!-- APPLICATION PRINCIPALE -->
-    <div id="app" class="page hidden">
-        <!-- BARRE LATÉRALE -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h1>SYNERGIA</h1>
-            </div>
+
+    <!-- Templates des différentes pages -->
+    <template id="dashboard-template">
+        <div class="dashboard">
+            <section class="welcome-card">
+                <h2>Bienvenue, <span id="welcome-name"></span> !</h2>
+                <p class="stat-highlight"><span id="quests-today">0</span> quêtes aujourd'hui</p>
+            </section>
             
-            <div class="user-profile">
-                <div class="avatar">
-                    <img src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
-                </div>
-                <div class="user-info">
-                    <div class="user-name">Utilisateur</div>
-                    <div class="user-level">Niveau 1</div>
-                </div>
-            </div>
-            
-<nav class="main-menu">
-  <ul>
-<li><a href="#" class="menu-link active" data-target="dashboard-page" data-tooltip="Tableau de Bord">
-  <i class="fas fa-home"></i> <span>Tableau de Bord</span>
-</a></li>
-    <li><a href="#" class="menu-link" data-target="stats-page">
-      <i class="fas fa-chart-line"></i> <span>Statistiques</span>
-    </a></li>
-    <li><a href="#" class="menu-link" data-target="alter-ego-page">
-      <i class="fas fa-user-astronaut"></i> <span>Mon Alter Ego</span>
-    </a></li>
-    <li><a href="#" class="menu-link" data-target="quests-page">
-      <i class="fas fa-tasks"></i> <span>Quêtes</span>
-    </a></li>
-    <li><a href="#" class="menu-link" data-target="team-page">
-      <i class="fas fa-users"></i> <span>Équipe</span>
-    </a></li>
-    <li><a href="#" class="menu-link" data-target="badges-page">
-      <i class="fas fa-award"></i> <span>Badges</span>
-    </a></li>
-  </ul>
-</nav>
-            
-<div class="sidebar-footer">
-  <button id="logout-button" class="btn btn-outline">
-    <i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span>
-  </button>
-</div>
-        </aside>
-        
-        <!-- CONTENU PRINCIPAL -->
-        <main class="main-content">
-            <!-- PAGE TABLEAU DE BORD -->
-            <div id="dashboard-page" class="content-page active">
-                <header class="page-header">
-                    <h2>Tableau de Bord</h2>
-                </header>
-                
-                <div class="dashboard-grid">
-                    <!-- Résumé des statistiques -->
-                    <div class="dashboard-card stats-card">
-                        <h3>Statistiques</h3>
-                        <div class="stats-container">
-                            <div class="stat-item">
-                                <div class="stat-value">3</div>
-                                <div class="stat-label">Quêtes complétées</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">2</div>
-                                <div class="stat-label">Badges obtenus</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">15</div>
-                                <div class="stat-label">Points de compétence</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">4/12</div>
-                                <div class="stat-label">Position d'équipe</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Alter Ego -->
-                    <div class="dashboard-card alter-ego-card">
-                        <h3>Mon Alter Ego</h3>
-                        <div class="alter-ego-preview">
-                            <div class="avatar large">
-                                <img src="https://placehold.co/150/blue/white?text=User" alt="Avatar">
-                            </div>
-                            <h4 class="alter-ego-name">Nom de l'Alter Ego</h4>
-                            <div class="skills-container">
-                                <div class="skill-item">
-                                    <div class="skill-label">Technique</div>
-                                    <div class="skill-bar">
-                                        <div class="skill-progress" style="width: 60%"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item">
-                                    <div class="skill-label">Communication</div>
-                                    <div class="skill-bar">
-                                        <div class="skill-progress" style="width: 80%"></div>
-                                    </div>
-                                </div>
-                                <div class="skill-item">
-                                    <div class="skill-label">Créativité</div>
-                                    <div class="skill-bar">
-                                        <div class="skill-progress" style="width: 40%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Quêtes en cours -->
-                    <div class="dashboard-card quests-card">
-                        <div class="card-header">
-                            <h3>Quêtes en cours</h3>
-                            <a href="#" class="card-link" data-target="quests-page">Voir tout</a>
-                        </div>
-                        <div class="quests-container">
-                            <div class="quest-item">
-                                <h4>Optimiser le processus de communication</h4>
-                                <div class="quest-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 75%"></div>
-                                    </div>
-                                    <div class="progress-text">75% - Étape 3/4</div>
-                                </div>
-                            </div>
-                            <div class="quest-item">
-                                <h4>Préparer la réunion mensuelle</h4>
-                                <div class="quest-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 30%"></div>
-                                    </div>
-                                    <div class="progress-text">30% - Étape 1/3</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="no-quests-message hidden">
-                            <p>Vous n'avez pas de quêtes en cours. Commencez-en une !</p>
-                            <button class="btn btn-primary">Nouvelle quête</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Activité de l'équipe -->
-                    <div class="dashboard-card team-activity-card">
-                        <h3>Activité de l'Équipe</h3>
-                        <div class="activity-feed">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-text">
-                                        <span class="username">Sophie Martin</span> a terminé la quête <span class="highlight">Formation des nouveaux</span>
-                                    </div>
-                                    <div class="activity-time">Il y a 2 heures</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-award"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-text">
-                                        <span class="username">Thomas Bernard</span> a obtenu le badge <span class="highlight">Expert en Communication</span>
-                                    </div>
-                                    <div class="activity-time">Il y a 3 heures</div>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-play-circle"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-text">
-                                        <span class="username">Julie Dupont</span> a commencé la quête <span class="highlight">Création du planning</span>
-                                    </div>
-                                    <div class="activity-time">Il y a 5 heures</div>
-                                </div>
-                            </div>
+            <section class="stats-card">
+                <h3>Ton niveau</h3>
+                <div class="level-display">
+                    <div id="level-badge">1</div>
+                    <div class="level-info">
+                        <h4 id="level-title">Novice</h4>
+                        <div class="level-progress">
+                            <div id="level-bar"></div>
+                            <span id="level-text">0/100 XP</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
             
-            <!-- PAGE STATISTIQUES -->
-            <div id="stats-page" class="content-page">
-                <header class="page-header">
-                    <h2>Statistiques</h2>
-                </header>
-                
-                <div class="stats-grid">
-                    <!-- Contenu détaillé des statistiques ici -->
-                    <div class="stats-card">
-                        <h3>Progression globale</h3>
-                        <div class="stats-container">
-                            <!-- Contenu des statistiques -->
+            <section class="role-card">
+                <h3>Ton rôle principal</h3>
+                <div id="main-role">
+                    <div id="role-icon" class="role-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <div class="role-info">
+                        <h4 id="role-name">Entretien & Maintenance</h4>
+                        <div class="mastery-progress">
+                            <div id="mastery-bar"></div>
+                            <span id="mastery-text">Novice</span>
                         </div>
                     </div>
                 </div>
+            </section>
+            
+            <section class="quests-preview">
+                <div class="section-header">
+                    <h3>Quêtes du jour</h3>
+                    <button class="btn-text" data-page="quests">Voir tout</button>
+                </div>
+                <div id="daily-quests">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+            
+            <section class="team-activity">
+                <h3>Activité de l'équipe</h3>
+                <div id="team-feed">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="quests-template">
+        <div class="quests-page">
+            <div class="tabs">
+                <button class="tab active" data-tab="daily">Quotidiennes</button>
+                <button class="tab" data-tab="weekly">Hebdomadaires</button>
+                <button class="tab" data-tab="special">Spéciales</button>
             </div>
             
-            <!-- PAGE ALTER EGO -->
-            <div id="alter-ego-page" class="content-page">
-                <header class="page-header">
-                    <h2>Mon Alter Ego</h2>
-                </header>
-                
-                <div class="alter-ego-content">
-                    <div class="alter-ego-preview large">
-                        <div class="avatar x-large">
-                            <img src="https://placehold.co/300/blue/white?text=User" alt="Avatar">
-                        </div>
-                        <h3 class="alter-ego-name">Nom de l'Alter Ego</h3>
-                        
-                        <div class="skills-container large">
-                            <div class="skill-item">
-                                <div class="skill-label">Technique</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 60%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-label">Communication</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 80%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-label">Créativité</div>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" style="width: 40%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="alter-ego-customization">
-                        <h3>Personnalisation</h3>
-                        <!-- Formulaire de personnalisation ici -->
-                    </div>
+            <div class="tab-content active" id="daily-tab">
+                <div class="quests-list" id="daily-quests-list">
+                    <!-- Sera rempli dynamiquement -->
                 </div>
             </div>
             
-            <!-- PAGE QUÊTES -->
-            <div id="quests-page" class="content-page">
-                <header class="page-header">
-                    <h2>Quêtes</h2>
-                </header>
-                
-                <div class="quests-tabs">
-                    <button class="tab-button active" data-tab="active-quests">En cours</button>
-                    <button class="tab-button" data-tab="available-quests">Disponibles</button>
-                    <button class="tab-button" data-tab="completed-quests">Complétées</button>
+            <div class="tab-content" id="weekly-tab">
+                <div class="quests-list" id="weekly-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="special-tab">
+                <div class="quests-list" id="special-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="team-template">
+        <div class="team-page">
+            <div class="leaderboard">
+                <h3>Classement</h3>
+                <div id="leaderboard-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="team-members">
+                <h3>Membres de l'équipe</h3>
+                <div id="team-members-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="roles-overview">
+                <h3>Rôles attribués</h3>
+                <div id="roles-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="calendar-template">
+        <div class="calendar-page">
+            <div class="calendar-header">
+                <button id="prev-month" class="icon-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h3 id="current-month">Mai 2025</h3>
+                <button id="next-month" class="icon-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="calendar-view">
+                <div class="weekdays">
+                    <div>Lu</div>
+                    <div>Ma</div>
+                    <div>Me</div>
+                    <div>Je</div>
+                    <div>Ve</div>
+                    <div>Sa</div>
+                    <div>Di</div>
+                </div>
+                <div id="calendar-days" class="calendar-days">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="events-list">
+                <h3>Événements à venir</h3>
+                <div id="events-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <button id="add-event" class="btn-primary floating-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </template>
+
+    <template id="chat-template">
+        <div class="chat-page">
+            <div class="chat-channels">
+                <button class="chat-channel active" data-channel="general">
+                    <i class="fas fa-hashtag"></i>
+                    <span>général</span>
+                </button>
+                <button class="chat-channel" data-channel="organisation">
+                    <i class="fas fa-hashtag"></i>
+                    <span>organisation</span>
+                </button>
+                <button class="chat-channel" data-channel="maintenance">
+                    <i class="fas fa-hashtag"></i>
+                    <span>maintenance</span>
+                </button>
+                <button class="chat-channel" data-channel="fun">
+                    <i class="fas fa-hashtag"></i>
+                    <span>fun</span>
+                </button>
+            </div>
+            
+            <div id="chat-container">
+                <div id="chat-messages">
+                    <!-- Sera rempli dynamiquement -->
                 </div>
                 
-                <div class="quests-content">
-                    <div id="active-quests" class="tab-content active">
-                        <div class="quests-container">
-                            <!-- Quêtes actives ici -->
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Envoyer un message...">
+                    <button id="send-message" class="icon-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Modèles pour composants dynamiques -->
+    <template id="quest-item-template">
+        <div class="quest-item">
+            <div class="quest-info">
+                <h4 class="quest-title"></h4>
+                <p class="quest-description"></p>
+                <div class="quest-meta">
+                    <span class="quest-xp"><i class="fas fa-star"></i> <span class="xp-amount"></span> XP</span>
+                    <span class="quest-deadline"><i class="fas fa-clock"></i> <span class="deadline-text"></span></span>
+                </div>
+            </div>
+            <button class="btn-complete">
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+    </template>
+
+    <template id="team-member-template">
+        <div class="team-member-card">
+            <img class="member-avatar" src="" alt="Avatar">
+            <div class="member-info">
+                <h4 class="member-name"></h4>
+                <div class="member-role"></div>
+                <div class="member-level">
+                    <span class="level-number"></span>
+                    <div class="level-progress">
+                        <div class="level-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="event-item-template">
+        <div class="event-item">
+            <div class="event-dot"></div>
+            <div class="event-info">
+                <h4 class="event-title"></h4>
+                <p class="event-time"></p>
+                <p class="event-participants"></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="chat-message-template">
+        <div class="chat-message">
+            <img class="message-avatar" src="" alt="Avatar">
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-author"></span>
+                    <span class="message-time"></span>
+                </div>
+                <p class="message-text"></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="notification-item-template">
+        <div class="notification-item">
+            <div class="notification-icon">
+                <i class=""></i>
+            </div>
+            <div class="notification-content">
+                <p class="notification-text"></p>
+                <span class="notification-time"></span>
+            </div>
+        </div>
+    </template>
+
+    <!-- Modal pour ajouter un événement -->
+    <div id="event-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nouvel événement</h3>
+                <button id="close-event-modal" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="event-form">
+                    <div class="form-group">
+                        <label for="event-title">Titre</label>
+                        <input type="text" id="event-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Date</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-start-time">Heure de début</label>
+                        <input type="time" id="event-start-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end-time">Heure de fin</label>
+                        <input type="time" id="event-end-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-attendees">Participants</label>
+                        <select id="event-attendees" multiple>
+                            <option value="all">Toute l'équipe</option>
+                            <option value="paris">Paris Amélie</option>
+                            <option value="red">Red Houlette</option>
+                            <option value="leo">Léo Mercier</option>
+                            <option value="polar">Polar Caron</option>
+                            <option value="allan">Allan Boehme</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Description</label>
+                        <textarea id="event-description"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Créer l'événement</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour valider une quête -->
+    <div id="quest-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Valider la quête</h3>
+                <button id="close-quest-modal" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4 id="quest-modal-title"></h4>
+                <p id="quest-modal-description"></p>
+                <div class="xp-reward">
+                    <i class="fas fa-star"></i>
+                    <span id="quest-modal-xp"></span> XP
+                </div>
+                <form id="quest-validation-form">
+                    <div class="form-group">
+                        <label for="quest-comment">Commentaire (optionnel)</label>
+                        <textarea id="quest-comment"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="quest-proof">Preuve de réalisation (optionnel)</label>
+                        <input type="file" id="quest-proof">
+                    </div>
+                    <button type="submit" class="btn-primary">Valider la quête</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de succès -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content success-content">
+            <div class="success-header">
+                <i class="fas fa-check-circle"></i>
+                <h3>Félicitations !</h3>
+            </div>
+            <div class="success-body">
+                <p id="success-message"></p>
+                <div id="rewards">
+                    <div class="xp-gained">
+                        <i class="fas fa-star"></i>
+                        <span id="gained-xp"></span> XP gagnés
+                    </div>
+                    <div id="badge-unlocked" class="hidden">
+                        <div class="badge-icon">
+                            <i class=""></i>
                         </div>
-                        <div class="no-quests-message hidden">
-                            <p>Vous n'avez pas de quêtes en cours. Commencez-en une !</p>
-                            <button class="btn btn-primary">Nouvelle quête</button>
+                        <div class="badge-info">
+                            <h4>Nouveau badge débloqué !</h4>
+                            <p id="badge-name"></p>
                         </div>
                     </div>
-                    
-                    <div id="available-quests" class="tab-content">
-                        <!-- Quêtes disponibles ici -->
-                    </div>
-                    
-                    <div id="completed-quests" class="tab-content">
-                        <!-- Quêtes complétées ici -->
-                    </div>
                 </div>
+                <button id="close-success" class="btn-primary">Super !</button>
             </div>
-            
-            <!-- PAGE ÉQUIPE -->
-            <div id="team-page" class="content-page">
-                <header class="page-header">
-                    <h2>Équipe</h2>
-                </header>
-                
-                <div class="team-content">
-                    <!-- Contenu équipe ici -->
-                </div>
-            </div>
-            
-            <!-- PAGE BADGES -->
-            <div id="badges-page" class="content-page">
-                <header class="page-header">
-                    <h2>Badges</h2>
-                </header>
-                
-                <div class="badges-grid">
-                    <!-- Contenu badges ici -->
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
 
     <!-- Scripts Firebase -->
-   <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, collection, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-       // Configuration Firebase fournie
-  const firebaseConfig = {
-    apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
-    authDomain: "synergia-app-f27e7.firebaseapp.com",
-    projectId: "synergia-app-f27e7",
-    storageBucket: "synergia-app-f27e7.firebasestorage.app",
-    messagingSenderId: "201912738922",
-    appId: "1:201912738922:web:96a9f0a6ffadf9cf899613",
-    measurementId: "G-S5WPV574KJ"
-  };
-
-       // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // Exposez Firebase pour le fichier script.js
-  window.firebaseApp = app;
-  window.firebaseAuth = auth;
-  window.firebaseDb = db;
-  window.firebaseAuthFunctions = { signInWithEmailAndPassword, onAuthStateChanged, signOut };
-  window.firebaseFirestoreFunctions = { collection, doc, getDoc, setDoc, updateDoc };
-</script>
-
-<!-- Votre script principal -->
-<script src="script.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
+    
+    <!-- Scripts de l'application -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/roles.js"></script>
+    <script src="js/quests.js"></script>
+    <script src="js/badges.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker enregistré avec succès:', registration);
+                }).catch(error => {
+                    console.log('Échec de l\'enregistrement du Service Worker:', error);
+                });
+        }
+    </script>
 </body>
 </html>
