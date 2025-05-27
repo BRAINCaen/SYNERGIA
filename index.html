@@ -182,6 +182,50 @@ const firebaseConfig = {
             questsList.appendChild(questItem);
         });
     }
+        // Ajouter ce code après ta fonction loadQuests()
+
+// Afficher le nom de l'utilisateur connecté
+function showUserInfo(user) {
+    const header = document.createElement('div');
+    header.style.backgroundColor = '#7e57c2';
+    header.style.color = 'white';
+    header.style.padding = '15px';
+    header.style.display = 'flex';
+    header.style.justifyContent = 'space-between';
+    header.style.alignItems = 'center';
+    header.style.marginBottom = '20px';
+    
+    header.innerHTML = `
+        <div>
+            <h2 style="margin:0;">Bienvenue, ${user.email}</h2>
+        </div>
+        <button id="logout-btn" style="padding:8px 15px; background:white; color:#7e57c2; border:none; border-radius:5px; cursor:pointer;">
+            Déconnexion
+        </button>
+    `;
+    
+    document.querySelector('.quests-container').prepend(header);
+    
+    document.getElementById('logout-btn').addEventListener('click', () => {
+        auth.signOut().then(() => {
+            window.location.reload();
+        });
+    });
+}
+
+// Modifier onAuthStateChanged pour afficher les infos utilisateur
+auth.onAuthStateChanged(user => {
+    if (user) {
+        loadQuests();
+        showUserInfo(user);
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+    } else {
+        document.getElementById('login-screen').style.display = 'block';
+        document.getElementById('app').style.display = 'none';
+    }
+});
+
     </script>
 </body>
 </html>
