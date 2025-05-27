@@ -1,1844 +1,547 @@
-<!-- Scripts Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
-
-<!-- Ton fichier de configuration Firebase -->
-<script src="js/firebase-config.js"></script>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYNERGIA - Gestion d'équipe gamifiée</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <!-- Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <style>
-        :root {
-            --primary: #6C63FF;
-            --secondary: #FF6584;
-            --success: #38B2AC;
-            --warning: #F6AD55;
-            --danger: #F56565;
-            --info: #4299E1;
-            --dark: #2D3748;
-            --light: #F7FAFC;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-            overscroll-behavior-y: contain;
-            -webkit-user-select: none;
-            user-select: none;
-            touch-action: manipulation;
-        }
-        
-        .game-font {
-            font-family: 'Press Start 2P', cursive;
-        }
-        
-        .pixel-border {
-            border: 4px solid #000;
-            box-shadow: 0 0 0 4px #FFF, 0 0 0 8px #000;
-        }
-        
-        .role-card, .quest-card, .badge-card {
-            transition: all 0.3s ease;
-            border-radius: 10px;
-            border: 2px solid #ddd;
-            overflow: hidden;
-        }
-        
-        .role-card:hover, .quest-card:hover, .badge-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        
-        .menu-item {
-            position: relative;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .menu-item:hover {
-            background-color: rgba(108, 99, 255, 0.1);
-        }
-        
-        .menu-item.active {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .menu-item i {
-            margin-right: 12px;
-            font-size: 1.2rem;
-        }
-        
-        .badge {
-            position: relative;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #FFF;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .badge.locked {
-            filter: grayscale(100%);
-            opacity: 0.5;
-        }
-        
-        .badge i {
-            font-size: 28px;
-        }
-        
-        .progress-xp {
-            height: 16px;
-            border-radius: 8px;
-            background-color: #e2e8f0;
-            overflow: hidden;
-        }
-        
-        .progress-xp .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #6C63FF 0%, #9F7AEA 100%);
-            border-radius: 8px;
-            transition: width 0.5s ease;
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 18px;
-            height: 18px;
-            background-color: var(--danger);
-            border-radius: 50%;
-            color: white;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            z-index: 100;
-        }
-        
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #718096;
-            font-size: 0.75rem;
-        }
-        
-        .bottom-nav-item.active {
-            color: var(--primary);
-        }
-        
-        .bottom-nav-item i {
-            font-size: 1.25rem;
-            margin-bottom: 2px;
-        }
-        
-        .screen {
-            padding-bottom: 70px;
-            display: none;
-        }
-        
-        .screen.active {
-            display: block;
-        }
-        
-        .quest-progress {
-            height: 8px;
-            background-color: #e2e8f0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .quest-progress .fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        .xp-animation {
-            position: fixed;
-            color: var(--success);
-            font-weight: bold;
-            z-index: 1000;
-            animation: float-up 2s forwards;
-        }
-        
-        @keyframes float-up {
-            0% {
-                opacity: 0;
-                transform: translateY(0);
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px);
-            }
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .message {
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            margin-bottom: 8px;
-        }
-        
-        .message.sent {
-            background-color: var(--primary);
-            color: white;
-            border-bottom-right-radius: 4px;
-            margin-left: auto;
-        }
-        
-        .message.received {
-            background-color: #e2e8f0;
-            border-bottom-left-radius: 4px;
-        }
-        
-        .level-badge {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 12px;
-            margin-right: 8px;
-        }
-        
-        /* Animation for level up */
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.15);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        
-        .pulse-animation {
-            animation: pulse 1s infinite;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            border-radius: 16px;
-            padding: 20px;
-            width: 85%;
-            max-width: 500px;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            animation: confetti-fall 3s ease-out forwards;
-        }
-        
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100%) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(1000%) rotate(720deg);
-                opacity: 0;
-            }
-        }
-    </style>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    <!-- Splash/Login Screen -->
-    <div id="login-screen" class="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 z-50">
-        <div class="w-4/5 max-w-md p-8 bg-white rounded-xl shadow-2xl">
-            <div class="text-center mb-6">
-                <h1 class="game-font text-2xl mb-2 text-indigo-600">SYNERGIA</h1>
-                <p class="text-gray-600">Brain Escape & Quiz Game - Caen</p>
-                <div class="w-24 h-1 bg-indigo-500 mx-auto my-4"></div>
+<body>
+    <!-- Écran de chargement -->
+    <div id="loading-screen">
+        <div class="loading-container">
+            <img src="images/synergia-logo.png" alt="SYNERGIA Logo" class="pulse">
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
             </div>
-            
-            <h2 class="text-lg font-semibold mb-4 text-center">Qui êtes-vous ?</h2>
-            
-            <div class="grid grid-cols-1 gap-3">
-                <button data-user="Allan Boehme" class="user-select-btn flex items-center p-3 bg-indigo-50 hover:bg-indigo-100 rounded-lg border-2 border-indigo-200">
-                    <div class="user-avatar bg-indigo-600 mr-3">AB</div>
-                    <div class="text-left">
-                        <h3 class="font-medium">Allan Boehme</h3>
-                        <p class="text-xs text-gray-500">Gérant - Niveau 8</p>
-                    </div>
-                </button>
-                
-                <button data-user="Paris Amélie" class="user-select-btn flex items-center p-3 bg-pink-50 hover:bg-pink-100 rounded-lg border-2 border-pink-200">
-                    <div class="user-avatar bg-pink-500 mr-3">PA</div>
-                    <div class="text-left">
-                        <h3 class="font-medium">Paris Amélie</h3>
-                        <p class="text-xs text-gray-500">Communicante - Niveau 6</p>
-                    </div>
-                </button>
-                
-                <button data-user="Red Houlette" class="user-select-btn flex items-center p-3 bg-red-50 hover:bg-red-100 rounded-lg border-2 border-red-200">
-                    <div class="user-avatar bg-red-500 mr-3">RH</div>
-                    <div class="text-left">
-                        <h3 class="font-medium">Red Houlette</h3>
-                        <p class="text-xs text-gray-500">Game Master - Niveau 5</p>
-                    </div>
-                </button>
-                
-                <button data-user="Léo Mercier" class="user-select-btn flex items-center p-3 bg-green-50 hover:bg-green-100 rounded-lg border-2 border-green-200">
-                    <div class="user-avatar bg-green-500 mr-3">LM</div>
-                    <div class="text-left">
-                        <h3 class="font-medium">Léo Mercier</h3>
-                        <p class="text-xs text-gray-500">Mr. Bricolo - Niveau 7</p>
-                    </div>
-                </button>
-                
-                <button data-user="Polar Caron" class="user-select-btn flex items-center p-3 bg-blue-50 hover:bg-blue-100 rounded-lg border-2 border-blue-200">
-                    <div class="user-avatar bg-blue-500 mr-3">PC</div>
-                    <div class="text-left">
-                        <h3 class="font-medium">Polar Caron</h3>
-                        <p class="text-xs text-gray-500">Bras droit - Niveau 5</p>
-                    </div>
-                </button>
-            </div>
-            
-            <div class="mt-6 text-center text-sm text-gray-500">
-                <p>© 2024 SYNERGIA - Brain Escape & Quiz Game</p>
-            </div>
+            <p>Chargement de l'aventure...</p>
         </div>
     </div>
 
-    <!-- Header -->
-    <header class="bg-white shadow-md p-4 flex items-center justify-between sticky top-0 z-40">
-        <div class="flex items-center">
-            <div id="user-avatar" class="user-avatar mr-3 bg-indigo-600">AB</div>
-            <div>
-                <h1 id="user-name" class="font-bold">Allan Boehme</h1>
-                <div class="flex items-center text-xs text-gray-600">
-                    <div id="user-level-badge" class="level-badge">8</div>
-                    <div class="w-20 h-3 bg-gray-200 rounded-full overflow-hidden">
-                        <div id="user-xp-bar" class="h-full bg-indigo-500" style="width: 60%"></div>
-                    </div>
-                    <span id="user-xp" class="ml-1">1800/2000</span>
+    <!-- Écran de connexion -->
+    <div id="login-screen">
+        <div class="login-container">
+            <img src="images/synergia-logo.png" alt="SYNERGIA Logo">
+            <h1>SYNERGIA</h1>
+            <p>L'aventure commence ici</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email" required>
                 </div>
-            </div>
-        </div>
-        <div class="flex">
-            <button id="notifications-btn" class="relative p-2">
-                <i class="fas fa-bell"></i>
-                <span class="notification-badge">3</span>
-            </button>
-            <button id="settings-btn" class="p-2">
-                <i class="fas fa-cog"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto pb-20">
-        <!-- Dashboard Screen -->
-        <div id="dashboard-screen" class="screen active px-4 py-5">
-            <div class="mb-6">
-                <h2 class="text-xl font-bold mb-4">Tableau de Bord</h2>
-                <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                    <h3 class="font-semibold text-gray-700 mb-2">Niveau d'Activité de l'Équipe</h3>
-                    <canvas id="activity-chart" width="300" height="150"></canvas>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Mot de passe" required>
                 </div>
-                
-                <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-semibold text-gray-700">Missions en cours</h3>
-                        <span class="text-xs text-indigo-600 font-medium">Voir tout</span>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <div class="w-2 h-10 bg-indigo-500 rounded-full mr-3"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between">
-                                    <h4 class="font-medium text-sm">Réparation - Coffre Salle 2</h4>
-                                    <span class="text-xs text-gray-500">Urgent</span>
-                                </div>
-                                <div class="flex items-center text-xs mt-1">
-                                    <div class="user-avatar bg-green-500 w-5 h-5 text-xs">LM</div>
-                                    <div class="quest-progress flex-1 mx-2">
-                                        <div class="fill bg-indigo-500" style="width: 70%"></div>
-                                    </div>
-                                    <span>70%</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <div class="w-2 h-10 bg-pink-500 rounded-full mr-3"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between">
-                                    <h4 class="font-medium text-sm">Création Contenu Instagram</h4>
-                                    <span class="text-xs text-gray-500">Cette semaine</span>
-                                </div>
-                                <div class="flex items-center text-xs mt-1">
-                                    <div class="user-avatar bg-pink-500 w-5 h-5 text-xs">PA</div>
-                                    <div class="quest-progress flex-1 mx-2">
-                                        <div class="fill bg-pink-500" style="width: 40%"></div>
-                                    </div>
-                                    <span>40%</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <div class="w-2 h-10 bg-red-500 rounded-full mr-3"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between">
-                                    <h4 class="font-medium text-sm">Formation Nouveau Game Master</h4>
-                                    <span class="text-xs text-gray-500">Aujourd'hui</span>
-                                </div>
-                                <div class="flex items-center text-xs mt-1">
-                                    <div class="user-avatar bg-red-500 w-5 h-5 text-xs">RH</div>
-                                    <div class="quest-progress flex-1 mx-2">
-                                        <div class="fill bg-red-500" style="width: 10%"></div>
-                                    </div>
-                                    <span>10%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md p-4">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-semibold text-gray-700">Progression de l'équipe</h3>
-                        <span class="text-xs text-indigo-600 font-medium">Cette semaine</span>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-indigo-600 w-8 h-8 text-xs">AB</div>
-                                <span class="ml-2 text-sm">Allan</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xs mr-2">450 XP</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full">
-                                    <div class="h-full bg-indigo-600 rounded-full" style="width: 90%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-green-500 w-8 h-8 text-xs">LM</div>
-                                <span class="ml-2 text-sm">Léo</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xs mr-2">380 XP</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full">
-                                    <div class="h-full bg-green-500 rounded-full" style="width: 76%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-pink-500 w-8 h-8 text-xs">PA</div>
-                                <span class="ml-2 text-sm">Amélie</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xs mr-2">320 XP</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full">
-                                    <div class="h-full bg-pink-500 rounded-full" style="width: 64%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-red-500 w-8 h-8 text-xs">RH</div>
-                                <span class="ml-2 text-sm">Red</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xs mr-2">280 XP</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full">
-                                    <div class="h-full bg-red-500 rounded-full" style="width: 56%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-blue-500 w-8 h-8 text-xs">PC</div>
-                                <span class="ml-2 text-sm">Polar</span>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-xs mr-2">250 XP</span>
-                                <div class="w-24 h-2 bg-gray-200 rounded-full">
-                                    <div class="h-full bg-blue-500 rounded-full" style="width: 50%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Roles Screen -->
-        <div id="roles-screen" class="screen px-4 py-5">
-            <div class="mb-6">
-                <h2 class="text-xl font-bold mb-4">Gestion des Rôles</h2>
-                <p class="text-sm text-gray-600 mb-4">Gérez les rôles de l'équipe et suivez leur niveau de maîtrise.</p>
-                
-                <div class="space-y-4">
-                    <!-- Entretien & Maintenance -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Entretien & Maintenance</h3>
-                            <div class="flex">
-                                <div class="bg-green-500 text-white text-xs px-2 py-1 rounded">Léo Mercier</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Réparations techniques, entretien des énigmes et mécanismes, aménagements.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-50 text-indigo-600 py-2 rounded-lg text-sm font-medium">Voir les quêtes associées</button>
-                    </div>
-                    
-                    <!-- Gestion des Avis -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Gestion des Avis</h3>
-                            <div class="flex">
-                                <div class="bg-pink-500 text-white text-xs px-2 py-1 rounded">Paris Amélie</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Suivi des avis clients, réponses personnalisées, analyse des tendances.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-50 text-indigo-600 py-2 rounded-lg text-sm font-medium">Voir les quêtes associées</button>
-                    </div>
-                    
-                    <!-- Gestion des Stocks -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Gestion des Stocks</h3>
-                            <div class="flex">
-                                <div class="bg-blue-500 text-white text-xs px-2 py-1 rounded">Polar Caron</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Suivi des consommables, commandes, organisation des espaces de stockage.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-50 text-indigo-600 py-2 rounded-lg text-sm font-medium">Voir les quêtes associées</button>
-                    </div>
-                    
-                    <!-- Organisation Interne -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Organisation Interne</h3>
-                            <div class="flex">
-                                <div class="bg-indigo-500 text-white text-xs px-2 py-1 rounded">Allan Boehme</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Planification, congés, conformité, suivi des rôles et amélioration organisationnelle.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-50 text-indigo-600 py-2 rounded-lg text-sm font-medium">Voir les quêtes associées</button>
-                    </div>
-                    
-                    <!-- Création de Contenu -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Création de Contenu</h3>
-                            <div class="flex">
-                                <div class="bg-pink-500 text-white text-xs px-2 py-1 rounded">Paris Amélie</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Créations visuelles, mise en forme, cohérence graphique et actualisation des affichages.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-50 text-indigo-600 py-2 rounded-lg text-sm font-medium">Voir les quêtes associées</button>
-                    </div>
-                    
-                    <!-- Mentorat & Formation -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Mentorat & Formation</h3>
-                            <div class="flex">
-                                <div class="bg-red-500 text-white text-xs px-2 py-1 rounded">Red Houlette</div>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Accueil et formation des nouveaux, création de supports pédagogiques, animation d'échanges.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-50 text-indigo-600 py-2 rounded-lg text-sm font-medium">Voir les quêtes associées</button>
-                    </div>
-                    
-                    <!-- Partenariats & Référencement -->
-                    <div class="role-card bg-white p-4 rounded-xl shadow-md">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Partenariats & Référencement</h3>
-                            <div class="flex">
-                                <span class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded">Non assigné</span>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 mb-3">Gestion des partenaires locaux, représentation externe, optimisation du référencement.</p>
-                        <div class="flex items-center">
-                            <div class="text-xs text-gray-500 mr-2">Niveau de maîtrise:</div>
-                            <div class="flex">
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                                <i class="far fa-star text-yellow-400"></i>
-                            </div>
-                        </div>
-                        <button class="mt-3 w-full bg-indigo-500 text-white py-2 rounded-lg text-sm font-medium">Prendre ce rôle</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quests Screen -->
-        <div id="quests-screen" class="screen px-4 py-5">
-            <div class="mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold">Quêtes</h2>
-                    <div class="flex">
-                        <button id="quests-all-btn" class="tab-btn active px-3 py-1 text-sm font-medium rounded-l-lg bg-indigo-500 text-white">Toutes</button>
-                        <button id="quests-my-btn" class="tab-btn px-3 py-1 text-sm font-medium rounded-r-lg bg-gray-200">Mes quêtes</button>
-                    </div>
-                </div>
-                
-                <div id="quests-all-content" class="tab-content active">
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-red-600">URGENT</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 50 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Réparer le mécanisme du coffre - Salle 2</h3>
-                        <p class="text-sm text-gray-600 mb-2">Le mécanisme d'ouverture du coffre ne fonctionne plus correctement. À réparer avant le weekend.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-green-500 w-6 h-6 text-xs mr-2">LM</div>
-                                <span class="text-xs text-gray-600">Assigné à Léo</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: Demain</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-green-500" style="width: 70%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">70%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-yellow-600">IMPORTANT</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 40 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Créer un post Instagram pour le nouvel escape game</h3>
-                        <p class="text-sm text-gray-600 mb-2">Créer un contenu engageant pour annoncer le lancement du nouvel escape game. Photos + texte accrocheur.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-pink-500 w-6 h-6 text-xs mr-2">PA</div>
-                                <span class="text-xs text-gray-600">Assigné à Paris</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: 3 jours</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-pink-500" style="width: 40%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">40%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-blue-600">NORMAL</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 30 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Commander les stocks de consommables pour juin</h3>
-                        <p class="text-sm text-gray-600 mb-2">Vérifier et commander les stocks de piles, ampoules, accessoires et matériel d'entretien pour le mois prochain.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-blue-500 w-6 h-6 text-xs mr-2">PC</div>
-                                <span class="text-xs text-gray-600">Assigné à Polar</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: 7 jours</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-blue-500" style="width: 20%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">20%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-green-600">RÉCURRENT</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 25 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Répondre aux avis clients de la semaine</h3>
-                        <p class="text-sm text-gray-600 mb-2">Répondre de manière personnalisée aux nouveaux avis reçus sur Google, TripAdvisor et Facebook.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-pink-500 w-6 h-6 text-xs mr-2">PA</div>
-                                <span class="text-xs text-gray-600">Assigné à Paris</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: Hebdomadaire</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-pink-500" style="width: 90%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">90%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-indigo-600">NOUVEAU</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 35 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Former le nouveau Game Master</h3>
-                        <p class="text-sm text-gray-600 mb-2">Former le nouveau Game Master sur les procédures, le déroulement des sessions et la gestion des clients.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-red-500 w-6 h-6 text-xs mr-2">RH</div>
-                                <span class="text-xs text-gray-600">Assigné à Red</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: 5 jours</span>
-                        </div>
-                        <div class="flex items-center">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-red-500" style="width: 10%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">10%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="quests-my-content" class="tab-content">
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-indigo-600">EN COURS</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 45 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Planifier les sessions de Juin</h3>
-                        <p class="text-sm text-gray-600 mb-2">Établir le planning des sessions et répartition des rôles pour le mois de juin.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-indigo-600 w-6 h-6 text-xs mr-2">AB</div>
-                                <span class="text-xs text-gray-600">Assigné à vous</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: 2 jours</span>
-                        </div>
-                        <div class="flex items-center mb-3">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-indigo-500" style="width: 60%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">60%</span>
-                        </div>
-                        <button class="bg-indigo-500 text-white text-sm font-medium w-full py-2 rounded-lg">Marquer progression</button>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-yellow-600">IMPORTANT</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 40 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Préparer le bilan mensuel d'activité</h3>
-                        <p class="text-sm text-gray-600 mb-2">Compiler les données du mois et préparer un rapport sur l'activité de l'escape game.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-indigo-600 w-6 h-6 text-xs mr-2">AB</div>
-                                <span class="text-xs text-gray-600">Assigné à vous</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: 4 jours</span>
-                        </div>
-                        <div class="flex items-center mb-3">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-indigo-500" style="width: 30%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">30%</span>
-                        </div>
-                        <button class="bg-indigo-500 text-white text-sm font-medium w-full py-2 rounded-lg">Marquer progression</button>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                                <span class="text-xs font-medium text-green-600">À DÉMARRER</span>
-                            </div>
-                            <span class="text-xs text-gray-500">+ 30 XP</span>
-                        </div>
-                        <h3 class="font-semibold mb-1">Entretien individuel avec Léo</h3>
-                        <p class="text-sm text-gray-600 mb-2">Rencontre individuelle pour faire le point sur les objectifs et les progrès.</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center">
-                                <div class="user-avatar bg-indigo-600 w-6 h-6 text-xs mr-2">AB</div>
-                                <span class="text-xs text-gray-600">Assigné à vous</span>
-                            </div>
-                            <span class="text-xs text-gray-500">Échéance: Semaine prochaine</span>
-                        </div>
-                        <div class="flex items-center mb-3">
-                            <div class="flex-1 mr-3">
-                                <div class="quest-progress">
-                                    <div class="fill bg-indigo-500" style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <span class="text-xs font-medium">0%</span>
-                        </div>
-                        <button class="bg-indigo-500 text-white text-sm font-medium w-full py-2 rounded-lg">Démarrer</button>
-                    </div>
-                </div>
-                
-                <div class="mt-6">
-                    <button id="create-quest-btn" class="fixed bottom-20 right-6 w-14 h-14 bg-indigo-600 rounded-full shadow-lg flex items-center justify-center">
-                        <i class="fas fa-plus text-white text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Calendar Screen -->
-        <div id="calendar-screen" class="screen px-4 py-5">
-            <div class="mb-6">
-                <h2 class="text-xl font-bold mb-4">Planning</h2>
-                
-                <!-- Month selector -->
-                <div class="flex items-center justify-between mb-4">
-                    <button class="p-2"><i class="fas fa-chevron-left"></i></button>
-                    <h3 class="font-semibold text-lg">Mai 2024</h3>
-                    <button class="p-2"><i class="fas fa-chevron-right"></i></button>
-                </div>
-                
-                <!-- Days of week -->
-                <div class="grid grid-cols-7 text-center mb-2">
-                    <div class="text-xs font-medium text-gray-500">L</div>
-                    <div class="text-xs font-medium text-gray-500">M</div>
-                    <div class="text-xs font-medium text-gray-500">M</div>
-                    <div class="text-xs font-medium text-gray-500">J</div>
-                    <div class="text-xs font-medium text-gray-500">V</div>
-                    <div class="text-xs font-medium text-gray-500">S</div>
-                    <div class="text-xs font-medium text-gray-500">D</div>
-                </div>
-                
-                <!-- Calendar grid -->
-                <div class="grid grid-cols-7 gap-1 mb-6">
-                    <!-- Previous month -->
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs text-gray-400">29</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs text-gray-400">30</div>
-                    </div>
-                    
-                    <!-- Current month -->
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">1</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">2</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">3</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">4</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">5</div>
-                    </div>
-                    
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">6</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">7</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">8</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">9</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">10</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">11</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">12</div>
-                    </div>
-                    
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">13</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">14</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">15</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs bg-yellow-100 text-yellow-800">16</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs bg-red-500 text-white">17</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">18</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">19</div>
-                    </div>
-                    
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">20</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs bg-indigo-500 text-white">21</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs bg-indigo-100 text-indigo-800">22</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">23</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs bg-green-100 text-green-800">24</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">25</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">26</div>
-                    </div>
-                    
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">27</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">28</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">29</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">30</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs">31</div>
-                    </div>
-                    
-                    <!-- Next month -->
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs text-gray-400">1</div>
-                    </div>
-                    <div class="aspect-square p-1">
-                        <div class="w-full h-full flex items-center justify-center rounded-full text-xs text-gray-400">2</div>
-                    </div>
-                </div>
-                
-                <!-- Events of the day -->
-                <div>
-                    <h3 class="font-semibold mb-3">Événements du 17 Mai</h3>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-3">
-                        <div class="flex">
-                            <div class="w-2 bg-red-500 rounded-full mr-3"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h4 class="font-medium">Réparation du coffre - Salle 2</h4>
-                                    <span class="text-xs text-gray-500">09:00 - 12:00</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fas fa-user-circle mr-1"></i>
-                                    <span>Léo</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4 mb-3">
-                        <div class="flex">
-                            <div class="w-2 bg-blue-500 rounded-full mr-3"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h4 class="font-medium">Formation nouveau Game Master</h4>
-                                    <span class="text-xs text-gray-500">14:00 - 17:00</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fas fa-user-circle mr-1"></i>
-                                    <span>Red</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-4">
-                        <div class="flex">
-                            <div class="w-2 bg-purple-500 rounded-full mr-3"></div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h4 class="font-medium">Réunion d'équipe</h4>
-                                    <span class="text-xs text-gray-500">18:00 - 19:00</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fas fa-users mr-1"></i>
-                                    <span>Toute l'équipe</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Communication Screen -->
-        <div id="chat-screen" class="screen px-4 py-5">
-            <div class="mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold">Communication</h2>
-                    <button class="p-2 bg-indigo-500 rounded-full text-white">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center">
-                            <div class="bg-indigo-100 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">Équipe SYNERGIA</h3>
-                                <p class="text-xs text-gray-500">5 membres</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-indigo-500 text-white px-2 py-1 rounded-full">3 Nouveaux</span>
-                    </div>
-                    
-                    <div class="border-t border-gray-200 pt-3">
-                        <div class="flex mb-3">
-                            <div class="user-avatar bg-red-500 w-8 h-8 text-xs mr-2 flex-shrink-0">RH</div>
-                            <div class="message received">
-                                <p class="text-sm">Bonjour tout le monde ! J'ai besoin d'aide pour la formation du nouveau GM cet après-midi. Des volontaires ?</p>
-                                <span class="text-xs text-gray-500">09:34</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex mb-3">
-                            <div class="user-avatar bg-blue-500 w-8 h-8 text-xs mr-2 flex-shrink-0">PC</div>
-                            <div class="message received">
-                                <p class="text-sm">Je suis disponible après 16h si ça peut aider !</p>
-                                <span class="text-xs text-gray-500">09:40</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-end mb-3">
-                            <div class="message sent">
-                                <p class="text-sm">Super Polar ! Red, n'oublie pas de documenter la session pour qu'on puisse l'utiliser pour les prochaines formations.</p>
-                                <span class="text-xs text-gray-400">09:45</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center mt-3">
-                            <input type="text" placeholder="Écrivez un message..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <button class="ml-2 w-10 h-10 bg-indigo-500 rounded-full text-white flex items-center justify-center">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="space-y-3">
-                    <div class="bg-white rounded-xl shadow-md p-3">
-                        <div class="flex items-center">
-                            <div class="user-avatar bg-green-500 w-10 h-10 text-xs mr-3">LM</div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">Léo Mercier</h4>
-                                <p class="text-xs text-gray-500">En ligne il y a 5 minutes</p>
-                            </div>
-                            <div class="bg-green-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs">2</div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-3">
-                        <div class="flex items-center">
-                            <div class="user-avatar bg-pink-500 w-10 h-10 text-xs mr-3">PA</div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">Paris Amélie</h4>
-                                <p class="text-xs text-gray-500">En ligne maintenant</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-3">
-                        <div class="flex items-center">
-                            <div class="user-avatar bg-red-500 w-10 h-10 text-xs mr-3">RH</div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">Red Houlette</h4>
-                                <p class="text-xs text-gray-500">En ligne il y a 20 minutes</p>
-                            </div>
-                            <div class="bg-green-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs">1</div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md p-3">
-                        <div class="flex items-center">
-                            <div class="user-avatar bg-blue-500 w-10 h-10 text-xs mr-3">PC</div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">Polar Caron</h4>
-                                <p class="text-xs text-gray-500">En ligne il y a 1 heure</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Profile/XP Screen -->
-        <div id="profile-screen" class="screen px-4 py-5">
-            <div class="mb-6">
-                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <div id="profile-avatar" class="user-avatar bg-indigo-600 w-20 h-20 text-xl mb-3">AB</div>
-                        <h2 id="profile-name" class="text-xl font-bold">Allan Boehme</h2>
-                        <p class="text-sm text-gray-600">Gérant - Organisation Interne</p>
-                    </div>
-                    
-                    <div class="flex justify-center items-center mb-4">
-                        <div id="profile-level-badge" class="level-badge w-14 h-14 text-lg mr-3">8</div>
-                        <div class="flex flex-col">
-                            <div class="flex items-center">
-                                <span class="text-xs font-medium mr-2">XP</span>
-                                <span id="profile-xp" class="text-xs text-gray-600">1800/2000</span>
-                            </div>
-                            <div class="w-36 h-3 bg-gray-200 rounded-full overflow-hidden">
-                                <div id="profile-xp-bar" class="h-full bg-indigo-500" style="width: 90%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="border-t border-gray-200 pt-4">
-                        <h3 class="text-sm font-semibold text-center mb-3">Statistiques</h3>
-                        <div class="grid grid-cols-3 gap-3 text-center">
-                            <div>
-                                <p class="text-lg font-bold text-indigo-600">24</p>
-                                <p class="text-xs text-gray-500">Quêtes terminées</p>
-                            </div>
-                            <div>
-                                <p class="text-lg font-bold text-indigo-600">5</p>
-                                <p class="text-xs text-gray-500">Quêtes en cours</p>
-                            </div>
-                            <div>
-                                <p class="text-lg font-bold text-indigo-600">12</p>
-                                <p class="text-xs text-gray-500">Badges gagnés</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <h3 class="font-semibold mb-3">Badges & Récompenses</h3>
-                
-                <div class="grid grid-cols-3 gap-4 mb-6">
-                    <div class="flex flex-col items-center">
-                        <div class="badge bg-indigo-600">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <p class="text-xs text-center font-medium">Chef d'équipe</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center">
-                        <div class="badge bg-green-600">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <p class="text-xs text-center font-medium">Organisateur</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center">
-                        <div class="badge bg-yellow-600">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <p class="text-xs text-center font-medium">Réactif</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center">
-                        <div class="badge bg-red-600">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <p class="text-xs text-center font-medium">Supporteur</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center">
-                        <div class="badge bg-blue-600">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <p class="text-xs text-center font-medium">Communicateur</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center">
-                        <div class="badge locked bg-gray-400">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <p class="text-xs text-center text-gray-500">Innovateur</p>
-                    </div>
-                </div>
-                
-                <h3 class="font-semibold mb-3">Prochains Objectifs</h3>
-                
-                <div class="bg-white rounded-xl shadow-md p-4 mb-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="font-medium">Badge "Innovateur"</h4>
-                        <span class="text-xs bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full">+50 XP</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">Proposer 3 idées d'amélioration qui sont mises en place.</p>
-                    <div class="flex items-center">
-                        <div class="flex-1 mr-3">
-                            <div class="quest-progress">
-                                <div class="fill bg-indigo-500" style="width: 66%"></div>
-                            </div>
-                        </div>
-                        <span class="text-xs font-medium">2/3</span>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-md p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="font-medium">Passage au niveau 9</h4>
-                        <span class="text-xs bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full">2000 XP requis</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">Complétez des quêtes pour gagner de l'XP et passer au niveau supérieur!</p>
-                    <div class="flex items-center">
-                        <div class="flex-1 mr-3">
-                            <div class="quest-progress">
-                                <div class="fill bg-indigo-500" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <span class="text-xs font-medium">1800/2000</span>
-                    </div>
-                </div>
-                
-                <div class="mt-6 text-center">
-                    <button id="logout-btn" class="text-red-500 text-sm font-medium">
-                        <i class="fas fa-sign-out-alt mr-1"></i> Déconnexion
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
-    
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <a href="#" class="bottom-nav-item active" data-screen="dashboard-screen">
-            <i class="fas fa-home"></i>
-            <span>Accueil</span>
-        </a>
-        <a href="#" class="bottom-nav-item" data-screen="roles-screen">
-            <i class="fas fa-user-tag"></i>
-            <span>Rôles</span>
-        </a>
-        <a href="#" class="bottom-nav-item" data-screen="quests-screen">
-            <i class="fas fa-tasks"></i>
-            <span>Quêtes</span>
-        </a>
-        <a href="#" class="bottom-nav-item" data-screen="calendar-screen">
-            <i class="fas fa-calendar-alt"></i>
-            <span>Planning</span>
-        </a>
-        <a href="#" class="bottom-nav-item" data-screen="chat-screen">
-            <i class="fas fa-comments"></i>
-            <span>Chat</span>
-            <div class="notification-badge">3</div>
-        </a>
-        <a href="#" class="bottom-nav-item" data-screen="profile-screen">
-            <i class="fas fa-trophy"></i>
-            <span>Profil</span>
-        </a>
-    </nav>
-    
-    <!-- Modals -->
-    
-    <!-- Create Quest Modal -->
-    <div id="create-quest-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold">Nouvelle Quête</h3>
-                <button class="modal-close p-2">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form id="create-quest-form">
-                <div class="mb-3">
-                    <label for="quest-title" class="block text-sm font-medium text-gray-700 mb-1">Titre</label>
-                    <input type="text" id="quest-title" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Titre de la quête">
-                </div>
-                
-                <div class="mb-3">
-                    <label for="quest-description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea id="quest-description" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Décrivez la quête..."></textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="quest-assignee" class="block text-sm font-medium text-gray-700 mb-1">Assigné à</label>
-                    <select id="quest-assignee" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="allan">Allan Boehme</option>
-                        <option value="paris">Paris Amélie</option>
-                        <option value="red">Red Houlette</option>
-                        <option value="leo">Léo Mercier</option>
-                        <option value="polar">Polar Caron</option>
-                    </select>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="quest-priority" class="block text-sm font-medium text-gray-700 mb-1">Priorité</label>
-                    <select id="quest-priority" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="normal">Normal</option>
-                        <option value="important">Important</option>
-                        <option value="urgent">Urgent</option>
-                    </select>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="quest-deadline" class="block text-sm font-medium text-gray-700 mb-1">Échéance</label>
-                    <input type="date" id="quest-deadline" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-                
-                <div class="mb-3">
-                    <label for="quest-xp" class="block text-sm font-medium text-gray-700 mb-1">XP à gagner</label>
-                    <input type="number" id="quest-xp" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="30" min="5" max="100">
-                </div>
-                
-                <div class="mb-3">
-                    <label for="quest-role" class="block text-sm font-medium text-gray-700 mb-1">Rôle associé</label>
-                    <select id="quest-role" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="maintenance">Entretien & Maintenance</option>
-                        <option value="avis">Gestion des Avis</option>
-                        <option value="stocks">Gestion des Stocks</option>
-                        <option value="organisation">Organisation Interne</option>
-                        <option value="contenu">Création de Contenu</option>
-                        <option value="mentorat">Mentorat & Formation</option>
-                        <option value="partenariats">Partenariats & Référencement</option>
-                    </select>
-                </div>
-                
-                <div class="flex justify-end">
-                    <button type="button" class="modal-close bg-gray-200 text-gray-800 px-4 py-2 rounded-md mr-2">Annuler</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md">Créer</button>
-                </div>
+                <button type="submit" class="btn-primary">Se connecter</button>
             </form>
+            <p class="login-help">Problème de connexion ? Contacte Allan !</p>
         </div>
     </div>
-    
-    <!-- Notifications Modal -->
-    <div id="notifications-modal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold">Notifications</h3>
-                <button class="modal-close p-2">
+
+    <!-- Interface principale -->
+    <div id="app" class="hidden">
+        <!-- En-tête -->
+        <header>
+            <div class="user-info">
+                <img id="user-avatar" src="" alt="Avatar">
+                <div>
+                    <h2 id="user-name"></h2>
+                    <div class="xp-bar">
+                        <div id="xp-progress"></div>
+                        <span id="xp-text">0 XP</span>
+                    </div>
+                </div>
+            </div>
+            <button id="notifications-btn" class="icon-btn">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" class="badge hidden">0</span>
+            </button>
+        </header>
+
+        <!-- Contenu principal (changera selon la navigation) -->
+        <main id="main-content">
+            <!-- Sera rempli dynamiquement -->
+        </main>
+
+        <!-- Navigation du bas -->
+        <nav>
+            <button class="nav-btn active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </button>
+            <button class="nav-btn" data-page="quests">
+                <i class="fas fa-tasks"></i>
+                <span>Quêtes</span>
+            </button>
+            <button class="nav-btn" data-page="team">
+                <i class="fas fa-users"></i>
+                <span>Équipe</span>
+            </button>
+            <button class="nav-btn" data-page="calendar">
+                <i class="fas fa-calendar"></i>
+                <span>Planning</span>
+            </button>
+            <button class="nav-btn" data-page="chat">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+                <span id="chat-badge" class="badge hidden">0</span>
+            </button>
+        </nav>
+
+        <!-- Panneau de notifications (caché par défaut) -->
+        <div id="notifications-panel" class="panel hidden">
+            <div class="panel-header">
+                <h3>Notifications</h3>
+                <button id="close-notifications" class="icon-btn">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            
-            <div class="space-y-3">
-                <div class="bg-indigo-50 p-3 rounded-lg border-l-4 border-indigo-500">
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-medium">Nouvelle quête assignée</h4>
-                        <span class="text-xs text-gray-500">Il y a 10 minutes</span>
-                    </div>
-                    <p class="text-sm text-gray-600">La quête "Planifier les sessions de Juin" vous a été assignée.</p>
-                </div>
-                
-                <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-medium">Badge Débloqué!</h4>
-                        <span class="text-xs text-gray-500">Hier</span>
-                    </div>
-                    <p class="text-sm text-gray-600">Félicitations! Vous avez débloqué le badge "Communicateur".</p>
-                </div>
-                
-                <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-medium">Rappel</h4>
-                        <span class="text-xs text-gray-500">Hier</span>
-                    </div>
-                    <p class="text-sm text-gray-600">Réunion d'équipe prévue demain à 18h.</p>
-                </div>
-                
-                <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-gray-300">
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-medium">Léo a terminé une quête</h4>
-                        <span class="text-xs text-gray-500">Il y a 3 jours</span>
-                    </div>
-                    <p class="text-sm text-gray-600">La quête "Réparer l'éclairage de la salle 3" a été complétée.</p>
-                </div>
-                
-                <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-gray-300">
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-medium">Polar a rejoint un rôle</h4>
-                        <span class="text-xs text-gray-500">Il y a 4 jours</span>
-                    </div>
-                    <p class="text-sm text-gray-600">Polar Caron est maintenant responsable de la Gestion des Stocks.</p>
-                </div>
-            </div>
-            
-            <div class="mt-4 text-center">
-                <button class="text-sm text-indigo-600 font-medium">Marquer tout comme lu</button>
+            <div class="panel-content" id="notifications-list">
+                <!-- Sera rempli dynamiquement -->
             </div>
         </div>
     </div>
-    
-    <!-- Level Up Modal -->
-    <div id="level-up-modal" class="modal">
-        <div class="modal-content text-center">
-            <h2 class="text-2xl font-bold text-indigo-600 mb-4">Niveau Supérieur!</h2>
-            <div class="bg-indigo-500 text-white w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 pulse-animation">
-                <span class="text-3xl font-bold">9</span>
-            </div>
-            <p class="mb-4">Félicitations! Vous avez atteint le niveau 9!</p>
-            <p class="text-sm text-gray-600 mb-6">Continuez votre excellent travail pour débloquer encore plus de fonctionnalités et de récompenses.</p>
+
+    <!-- Templates des différentes pages -->
+    <template id="dashboard-template">
+        <div class="dashboard">
+            <section class="welcome-card">
+                <h2>Bienvenue, <span id="welcome-name"></span> !</h2>
+                <p class="stat-highlight"><span id="quests-today">0</span> quêtes aujourd'hui</p>
+            </section>
             
-            <div class="bg-indigo-50 p-3 rounded-lg mb-6">
-                <h3 class="font-medium mb-2">Récompenses Débloquées:</h3>
-                <ul class="text-sm text-left space-y-2">
-                    <li class="flex items-center">
-                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                        <span>Nouveau badge "Expert"</span>
-                    </li>
-                    <li class="flex items-center">
-                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                        <span>Possibilité de créer des quêtes spéciales</span>
-                    </li>
-                    <li class="flex items-center">
-                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                        <span>+100 points bonus pour le prochain event</span>
-                    </li>
-                </ul>
+            <section class="stats-card">
+                <h3>Ton niveau</h3>
+                <div class="level-display">
+                    <div id="level-badge">1</div>
+                    <div class="level-info">
+                        <h4 id="level-title">Novice</h4>
+                        <div class="level-progress">
+                            <div id="level-bar"></div>
+                            <span id="level-text">0/100 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="role-card">
+                <h3>Ton rôle principal</h3>
+                <div id="main-role">
+                    <div id="role-icon" class="role-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <div class="role-info">
+                        <h4 id="role-name">Entretien & Maintenance</h4>
+                        <div class="mastery-progress">
+                            <div id="mastery-bar"></div>
+                            <span id="mastery-text">Novice</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="quests-preview">
+                <div class="section-header">
+                    <h3>Quêtes du jour</h3>
+                    <button class="btn-text" data-page="quests">Voir tout</button>
+                </div>
+                <div id="daily-quests">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+            
+            <section class="team-activity">
+                <h3>Activité de l'équipe</h3>
+                <div id="team-feed">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="quests-template">
+        <div class="quests-page">
+            <div class="tabs">
+                <button class="tab active" data-tab="daily">Quotidiennes</button>
+                <button class="tab" data-tab="weekly">Hebdomadaires</button>
+                <button class="tab" data-tab="special">Spéciales</button>
             </div>
             
-            <button class="modal-close bg-indigo-600 text-white px-6 py-3 rounded-md">Génial !</button>
+            <div class="tab-content active" id="daily-tab">
+                <div class="quests-list" id="daily-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="weekly-tab">
+                <div class="quests-list" id="weekly-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="special-tab">
+                <div class="quests-list" id="special-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="team-template">
+        <div class="team-page">
+            <div class="leaderboard">
+                <h3>Classement</h3>
+                <div id="leaderboard-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="team-members">
+                <h3>Membres de l'équipe</h3>
+                <div id="team-members-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="roles-overview">
+                <h3>Rôles attribués</h3>
+                <div id="roles-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="calendar-template">
+        <div class="calendar-page">
+            <div class="calendar-header">
+                <button id="prev-month" class="icon-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h3 id="current-month">Mai 2025</h3>
+                <button id="next-month" class="icon-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="calendar-view">
+                <div class="weekdays">
+                    <div>Lu</div>
+                    <div>Ma</div>
+                    <div>Me</div>
+                    <div>Je</div>
+                    <div>Ve</div>
+                    <div>Sa</div>
+                    <div>Di</div>
+                </div>
+                <div id="calendar-days" class="calendar-days">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="events-list">
+                <h3>Événements à venir</h3>
+                <div id="events-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <button id="add-event" class="btn-primary floating-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </template>
+
+    <template id="chat-template">
+        <div class="chat-page">
+            <div class="chat-channels">
+                <button class="chat-channel active" data-channel="general">
+                    <i class="fas fa-hashtag"></i>
+                    <span>général</span>
+                </button>
+                <button class="chat-channel" data-channel="organisation">
+                    <i class="fas fa-hashtag"></i>
+                    <span>organisation</span>
+                </button>
+                <button class="chat-channel" data-channel="maintenance">
+                    <i class="fas fa-hashtag"></i>
+                    <span>maintenance</span>
+                </button>
+                <button class="chat-channel" data-channel="fun">
+                    <i class="fas fa-hashtag"></i>
+                    <span>fun</span>
+                </button>
+            </div>
+            
+            <div id="chat-container">
+                <div id="chat-messages">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Envoyer un message...">
+                    <button id="send-message" class="icon-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Modèles pour composants dynamiques -->
+    <template id="quest-item-template">
+        <div class="quest-item">
+            <div class="quest-info">
+                <h4 class="quest-title"></h4>
+                <p class="quest-description"></p>
+                <div class="quest-meta">
+                    <span class="quest-xp"><i class="fas fa-star"></i> <span class="xp-amount"></span> XP</span>
+                    <span class="quest-deadline"><i class="fas fa-clock"></i> <span class="deadline-text"></span></span>
+                </div>
+            </div>
+            <button class="btn-complete">
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+    </template>
+
+    <template id="team-member-template">
+        <div class="team-member-card">
+            <img class="member-avatar" src="" alt="Avatar">
+            <div class="member-info">
+                <h4 class="member-name"></h4>
+                <div class="member-role"></div>
+                <div class="member-level">
+                    <span class="level-number"></span>
+                    <div class="level-progress">
+                        <div class="level-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="event-item-template">
+        <div class="event-item">
+            <div class="event-dot"></div>
+            <div class="event-info">
+                <h4 class="event-title"></h4>
+                <p class="event-time"></p>
+                <p class="event-participants"></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="chat-message-template">
+        <div class="chat-message">
+            <img class="message-avatar" src="" alt="Avatar">
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-author"></span>
+                    <span class="message-time"></span>
+                </div>
+                <p class="message-text"></p>
+            </div>
+        </div>
+    </template>
+
+    <template id="notification-item-template">
+        <div class="notification-item">
+            <div class="notification-icon">
+                <i class=""></i>
+            </div>
+            <div class="notification-content">
+                <p class="notification-text"></p>
+                <span class="notification-time"></span>
+            </div>
+        </div>
+    </template>
+
+    <!-- Modal pour ajouter un événement -->
+    <div id="event-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nouvel événement</h3>
+                <button id="close-event-modal" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="event-form">
+                    <div class="form-group">
+                        <label for="event-title">Titre</label>
+                        <input type="text" id="event-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Date</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-start-time">Heure de début</label>
+                        <input type="time" id="event-start-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end-time">Heure de fin</label>
+                        <input type="time" id="event-end-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-attendees">Participants</label>
+                        <select id="event-attendees" multiple>
+                            <option value="all">Toute l'équipe</option>
+                            <option value="paris">Paris Amélie</option>
+                            <option value="red">Red Houlette</option>
+                            <option value="leo">Léo Mercier</option>
+                            <option value="polar">Polar Caron</option>
+                            <option value="allan">Allan Boehme</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Description</label>
+                        <textarea id="event-description"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Créer l'événement</button>
+                </form>
+            </div>
         </div>
     </div>
+
+    <!-- Modal pour valider une quête -->
+    <div id="quest-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Valider la quête</h3>
+                <button id="close-quest-modal" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4 id="quest-modal-title"></h4>
+                <p id="quest-modal-description"></p>
+                <div class="xp-reward">
+                    <i class="fas fa-star"></i>
+                    <span id="quest-modal-xp"></span> XP
+                </div>
+                <form id="quest-validation-form">
+                    <div class="form-group">
+                        <label for="quest-comment">Commentaire (optionnel)</label>
+                        <textarea id="quest-comment"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="quest-proof">Preuve de réalisation (optionnel)</label>
+                        <input type="file" id="quest-proof">
+                    </div>
+                    <button type="submit" class="btn-primary">Valider la quête</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de succès -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content success-content">
+            <div class="success-header">
+                <i class="fas fa-check-circle"></i>
+                <h3>Félicitations !</h3>
+            </div>
+            <div class="success-body">
+                <p id="success-message"></p>
+                <div id="rewards">
+                    <div class="xp-gained">
+                        <i class="fas fa-star"></i>
+                        <span id="gained-xp"></span> XP gagnés
+                    </div>
+                    <div id="badge-unlocked" class="hidden">
+                        <div class="badge-icon">
+                            <i class=""></i>
+                        </div>
+                        <div class="badge-info">
+                            <h4>Nouveau badge débloqué !</h4>
+                            <p id="badge-name"></p>
+                        </div>
+                    </div>
+                </div>
+                <button id="close-success" class="btn-primary">Super !</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMPORTANT : Scripts Firebase d'abord, puis configuration, puis autres scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
     
+    <!-- Configuration Firebase corrigée -->
     <script>
-        // Initialize app after DOM loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Firebase configuration placeholder
-            // You need to replace these with your actual Firebase config
-            const firebaseConfig = {
-                apiKey: "YOUR_API_KEY",
-                authDomain: "your-app.firebaseapp.com",
-                projectId: "your-app-id",
-                storageBucket: "your-app.appspot.com",
-                messagingSenderId: "your-messaging-sender-id",
-                appId: "your-app-id"
-            };
-            
-            // Initialize Firebase (commented out as we don't have real credentials)
-            // firebase.initializeApp(firebaseConfig);
-            
-            // Chart initialization
-            const activityChart = new Chart(document.getElementById('activity-chart'), {
-                type: 'line',
-                data: {
-                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-                    datasets: [{
-                        label: 'XP gagnés',
-                        data: [120, 90, 150, 180, 210, 95, 75],
-                        borderColor: '#6C63FF',
-                        backgroundColor: 'rgba(108, 99, 255, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            
-            // User selection on login screen
-            const userSelectButtons = document.querySelectorAll('.user-select-btn');
-            userSelectButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const selectedUser = this.getAttribute('data-user');
-                    const userInitials = selectedUser.split(' ').map(name => name[0]).join('');
-                    const userLevelMap = {
-                        'Allan Boehme': 8,
-                        'Paris Amélie': 6,
-                        'Red Houlette': 5,
-                        'Léo Mercier': 7,
-                        'Polar Caron': 5
-                    };
-                    const userColorMap = {
-                        'Allan Boehme': 'bg-indigo-600',
-                        'Paris Amélie': 'bg-pink-500',
-                        'Red Houlette': 'bg-red-500',
-                        'Léo Mercier': 'bg-green-500',
-                        'Polar Caron': 'bg-blue-500'
-                    };
-                    
-                    document.getElementById('user-name').textContent = selectedUser;
-                    document.getElementById('profile-name').textContent = selectedUser;
-                    
-                    const userAvatar = document.getElementById('user-avatar');
-                    const profileAvatar = document.getElementById('profile-avatar');
-                    
-                    // Remove all color classes and add the appropriate one
-                    userAvatar.className = 'user-avatar mr-3';
-                    profileAvatar.className = 'user-avatar w-20 h-20 text-xl mb-3';
-                    userAvatar.classList.add(userColorMap[selectedUser]);
-                    profileAvatar.classList.add(userColorMap[selectedUser]);
-                    
-                    userAvatar.textContent = userInitials;
-                    profileAvatar.textContent = userInitials;
-                    
-                    document.getElementById('user-level-badge').textContent = userLevelMap[selectedUser];
-                    document.getElementById('profile-level-badge').textContent = userLevelMap[selectedUser];
-                    
-                    // Hide login screen
-                    document.getElementById('login-screen').style.display = 'none';
-                });
-            });
-            
-            // Screen navigation
-            const navItems = document.querySelectorAll('.bottom-nav-item');
-            navItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Update navigation active state
-                    navItems.forEach(navItem => navItem.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Show appropriate screen
-                    const targetScreenId = this.getAttribute('data-screen');
-                    const screens = document.querySelectorAll('.screen');
-                    screens.forEach(screen => screen.classList.remove('active'));
-                    document.getElementById(targetScreenId).classList.add('active');
-                });
-            });
-            
-            // Tab switching within screens
-            document.getElementById('quests-all-btn').addEventListener('click', function() {
-                this.classList.add('active', 'bg-indigo-500', 'text-white');
-                this.classList.remove('bg-gray-200');
-                document.getElementById('quests-my-btn').classList.remove('active', 'bg-indigo-500', 'text-white');
-                document.getElementById('quests-my-btn').classList.add('bg-gray-200');
-                document.getElementById('quests-all-content').classList.add('active');
-                document.getElementById('quests-my-content').classList.remove('active');
-            });
-            
-            document.getElementById('quests-my-btn').addEventListener('click', function() {
-                this.classList.add('active', 'bg-indigo-500', 'text-white');
-                this.classList.remove('bg-gray-200');
-                document.getElementById('quests-all-btn').classList.remove('active', 'bg-indigo-500', 'text-white');
-                document.getElementById('quests-all-btn').classList.add('bg-gray-200');
-                document.getElementById('quests-my-content').classList.add('active');
-                document.getElementById('quests-all-content').classList.remove('active');
-            });
-            
-            // Modal functions
-            function openModal(modalId) {
-                document.getElementById(modalId).style.display = 'flex';
-            }
-            
-            function closeModal(modalId) {
-                document.getElementById(modalId).style.display = 'none';
-            }
-            
-            // Set up modal open/close
-            document.getElementById('create-quest-btn').addEventListener('click', function() {
-                openModal('create-quest-modal');
-            });
-            
-            document.getElementById('notifications-btn').addEventListener('click', function() {
-                openModal('notifications-modal');
-                this.querySelector('.notification-badge').style.display = 'none';
-            });
-            
-            // Logout button
-            document.getElementById('logout-btn').addEventListener('click', function() {
-                document.getElementById('login-screen').style.display = 'flex';
-            });
-            
-            // Close modal buttons
-            document.querySelectorAll('.modal-close').forEach(button => {
-                button.addEventListener('click', function() {
-                    const modal = this.closest('.modal');
-                    modal.style.display = 'none';
-                });
-            });
-            
-            // Close modals when clicking outside
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        this.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Form submission
-            document.getElementById('create-quest-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Get form values
-                const title = document.getElementById('quest-title').value;
-                const description = document.getElementById('quest-description').value;
-                const assignee = document.getElementById('quest-assignee').value;
-                const priority = document.getElementById('quest-priority').value;
-                const deadline = document.getElementById('quest-deadline').value;
-                const xp = document.getElementById('quest-xp').value;
-                
-                // Here we'd normally save to Firebase, for now just show success
-                showXpGain(10, 'Quête créée!');
-                closeModal('create-quest-modal');
-                
-                // Reset form
-                this.reset();
-            });
-            
-            // XP animation
-            function showXpGain(amount, message) {
-                const xpNotification = document.createElement('div');
-                xpNotification.className = 'xp-animation';
-                xpNotification.textContent = `+${amount} XP ${message ? '- ' + message : ''}`;
-                xpNotification.style.left = `${Math.random() * 80}%`;
-                xpNotification.style.top = `${50 + Math.random() * 20}%`;
-                document.body.appendChild(xpNotification);
-                
-                // Remove after animation completes
-                setTimeout(() => {
-                    document.body.removeChild(xpNotification);
-                }, 2000);
-            }
-            
-            // Occasionally show XP gain (demo only)
-            setTimeout(() => {
-                showXpGain(5, 'Activité quotidienne');
-            }, 15000);
-            
-            // Demo of level up (after 30 seconds)
-            setTimeout(() => {
-                openModal('level-up-modal');
-                createConfetti();
-            }, 30000);
-            
-            // Create confetti animation
-            function createConfetti() {
-                const confettiCount = 100;
-                const colors = ['#6C63FF', '#FF6584', '#38B2AC', '#F6AD55', '#F56565', '#4299E1'];
-                
-                for (let i = 0; i < confettiCount; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
-                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
-                    document.body.appendChild(confetti);
-                    
-                    // Remove after animation
-                    setTimeout(() => {
-                        document.body.removeChild(confetti);
-                    }, 5000);
-                }
-            }
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvFX1mKk-YN_MJTB0CvA5aWeRw3fJb5rk",
+      authDomain: "synergia-app-f27e7.firebaseapp.com",
+      projectId: "synergia-app-f27e7",
+      storageBucket: "synergia-app-f27e7.firebasestorage.app",
+      messagingSenderId: "1015127389223",
+      appId: "1:1015127389223:web:18c914e061add85c9f99613",
+      measurementId: "G-V58F9EV7Q6"
+    };
+
+    // Initialisation de firebase (seulement si elle n'est pas déjà initialisée)
+    let firebaseApp;
+    try {
+      firebaseApp = firebase.app(); 
+    } catch (e) {
+      firebaseApp = firebase.initializeApp(firebaseConfig);
+    }
+
+    // Référence aux services firebase
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // Paramètres Firestore avec l'option merge: true
+    db.settings({
+      cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED,
+      merge: true
+    });
+
+    // Activer la persistance seulement si ce n'est pas déjà fait
+    try {
+      db.enablePersistence({ synchronizeTabs: true })
+        .catch(err => {
+          if (err.code !== 'failed-precondition') {
+            console.error("Erreur d'activation de la persistance:", err);
+          }
         });
+    } catch (e) {
+      // La persistance est peut-être déjà activée
+    }
+    </script>
+    
+    <!-- Autres scripts de l'application -->
+    <script src="js/auth.js"></script>
+    <script src="js/roles.js"></script>
+    <script src="js/quests.js"></script>
+    <script src="js/badges.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker enregistré avec succès:', registration);
+                }).catch(error => {
+                    console.log('Échec de l\'enregistrement du Service Worker:', error);
+                });
+        }
     </script>
 </body>
 </html>
-    <script id="html_badge_script1">
-        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDu%2FQlzlEFqUG8wFB3%2BXrJ98alZ8ylVEQjNfujpJI2yODWCwbCdwMG0Iy5uQ9oM7I%2BxqZNrMqbFV%2F7Uj0aDXzyYLLfV%2BjXsl56O%2BUhgV1yq1bkyLq6FX67mh3hKS2fclXnLbMywOV6N8TtWBOwiv%2FtNqMkccb4aJqrnyDVOsqFLZKgAgJKLmhWRfo0nZqzARaqsONbQ25imFrUzxblTQT2hcNwkVt4GhSgW0IO%2B7H%2B79N72phNUbdmNrgyhC6hai3guST95d5KsnRUolkYa5vIwAPOa9A4mGDvwjXi1NN8zYornut4RK%2Fu90ZjnZdhiXNo6Bm0XdsUbTIH2wH2KGp638VB7xKptn40PAdnER2QNxQ2ooUG5fFc7iT6dLgqFU%2F1mWFF%2BtRad0Loav5rl6a3G%2BCO9aqtHM3iDa7tlxyMPESDVy49X7BdB%2BYUgWt%2F0Vl8hl8f0qkCOAZuzj4uD1QUuL%2Bejt3KppusG5nI4%2FY4mp1h2u%2FfHNb3YW4z%2FanjqNL7Q%3D%3D";
-        window.__genspark_locale = "fr-FR";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDu/QlzlEFqUG8wFB3+XrJ98alZ8ylVEQjNfujpJI2yODWCwbCdwMG0Iy5uQ9oM7I+xqZNrMqbFV/7Uj0aDXzyYLLfV+jXsl56O+UhgV1yq1bkyLq6FX67mh3hKS2fclXnLbMywOV6N8TtWBOwiv/tNqMkccb4aJqrnyDVOsqFLZKgAgJKLmhWRfo0nZqzARaqsONbQ25imFrUzxblTQT2hcNwkVt4GhSgW0IO+7H+79N72phNUbdmNrgyhC6hai3guST95d5KsnRUolkYa5vIwAPOa9A4mGDvwjXi1NN8zYornut4RK/u90ZjnZdhiXNo6Bm0XdsUbTIH2wH2KGp638VB7xKptn40PAdnER2QNxQ2ooUG5fFc7iT6dLgqFU/1mWFF+tRad0Loav5rl6a3G+CO9aqtHM3iDa7tlxyMPESDVy49X7BdB+YUgWt/0Vl8hl8f0qkCOAZuzj4uD1QUuL+ejt3KppusG5nI4/Y4mp1h2u/fHNb3YW4z/anjqNL7Q==";
-    </script>
-    
-    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
-    
