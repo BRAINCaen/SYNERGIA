@@ -4,147 +4,1086 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYNERGIA - Gestion d'équipe gamifiée</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Améliorations visuelles */
-body {
-    background-color: #f5f5f5;
-    color: #333;
-}
+        /* Variables globales */
+        :root {
+            --primary: #7e57c2;
+            --primary-light: #b085f5;
+            --primary-dark: #4d2c91;
+            --secondary: #26c6da;
+            --secondary-light: #6ff9ff;
+            --secondary-dark: #0095a8;
+            --success: #66bb6a;
+            --danger: #ef5350;
+            --warning: #ffca28;
+            --info: #29b6f6;
+            --light: #f5f5f5;
+            --dark: #263238;
+            --gray: #757575;
+            --light-gray: #e0e0e0;
+            --background: #fafafa;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            --shadow-lg: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --border-radius-lg: 24px;
+            
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            
+            --font-family: 'Poppins', sans-serif;
+            --font-family-headings: 'Montserrat', sans-serif;
+        }
 
-.quests-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.quest-item {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-
-.quest-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.quest-item h3 {
-    color: #7e57c2;
-    margin-top: 0;
-    font-size: 18px;
-}
-
-.complete-btn:hover {
-    background: #43a047 !important;
-}
-
-.badge {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 12px;
-    color: white;
-}
-
-.badge-daily {
-    background-color: #29b6f6;
-}
-
-.badge-weekly {
-    background-color: #7e57c2;
-}
-
-.badge-urgent {
-    background-color: #ef5350;
-}
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
+        /* Réinitialisation et base */
+        * {
             margin: 0;
             padding: 0;
-        }
-        .login-container {
-            background-color: white;
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .login-container h1 {
-            color: #7e57c2;
-            margin-bottom: 10px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 13px;
-            color: #757575;
-        }
-        input {
-            width: 100%;
-            padding: 12px 12px 12px 40px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
             box-sizing: border-box;
         }
-        .btn-primary {
-            background-color: #7e57c2;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-family-headings);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--primary-light);
+        }
+
+        button {
             cursor: pointer;
+            font-family: var(--font-family);
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input, textarea, select {
+            font-family: var(--font-family);
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.3s ease;
             width: 100%;
-            font-size: 16px;
-            font-weight: bold;
         }
-        .login-help {
-            margin-top: 20px;
-            color: #757575;
-            font-size: 14px;
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
         }
-        img {
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Écran de chargement */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .loading-container img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+            70% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+        }
+
+        .loading-bar {
+            height: 6px;
+            background-color: var(--light-gray);
+            border-radius: 3px;
+            margin: var(--spacing-md) 0;
+            overflow: hidden;
+            position: relative;
+            width: 200px;
+        }
+
+        .loading-progress {
+            position: absolute;
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 3px;
+            width: 0%;
+            animation: loading 2s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0%;
+                left: 0;
+            }
+            50% {
+                width: 70%;
+            }
+            100% {
+                width: 0%;
+                left: 100%;
+            }
+        }
+
+        /* Écran de connexion */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        .login-container {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-container img {
             width: 80px;
             height: 80px;
-            margin-bottom: 20px;
+            margin-bottom: var(--spacing-md);
         }
-        .quests-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+
+        .login-container h1 {
+            color: var(--primary);
+            margin-bottom: var(--spacing-xs);
+            font-size: 2rem;
         }
+
+        .login-container p {
+            color: var(--gray);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: var(--spacing-md);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .input-group input {
+            padding-left: 40px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--border-radius);
+            width: 100%;
+            font-size: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+            font-weight: 600;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            box-shadow: var(--shadow-md);
+        }
+
+        .login-help {
+            margin-top: var(--spacing-lg);
+            font-size: 0.9rem;
+        }
+
+        /* Layout principal de l'application */
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: white;
+            padding: var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: var(--spacing-md);
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .user-info h2 {
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .xp-bar {
+            background-color: var(--light-gray);
+            height: 6px;
+            border-radius: 3px;
+            width: 100px;
+            position: relative;
+        }
+
+        #xp-progress {
+            position: absolute;
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        #xp-text {
+            position: absolute;
+            top: -18px;
+            right: 0;
+            font-size: 0.7rem;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            color: var(--dark);
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .badge {
+            background-color: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0 var(--spacing-xs);
+        }
+
+        /* Contenu principal */
+        main {
+            flex: 1;
+            padding: var(--spacing-md);
+            overflow-y: auto;
+        }
+
+        /* Navigation du bas */
+        nav {
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: var(--spacing-sm) 0;
+            box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+            background: transparent;
+            color: var(--gray);
+            font-size: 0.8rem;
+            position: relative;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .nav-btn.active {
+            color: var(--primary);
+        }
+
+        /* Tableau de bord */
+        .dashboard {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        .welcome-card h2 {
+            margin-top: 0;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .stat-highlight {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .stats-card, .role-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stats-card h3, .role-card h3 {
+            margin-top: 0;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .level-display {
+            display: flex;
+            align-items: center;
+            margin-top: var(--spacing-md);
+        }
+
+        #level-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .level-info {
+            flex: 1;
+        }
+
+        .level-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        .level-progress, .mastery-progress {
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            margin-top: var(--spacing-xs);
+            overflow: hidden;
+            position: relative;
+        }
+
+        #level-bar, #mastery-bar {
+            position: absolute;
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 4px;
+            width: 60%;
+        }
+
+        #mastery-bar {
+            background-color: var(--success);
+        }
+
+        #level-text, #mastery-text {
+            position: absolute;
+            top: -18px;
+            right: 0;
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        #main-role {
+            display: flex;
+            align-items: center;
+            margin-top: var(--spacing-md);
+        }
+
+        .role-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .role-info {
+            flex: 1;
+        }
+
+        .role-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .btn-text {
+            background: none;
+            color: var(--primary);
+            font-size: 0.9rem;
+            padding: 0;
+        }
+
+        .quests-preview, .team-activity {
+            margin-top: var(--spacing-lg);
+        }
+
+        /* Quêtes */
         .quest-item {
             background: white;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
-        .quest-item h3 {
-            margin-top: 0;
-            color: #333;
+
+        .quest-info {
+            flex: 1;
+            margin-right: var(--spacing-md);
+        }
+
+        .quest-title {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .quest-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin: var(--spacing-xs) 0;
+        }
+
+        .quest-meta {
+            display: flex;
+            margin-top: var(--spacing-sm);
+            font-size: 0.8rem;
+        }
+
+        .quest-xp {
+            color: var(--warning);
+            margin-right: var(--spacing-md);
+        }
+
+        .quest-deadline {
+            color: var(--info);
+        }
+
+        .btn-complete {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--success);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-complete:hover {
+            background-color: var(--success);
+            color: white;
+        }
+
+        /* Activity feed */
+        .activity-item {
+            display: flex;
+            align-items: start;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: var(--spacing-md);
+            font-size: 1rem;
+        }
+
+        .quest-completed {
+            background-color: rgba(102, 187, 106, 0.2);
+            color: var(--success);
+        }
+
+        .badge-unlocked {
+            background-color: rgba(255, 202, 40, 0.2);
+            color: var(--warning);
+        }
+
+        .role-assigned {
+            background-color: rgba(126, 87, 194, 0.2);
+            color: var(--primary);
+        }
+
+        .level-up {
+            background-color: rgba(41, 182, 246, 0.2);
+            color: var(--info);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .activity-time {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        /* Additionnels pour quêtes, badges, etc. */
+        .no-quests, .no-activity, .no-events {
+            text-align: center;
+            padding: var(--spacing-lg);
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Calendrier */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        #current-month {
+            margin: 0;
+            text-align: center;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+
+        .calendar-day {
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            border-radius: var(--border-radius-sm);
+        }
+
+        .calendar-day:hover {
+            background-color: var(--light-gray);
+        }
+
+        .today {
+            background-color: var(--primary-light);
+            color: white;
+            font-weight: bold;
+        }
+
+        .has-events {
+            font-weight: bold;
+        }
+
+        .event-indicator {
+            position: absolute;
+            bottom: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--info);
+            color: white;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .prev-month, .next-month {
+            color: var(--light-gray);
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 5;
+        }
+
+        .floating-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Tableaux */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--light-gray);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .tab {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Formulaires et modales */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: var(--spacing-md);
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-body {
+            padding: var(--spacing-md);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .success-content {
+            text-align: center;
+        }
+
+        .success-header {
+            background-color: var(--success);
+            color: white;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .success-header i {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .success-body {
+            padding: var(--spacing-lg);
+        }
+
+        .xp-reward, .xp-gained {
+            color: var(--warning);
+            font-size: 1.2rem;
+            margin: var(--spacing-md) 0;
+        }
+
+        .badge-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--warning);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-md) auto;
+        }
+
+        /* Chat */
+        .chat-channels {
+            display: flex;
+            overflow-x: auto;
+            padding: var(--spacing-xs) 0;
+            margin-bottom: var(--spacing-md);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .chat-channel {
+            background-color: var(--light);
+            color: var(--gray);
+            border-radius: 20px;
+            padding: var(--spacing-xs) var(--spacing-md);
+            margin-right: var(--spacing-sm);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .chat-channel.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 220px);
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-md);
+        }
+
+        .date-separator {
+            text-align: center;
+            margin: var(--spacing-md) 0;
+            font-size: 0.8rem;
+            color: var(--gray);
+            position: relative;
+        }
+
+        .date-separator:before, .date-separator:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: var(--light-gray);
+        }
+
+        .date-separator:before {
+            left: 0;
+        }
+
+        .date-separator:after {
+            right: 0;
+        }
+
+        .chat-message {
+            display: flex;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: var(--spacing-sm);
+            object-fit: cover;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .message-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .message-text {
+            background-color: var(--light);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .own-message {
+            flex-direction: row-reverse;
+        }
+
+        .own-message .message-avatar {
+            margin-right: 0;
+            margin-left: var(--spacing-sm);
+        }
+
+        .own-message .message-header {
+            flex-direction: row-reverse;
+        }
+
+        .own-message .message-text {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .typing-indicator {
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: var(--spacing-sm);
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .chat-input input {
+            flex: 1;
+            margin-right: var(--spacing-sm);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            #app {
+                flex-direction: row;
+            }
+
+            nav {
+                width: 80px;
+                flex-direction: column;
+                height: 100vh;
+                padding: var(--spacing-md) 0;
+            }
+
+            .nav-btn {
+                padding: var(--spacing-md) 0;
+            }
+
+            main {
+                width: calc(100% - 80px);
+                height: 100vh;
+                overflow-y: auto;
+                padding: var(--spacing-lg);
+            }
+
+            .dashboard, .quests-page, .team-page, .calendar-page, .chat-page {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            #chat-container {
+                height: calc(100vh - 180px);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Écran de chargement -->
+    <div id="loading-screen">
+        <div class="loading-container">
+            <img src="https://img.icons8.com/color/96/000000/s-key.png" alt="SYNERGIA Logo" class="pulse">
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p>Chargement de l'aventure...</p>
+        </div>
+    </div>
+
+    <!-- Écran de connexion -->
     <div id="login-screen">
         <div class="login-container">
             <img src="https://img.icons8.com/color/96/000000/s-key.png" alt="SYNERGIA Logo">
             <h1>SYNERGIA</h1>
             <p>L'aventure commence ici</p>
-            <form id="login-form">
+               <form id="login-form">
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
                     <input type="email" id="email" placeholder="Email" required>
@@ -158,13 +1097,155 @@ body {
             <p class="login-help">Problème de connexion ? Contacte Allan !</p>
         </div>
     </div>
-    
+
+    <!-- Interface principale -->
     <div id="app" class="hidden">
-        <div class="quests-container">
-            <h2>Quêtes du jour</h2>
-            <div id="quests-list"></div>
+        <!-- En-tête -->
+        <header>
+            <div class="user-info">
+                <img id="user-avatar" src="https://img.icons8.com/color/96/000000/user-male-circle--v1.png" alt="Avatar">
+                <div>
+                    <h2 id="user-name">Chargement...</h2>
+                    <div class="xp-bar">
+                        <div id="xp-progress" style="width: 60%;"></div>
+                        <span id="xp-text">0 XP</span>
+                    </div>
+                </div>
+            </div>
+            <button id="notifications-btn" class="icon-btn">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" class="badge hidden">0</span>
+            </button>
+        </header>
+
+        <!-- Contenu principal (changera selon la navigation) -->
+        <main id="main-content">
+            <!-- Sera rempli dynamiquement par JavaScript -->
+        </main>
+
+        <!-- Navigation du bas -->
+        <nav>
+            <button class="nav-btn active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </button>
+            <button class="nav-btn" data-page="quests">
+                <i class="fas fa-tasks"></i>
+                <span>Quêtes</span>
+            </button>
+            <button class="nav-btn" data-page="team">
+                <i class="fas fa-users"></i>
+                <span>Équipe</span>
+            </button>
+            <button class="nav-btn" data-page="calendar">
+                <i class="fas fa-calendar"></i>
+                <span>Planning</span>
+            </button>
+            <button class="nav-btn" data-page="chat">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+                <span id="chat-badge" class="badge hidden">0</span>
+            </button>
+        </nav>
+
+        <!-- Panneau de notifications (caché par défaut) -->
+        <div id="notifications-panel" class="panel hidden">
+            <div class="panel-header">
+                <h3>Notifications</h3>
+                <button id="close-notifications" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="panel-content" id="notifications-list">
+                <!-- Sera rempli dynamiquement -->
+            </div>
         </div>
     </div>
+
+    <!-- Templates pour les pages -->
+    <template id="dashboard-template">
+        <div class="dashboard">
+            <section class="welcome-card">
+                <h2>Bienvenue, <span id="welcome-name">Coéquipier</span> !</h2>
+                <p class="stat-highlight"><span id="quests-today">0</span> quêtes aujourd'hui</p>
+            </section>
+            
+            <section class="stats-card">
+                <h3>Ton niveau</h3>
+                <div class="level-display">
+                    <div id="level-badge">1</div>
+                    <div class="level-info">
+                        <h4 id="level-title">Novice</h4>
+                        <div class="level-progress">
+                            <div id="level-bar" style="width: 60%;"></div>
+                            <span id="level-text">60/100 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="role-card">
+                <h3>Ton rôle principal</h3>
+                <div id="main-role">
+                    <div class="role-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <div class="role-info">
+                        <h4 id="role-name">Entretien & Maintenance</h4>
+                        <div class="mastery-progress">
+                            <div id="mastery-bar" style="width: 40%;"></div>
+                            <span id="mastery-text">Novice</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="quests-preview">
+                <div class="section-header">
+                    <h3>Quêtes du jour</h3>
+                    <button class="btn-text" data-page="quests">Voir tout</button>
+                </div>
+                <div id="daily-quests">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+            
+            <section class="team-activity">
+                <h3>Activité de l'équipe</h3>
+                <div id="team-feed">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </section>
+        </div>
+    </template>
+
+    <template id="quests-template">
+        <div class="quests-page">
+            <div class="tabs">
+                <button class="tab active" data-tab="daily">Quotidiennes</button>
+                <button class="tab" data-tab="weekly">Hebdomadaires</button>
+                <button class="tab" data-tab="special">Spéciales</button>
+            </div>
+            
+            <div class="tab-content active" id="daily-tab">
+                <div class="quests-list" id="daily-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="weekly-tab">
+                <div class="quests-list" id="weekly-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="tab-content" id="special-tab">
+                <div class="quests-list" id="special-quests-list">
+                    <!-- Sera rempli dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </template>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
@@ -172,180 +1253,755 @@ body {
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage-compat.js"></script>
 
+    <!-- Configuration et logique de l'application -->
     <script>
-    // Configuration Firebase - REMPLACE PAR TES VRAIS IDENTIFIANTS
-const firebaseConfig = {
-  apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
-  authDomain: "synergia-app-f27e7.firebaseapp.com",
-  projectId: "synergia-app-f27e7",
-  storageBucket: "synergia-app-f27e7.firebasestorage.app",
-  messagingSenderId: "201912738922",
-  appId: "1:201912738922:web:2fcc1e49293bb632899613",
-  measurementId: "G-EGJ79SCMWX"
-};
+        // Configuration Firebase (remplace par tes identifiants réels)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvFX1mKk-YN_MJTB0CvA5aWeRw3fJb5rk",
+            authDomain: "synergia-app-f27e7.firebaseapp.com",
+            projectId: "synergia-app-f27e7",
+            storageBucket: "synergia-app-f27e7.appspot.com",
+            messagingSenderId: "1015127389922",
+            appId: "1:1015127389922:web:2fce1e492933b032899913"
+        };
 
-    // Initialisation Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    
-    // Gérer la connexion
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        
+        // Initialisation Firebase
+        let firebaseApp;
         try {
-            await auth.signInWithEmailAndPassword(email, password);
-            loadQuests();
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-        } catch (error) {
-            alert('Erreur de connexion: ' + error.message);
-            console.error('Erreur de connexion:', error);
+            firebaseApp = firebase.app();
+        } catch (e) {
+            firebaseApp = firebase.initializeApp(firebaseConfig);
         }
-    });
-    
-    // Vérifier si l'utilisateur est déjà connecté
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            loadQuests();
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-        }
-    });
-    
-// Charger les quêtes depuis Firestore
-async function loadQuests() {
-    const questsList = document.getElementById('quests-list');
-    questsList.innerHTML = '';
-    
-    // Charger depuis Firestore
-    try {
-        // Créer une collection de test si elle n'existe pas
-        const questsCollection = db.collection('quests');
-        const snapshot = await questsCollection.get();
-        
-        // Si la collection est vide, ajouter des exemples
-        if (snapshot.empty) {
-            const exampleQuests = [
-                { 
-                    title: "Réparer le mécanisme du coffre - Salle 2", 
-                    description: "Le mécanisme d'ouverture du coffre ne fonctionne plus correctement. À réparer avant le weekend.",
-                    xp: 15,
-                    deadline: new Date(Date.now() + 86400000 * 2) // Dans 2 jours
-                },
-                { 
-                    title: "Créer un post Instagram pour le nouvel escape game", 
-                    description: "Créer un contenu engageant pour annoncer le lancement du nouvel escape game. Photos + texte accrocheur.",
-                    xp: 10,
-                    deadline: new Date(Date.now() + 86400000 * 3) // Dans 3 jours
-                },
-                { 
-                    title: "Commander les stocks de consommables pour juin", 
-                    description: "Vérifier et commander les stocks de piles, ampoules, accessoires et matériel d'entretien pour le mois prochain.",
-                    xp: 5,
-                    deadline: new Date(Date.now() + 86400000 * 1) // Dans 1 jour
+
+        // Services Firebase
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Gestion de l'authentification
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                console.log('Connexion réussie');
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                alert('Erreur de connexion: ' + error.message);
+            }
+        });
+
+        // Vérifier l'état de l'authentification
+        auth.onAuthStateChanged(user => {
+            const loadingScreen = document.getElementById('loading-screen');
+            const loginScreen = document.getElementById('login-screen');
+            const app = document.getElementById('app');
+            
+            if (user) {
+                // Utilisateur connecté
+                loginScreen.classList.add('hidden');
+                app.classList.remove('hidden');
+                
+                // Charger les données de l'utilisateur
+                loadUserData(user);
+                
+                // Charger le tableau de bord
+                loadPage('dashboard');
+            } else {
+                // Utilisateur non connecté
+                app.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+            }
+            
+            // Masquer l'écran de chargement après un délai
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1000);
+        });
+
+        // Chargement des données utilisateur
+        async function loadUserData(user) {
+            try {
+                // Mettre à jour l'interface utilisateur avec les informations de base
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+                document.getElementById('welcome-name').textContent = user.displayName || 'Coéquipier';
+                
+                if (user.photoURL) {
+                    document.getElementById('user-avatar').src = user.photoURL;
                 }
-            ];
-            
-            // Ajouter les quêtes d'exemple à Firestore
-            for (const quest of exampleQuests) {
-                await questsCollection.add(quest);
+                
+                // Charger les données depuis Firestore
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    
+                    // Mettre à jour XP et niveau
+                    const xp = userData.xp || 0;
+                    const level = calculateLevel(xp);
+                    
+                    // Interface XP
+                    updateXpDisplay(xp, level);
+                    
+                    // Rôle principal
+                    if (userData.roles && userData.roles.length > 0) {
+                        updateMainRole(userData.roles[0]);
+                    }
+                } else {
+                    // Créer un document pour le nouvel utilisateur
+                    await db.collection('users').doc(user.uid).set({
+                        displayName: user.displayName || '',
+                        email: user.email,
+                        photoURL: user.photoURL || '',
+                        xp: 0,
+                        roles: [],
+                        badges: [],
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            } catch (error) {
+                console.error("Erreur lors du chargement des données utilisateur:", error);
             }
-            
-            // Recharger les données
-            return loadQuests();
         }
-        
-        // Afficher les quêtes depuis Firestore
-        snapshot.forEach(doc => {
-            const quest = doc.data();
-            const questItem = document.createElement('div');
-            questItem.className = 'quest-item';
+
+        // Calculer le niveau en fonction de l'XP
+        function calculateLevel(xp) {
+            return Math.floor(Math.sqrt(xp / 100)) + 1;
+        }
+
+        // Mettre à jour l'affichage XP
+        function updateXpDisplay(xp, level) {
+            const xpForCurrentLevel = 100 * Math.pow(level - 1, 2);
+            const xpForNextLevel = 100 * Math.pow(level, 2);
+            const xpProgress = xp - xpForCurrentLevel;
+            const xpNeeded = xpForNextLevel - xpForCurrentLevel;
+            const progressPercent = (xpProgress / xpNeeded) * 100;
             
-            // Formatter la date limite
-            let deadlineText = "Pas de date limite";
-            if (quest.deadline) {
-                const deadline = quest.deadline.toDate();
-                deadlineText = new Date(deadline).toLocaleDateString('fr-FR');
+            document.getElementById('xp-progress').style.width = progressPercent + '%';
+            document.getElementById('xp-text').textContent = xp + ' XP';
+            
+            // Tableau de bord
+            document.getElementById('level-badge').textContent = level;
+            document.getElementById('level-bar').style.width = progressPercent + '%';
+            document.getElementById('level-text').textContent = xpProgress + '/' + xpNeeded + ' XP';
+            
+            // Titre du niveau
+            const levelTitles = ['Novice', 'Apprenti', 'Initié', 'Compétent', 'Expert', 'Maître', 'Champion', 'Légende'];
+            document.getElementById('level-title').textContent = levelTitles[Math.min(level - 1, levelTitles.length - 1)];
+        }
+
+        // Mettre à jour le rôle principal
+        function updateMainRole(role) {
+            const roleIcons = {
+                'maintenance': 'fa-wrench',
+                'reviews': 'fa-star',
+                'inventory': 'fa-box',
+                'organization': 'fa-calendar-alt',
+                'content': 'fa-paint-brush',
+                'mentoring': 'fa-graduation-cap',
+                'partnerships': 'fa-handshake',
+                'social': 'fa-hashtag'
+            };
+            
+            const roleNames = {
+                'maintenance': 'Entretien & Maintenance',
+                'reviews': 'Gestion des Avis',
+                'inventory': 'Gestion des Stocks',
+                'organization': 'Organisation Interne',
+                'content': 'Création de Contenu',
+                'mentoring': 'Mentorat & Formation',
+                'partnerships': 'Partenariats',
+                'social': 'Communication & Réseaux Sociaux'
+            };
+            
+            document.getElementById('role-name').textContent = roleNames[role.role] || role.role;
+            
+            const roleIcon = document.querySelector('.role-icon i');
+            roleIcon.className = `fas ${roleIcons[role.role] || 'fa-user'}`;
+            
+            // Mastery
+            const masteryLevel = Math.min(Math.floor(role.mastery / 20), 4);
+            const masteryLabels = ['Novice', 'Intermédiaire', 'Avancé', 'Expert', 'Maître'];
+            
+            document.getElementById('mastery-bar').style.width = (role.mastery || 0) + '%';
+            document.getElementById('mastery-text').textContent = masteryLabels[masteryLevel];
+        }
+
+        // Chargement des quêtes
+        async function loadQuests() {
+            try {
+                const dailyQuestsContainer = document.getElementById('daily-quests');
+                if (!dailyQuestsContainer) return;
+                
+                dailyQuestsContainer.innerHTML = '<div class="loading">Chargement des quêtes...</div>';
+                
+                // Vérifier si la collection existe, sinon créer des exemples
+                const questsRef = db.collection('quests');
+                const snapshot = await questsRef.get();
+                
+                if (snapshot.empty) {
+                    // Créer des quêtes d'exemples
+                    const exampleQuests = [
+                        {
+                            title: "Réparer le mécanisme du coffre - Salle 2",
+                            description: "Le mécanisme d'ouverture du coffre ne fonctionne plus correctement. À réparer avant le weekend.",
+                            type: "daily",
+                            xp: 15,
+                            assignedTo: [auth.currentUser.uid],
+                            completed: false,
+                            deadline: new Date(Date.now() + 86400000 * 2), // Dans 2 jours
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        {
+                            title: "Créer un post Instagram pour le nouvel escape game",
+                            description: "Créer un contenu engageant pour annoncer le lancement du nouvel escape game. Photos + texte accrocheur.",
+                            type: "daily",
+                            xp: 10,
+                            assignedTo: [auth.currentUser.uid],
+                            completed: false,
+                            deadline: new Date(Date.now() + 86400000 * 3), // Dans 3 jours
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        {
+                            title: "Commander les stocks de consommables pour juin",
+                            description: "Vérifier et commander les stocks de piles, ampoules, accessoires et matériel d'entretien pour le mois prochain.",
+                            type: "daily",
+                            xp: 5,
+                            assignedTo: [auth.currentUser.uid],
+                            completed: false,
+                            deadline: new Date(Date.now() + 86400000 * 1), // Dans 1 jour
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }
+                    ];
+                    
+                    // Ajouter les quêtes d'exemple à Firestore
+                    for (const quest of exampleQuests) {
+                        await questsRef.add(quest);
+                    }
+                }
+                
+                // Charger les quêtes pour l'utilisateur actuel
+                const userQuests = await questsRef
+                    .where('assignedTo', 'array-contains', auth.currentUser.uid)
+                    .where('completed', '==', false)
+                    .where('type', '==', 'daily')
+                    .limit(3)
+                    .get();
+                
+                // Vider le conteneur
+                dailyQuestsContainer.innerHTML = '';
+                
+                if (userQuests.empty) {
+                    dailyQuestsContainer.innerHTML = '<div class="no-quests">Aucune quête pour aujourd\'hui !</div>';
+                    document.getElementById('quests-today').textContent = '0';
+                    return;
+                }
+                
+                // Mettre à jour le compteur de quêtes
+                document.getElementById('quests-today').textContent = userQuests.size;
+                
+                // Afficher les quêtes
+                userQuests.forEach(doc => {
+                    const quest = doc.data();
+                    const questItem = document.createElement('div');
+                    questItem.className = 'quest-item';
+                    
+                    // Formater la deadline
+                    let deadlineText = "Pas de date limite";
+                    if (quest.deadline) {
+                        const deadline = quest.deadline.toDate();
+                        const now = new Date();
+                        const tomorrow = new Date(now);
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        
+                        if (deadline.toDateString() === now.toDateString()) {
+                            deadlineText = "Aujourd'hui";
+                        } else if (deadline.toDateString() === tomorrow.toDateString()) {
+                            deadlineText = "Demain";
+                        } else {
+                            deadlineText = deadline.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                        }
+                    }
+                    
+                    questItem.innerHTML = `
+                        <div class="quest-info">
+                            <h4 class="quest-title">${quest.title}</h4>
+                            <p class="quest-description">${quest.description}</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> ${quest.xp} XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> ${deadlineText}</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" data-id="${doc.id}">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    `;
+                    
+                    // Ajouter au conteneur
+                    dailyQuestsContainer.appendChild(questItem);
+                    
+                    // Ajouter l'événement pour compléter la quête
+                    const completeButton = questItem.querySelector('.btn-complete');
+                    completeButton.addEventListener('click', () => completeQuest(doc.id, quest));
+                });
+                
+            } catch (error) {
+                console.error("Erreur lors du chargement des quêtes:", error);
+            }
+        }
+
+        // Compléter une quête
+        async function completeQuest(questId, quest) {
+            try {
+                // Mettre à jour la quête
+                await db.collection('quests').doc(questId).update({
+                    completed: true,
+                    completedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    completedBy: auth.currentUser.uid
+                });
+                
+                // Ajouter XP à l'utilisateur
+                await db.collection('users').doc(auth.currentUser.uid).update({
+                    xp: firebase.firestore.FieldValue.increment(quest.xp)
+                });
+                
+                // Ajouter une activité
+                await db.collection('activity').add({
+                    userId: auth.currentUser.uid,
+                    displayName: auth.currentUser.displayName || auth.currentUser.email,
+                    photoURL: auth.currentUser.photoURL || '',
+                    type: 'quest_completed',
+                    questId: questId,
+                    questTitle: quest.title,
+                    xp: quest.xp,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Afficher un message de succès
+                alert(`Quête terminée ! +${quest.xp} XP`);
+                
+                // Recharger les quêtes et les données utilisateur
+                loadQuests();
+                loadUserData(auth.currentUser);
+                loadTeamActivity();
+            } catch (error) {
+                console.error("Erreur lors de la validation de la quête:", error);
+                alert("Erreur: " + error.message);
+            }
+        }
+
+        // Chargement de l'activité d'équipe
+        async function loadTeamActivity() {
+            try {
+                const teamFeed = document.getElementById('team-feed');
+                if (!teamFeed) return;
+                
+                teamFeed.innerHTML = '<div class="loading">Chargement de l\'activité...</div>';
+                
+                // Charger les activités récentes
+                const activityRef = db.collection('activity')
+                    .orderBy('timestamp', 'desc')
+                    .limit(5);
+                    
+                const snapshot = await activityRef.get();
+                
+                // Vider le conteneur
+                teamFeed.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    teamFeed.innerHTML = '<div class="no-activity">Aucune activité récente</div>';
+                    return;
+                }
+                
+                // Afficher les activités
+                snapshot.forEach(doc => {
+                    const activity = doc.data();
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+                    
+                    // Type d'icône selon le type d'activité
+                    let iconClass = 'fa-bell';
+                    let activityType = '';
+                    
+                    switch (activity.type) {
+                        case 'quest_completed':
+                            iconClass = 'fa-check-circle';
+                            activityType = 'quest-completed';
+                            break;
+                        case 'badge_unlocked':
+                            iconClass = 'fa-award';
+                            activityType = 'badge-unlocked';
+                            break;
+                        case 'role_assigned':
+                            iconClass = 'fa-user-tag';
+                            activityType = 'role-assigned';
+                            break;
+                        case 'level_up':
+                            iconClass = 'fa-level-up-alt';
+                            activityType = 'level-up';
+                            break;
+                    }
+                    
+                    // Formater le temps écoulé
+                    let timeAgo = 'à l\'instant';
+                    if (activity.timestamp) {
+                        const now = Date.now();
+                        const timestamp = activity.timestamp.toDate().getTime();
+                        const diffSeconds = Math.floor((now - timestamp) / 1000);
+                        
+                        if (diffSeconds < 60) {
+                            timeAgo = 'à l\'instant';
+                        } else if (diffSeconds < 3600) {
+                            timeAgo = `il y a ${Math.floor(diffSeconds / 60)} min`;
+                        } else if (diffSeconds < 86400) {
+                            timeAgo = `il y a ${Math.floor(diffSeconds / 3600)} h`;
+                        } else {
+                            timeAgo = `il y a ${Math.floor(diffSeconds / 86400)} j`;
+                        }
+                    }
+                    
+                    // Contenu selon le type d'activité
+                    let activityText = '';
+                    
+                    switch (activity.type) {
+                        case 'quest_completed':
+                            activityText = `<strong>${activity.displayName}</strong> a terminé la quête <strong>${activity.questTitle}</strong> (+${activity.xp} XP)`;
+                            break;
+                        case 'badge_unlocked':
+                            activityText = `<strong>${activity.displayName}</strong> a débloqué le badge <strong>${activity.badgeName}</strong>`;
+                            break;
+                        case 'role_assigned':
+                            activityText = `<strong>${activity.displayName}</strong> a été assigné au rôle <strong>${activity.roleName}</strong>`;
+                            break;
+                        case 'level_up':
+                            activityText = `<strong>${activity.displayName}</strong> a atteint le niveau <strong>${activity.level}</strong>`;
+                            break;
+                        default:
+                            activityText = `<strong>${activity.displayName}</strong> a effectué une action`;
+                    }
+                    
+                    activityItem.innerHTML = `
+                        <div class="activity-icon ${activityType}">
+                            <i class="fas ${iconClass}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>${activityText}</p>
+                            <span class="activity-time">${timeAgo}</span>
+                        </div>
+                    `;
+                    
+                    // Ajouter au conteneur
+                    teamFeed.appendChild(activityItem);
+                });
+                
+            } catch (error) {
+                console.error("Erreur lors du chargement de l'activité d'équipe:", error);
+            }
+        }
+
+        // Navigation entre les pages
+        function loadPage(pageName) {
+            // Mettre à jour les boutons de navigation
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(button => {
+                if (button.getAttribute('data-page') === pageName) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Récupérer le template de la page
+            const template = document.getElementById(`${pageName}-template`);
+            if (!template) {
+                console.error(`Template non trouvé pour la page ${pageName}`);
+                return;
             }
             
-            questItem.innerHTML = `
-                <h3>${quest.title}</h3>
-                <p>${quest.description}</p>
-                <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                    <span style="color:#7e57c2;"><i class="fas fa-star"></i> ${quest.xp || 0} XP</span>
-                    <span><i class="fas fa-clock"></i> Échéance: ${deadlineText}</span>
-                </div>
-                <button class="complete-btn" data-id="${doc.id}" style="margin-top:10px; padding:8px; background:#66bb6a; color:white; border:none; border-radius:5px; cursor:pointer;">
-                    Marquer comme terminée
-                </button>
-            `;
-            questsList.appendChild(questItem);
+            // Cloner le contenu du template
+            const content = document.importNode(template.content, true);
             
-            // Ajouter l'événement pour compléter la quête
-            questItem.querySelector('.complete-btn').addEventListener('click', async (e) => {
-                const questId = e.target.dataset.id;
-                await questsCollection.doc(questId).update({
-                    completed: true,
-                    completedAt: new Date()
+            // Effacer le contenu actuel
+            const mainContent = document.getElementById('main-content');
+            mainContent.innerHTML = '';
+            
+            // Ajouter le nouveau contenu
+            mainContent.appendChild(content);
+            
+            // Initialiser la page spécifique
+            switch (pageName) {
+                case 'dashboard':
+                    loadQuests();
+                    loadTeamActivity();
+                    break;
+                case 'quests':
+                    loadAllQuests();
+                    break;
+                case 'team':
+                    loadTeamMembers();
+                    break;
+                case 'calendar':
+                    loadCalendar();
+                    break;
+                case 'chat':
+                    loadChat();
+                    break;
+            }
+            
+            // Faire défiler vers le haut
+            window.scrollTo(0, 0);
+        }
+
+        // Chargement de toutes les quêtes
+        function loadAllQuests() {
+            // À implémenter pour les onglets de quêtes
+        }
+
+        // Chargement des membres de l'équipe
+        function loadTeamMembers() {
+            // À implémenter pour la page Équipe
+        }
+
+        // Chargement du calendrier
+        function loadCalendar() {
+            // À implémenter pour la page Calendrier
+        }
+
+        // Chargement du chat
+        function loadChat() {
+            // À implémenter pour la page Chat
+        }
+
+        // Initialiser les gestionnaires d'événements
+        function initEventListeners() {
+            // Gestionnaire pour les boutons de navigation
+            document.querySelectorAll('.nav-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const page = button.getAttribute('data-page');
+                    loadPage(page);
                 });
-                alert('Quête terminée ! +' + (quest.xp || 0) + ' XP');
-                loadQuests(); // Recharger les quêtes
             });
+            
+            // Bouton de notifications
+            document.getElementById('notifications-btn').addEventListener('click', () => {
+                const panel = document.getElementById('notifications-panel');
+                panel.classList.toggle('hidden');
+            });
+            
+            // Fermer les notifications
+            document.getElementById('close-notifications').addEventListener('click', () => {
+                document.getElementById('notifications-panel').classList.add('hidden');
+            });
+            
+            // Gestionnaire global pour les boutons data-page
+            document.addEventListener('click', e => {
+                if (e.target.matches('[data-page]') || e.target.closest('[data-page]')) {
+                    const target = e.target.matches('[data-page]') ? e.target : e.target.closest('[data-page]');
+                    const page = target.getAttribute('data-page');
+                    loadPage(page);
+                    e.preventDefault();
+                }
+                
+                if (e.target.matches('[data-tab]') || e.target.closest('[data-tab]')) {
+                    const target = e.target.matches('[data-tab]') ? e.target : e.target.closest('[data-tab]');
+                    const tab = target.getAttribute('data-tab');
+                    
+                    // Mettre à jour les onglets
+                    const tabs = document.querySelectorAll('.tab');
+                    tabs.forEach(t => {
+                        if (t.getAttribute('data-tab') === tab) {
+                            t.classList.add('active');
+                        } else {
+                            t.classList.remove('active');
+                        }
+                    });
+                    
+                    // Mettre à jour le contenu des onglets
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(c => {
+                        if (c.id === `${tab}-tab`) {
+                            c.classList.add('active');
+                        } else {
+                            c.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Initialisation après chargement du DOM
+          // Initialisation après chargement du DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialiser les gestionnaires d'événements
+            initEventListeners();
+            
+            // Simuler un chargement
+            const loadingProgress = document.querySelector('.loading-progress');
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                loadingProgress.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 50);
         });
-    } catch (error) {
-        console.error("Erreur lors du chargement des quêtes:", error);
-        questsList.innerHTML = `<p style="color:red">Erreur lors du chargement des quêtes: ${error.message}</p>`;
-    }
-}
 
-        // Ajouter ce code après ta fonction loadQuests()
+        // Créer des données de test si nécessaire
+        async function createTestData() {
+            try {
+                // Utilisateurs
+                const usersRef = db.collection('users');
+                const usersSnapshot = await usersRef.get();
+                
+                if (usersSnapshot.empty) {
+                    // Créer des utilisateurs de test
+                    const users = [
+                        {
+                            displayName: "Allan Boehme",
+                            email: "allan@example.com",
+                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v1.png",
+                            xp: 1200,
+                            badges: ["founder", "mentor", "innovator"],
+                            roles: [
+                                { role: "mentoring", mastery: 85 },
+                                { role: "organization", mastery: 90 }
+                            ]
+                        },
+                        {
+                            displayName: "Paris Amélie",
+                            email: "paris@example.com",
+                            photoURL: "https://img.icons8.com/color/96/000000/user-female-circle--v1.png",
+                            xp: 850,
+                            badges: ["communicator", "creative"],
+                            roles: [
+                                { role: "content", mastery: 75 },
+                                { role: "social", mastery: 80 }
+                            ]
+                        },
+                        {
+                            displayName: "Red Houlette",
+                            email: "red@example.com",
+                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v2.png",
+                            xp: 920,
+                            badges: ["team_player", "includer"],
+                            roles: [
+                                { role: "social", mastery: 70 },
+                                { role: "reviews", mastery: 65 }
+                            ]
+                        },
+                        {
+                            displayName: "Léo Mercier",
+                            email: "leo@example.com",
+                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v3.png",
+                            xp: 780,
+                            badges: ["builder", "technical"],
+                            roles: [
+                                { role: "maintenance", mastery: 90 },
+                                { role: "inventory", mastery: 65 }
+                            ]
+                        },
+                        {
+                            displayName: "Polar Caron",
+                            email: "polar@example.com",
+                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v4.png",
+                            xp: 950,
+                            badges: ["organizer", "helper"],
+                            roles: [
+                                { role: "organization", mastery: 85 },
+                                { role: "partnerships", mastery: 75 }
+                            ]
+                        }
+                    ];
+                    
+                    // Ajouter les utilisateurs
+                    for (const user of users) {
+                        await usersRef.add({
+                            ...user,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                }
+                
+                // Badges
+                const badgesRef = db.collection('badges');
+                const badgesSnapshot = await badgesRef.get();
+                
+                if (badgesSnapshot.empty) {
+                    // Créer des badges de test
+                    const badges = [
+                        {
+                            id: "founder",
+                            name: "Fondateur",
+                            description: "A participé à la fondation de SYNERGIA",
+                            icon: "crown",
+                            color: "#ffd700",
+                            xpBonus: 100,
+                            requirements: { special: true }
+                        },
+                        {
+                            id: "team_player",
+                            name: "Esprit d'équipe",
+                            description: "A participé à 10 événements d'équipe",
+                            icon: "users",
+                            color: "#26c6da",
+                            xpBonus: 50,
+                            requirements: { events: 10 }
+                        },
+                        {
+                            id: "communicator",
+                            name: "Communicateur",
+                            description: "A créé 15 messages dans le chat d'équipe",
+                            icon: "comments",
+                            color: "#29b6f6",
+                            xpBonus: 30,
+                            requirements: { messages: 15 }
+                        },
+                        {
+                            id: "builder",
+                            name: "Constructeur",
+                            description: "A réalisé 20 réparations ou améliorations",
+                            icon: "hammer",
+                            color: "#ef5350",
+                            xpBonus: 40,
+                            requirements: { repairs: 20 }
+                        },
+                        {
+                            id: "creative",
+                            name: "Créatif",
+                            description: "A créé 10 contenus originaux",
+                            icon: "paint-brush",
+                            color: "#66bb6a",
+                            xpBonus: 35,
+                            requirements: { content: 10 }
+                        }
+                    ];
+                    
+                    // Ajouter les badges
+                    for (const badge of badges) {
+                        await badgesRef.doc(badge.id).set(badge);
+                    }
+                }
+                
+                console.log("Données de test créées avec succès");
+            } catch (error) {
+                console.error("Erreur lors de la création des données de test:", error);
+            }
+        }
 
-// Afficher le nom de l'utilisateur connecté
-function showUserInfo(user) {
-    const header = document.createElement('div');
-    header.style.backgroundColor = '#7e57c2';
-    header.style.color = 'white';
-    header.style.padding = '15px';
-    header.style.display = 'flex';
-    header.style.justifyContent = 'space-between';
-    header.style.alignItems = 'center';
-    header.style.marginBottom = '20px';
-    
-    header.innerHTML = `
-        <div>
-            <h2 style="margin:0;">Bienvenue, ${user.email}</h2>
-        </div>
-        <button id="logout-btn" style="padding:8px 15px; background:white; color:#7e57c2; border:none; border-radius:5px; cursor:pointer;">
-            Déconnexion
-        </button>
-    `;
-    
-    document.querySelector('.quests-container').prepend(header);
-    
-    document.getElementById('logout-btn').addEventListener('click', () => {
-        auth.signOut().then(() => {
-            window.location.reload();
+        // Créer des données de test si l'utilisateur est administrateur
+        auth.onAuthStateChanged(async (user) => {
+            if (user && user.email === "allan@example.com") {
+                // Vérifier si l'utilisateur est admin
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (userDoc.exists && userDoc.data().role === "admin") {
+                    createTestData();
+                }
+            }
         });
-    });
-}
-
-// Modifier onAuthStateChanged pour afficher les infos utilisateur
-auth.onAuthStateChanged(user => {
-    if (user) {
-        loadQuests();
-        showUserInfo(user);
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-    } else {
-        document.getElementById('login-screen').style.display = 'block';
-        document.getElementById('app').style.display = 'none';
-    }
-});
-
     </script>
 </body>
 </html>
