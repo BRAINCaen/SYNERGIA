@@ -1,6 +1,6 @@
 // Configuration Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAvFX1mKk-YN_MJTB0CvA5aWeRw3fJb5rk",
+  apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
   authDomain: "synergia-app-f27e7.firebaseapp.com",
   projectId: "synergia-app-f27e7",
   storageBucket: "synergia-app-f27e7.firebasestorage.app",
