@@ -2004,5 +2004,146 @@ const firebaseConfig = {
             }
         });
     </script>
+    <!-- Panneau d'administration (visible uniquement pour les admin) -->
+<div id="admin-panel" class="modal hidden">
+    <div class="modal-content admin-modal">
+        <div class="modal-header">
+            <h3>Panneau d'administration</h3>
+            <button id="close-admin" class="icon-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-admin-tab="quests">Quêtes</button>
+                <button class="admin-tab" data-admin-tab="users">Utilisateurs</button>
+                <button class="admin-tab" data-admin-tab="badges">Badges</button>
+                <button class="admin-tab" data-admin-tab="roles">Rôles</button>
+            </div>
+            
+            <div class="admin-tab-content active" id="admin-quests">
+                <h4>Gestion des quêtes</h4>
+                <button id="add-quest-btn" class="btn-primary">Ajouter une quête</button>
+                <div id="admin-quests-list" class="admin-list">
+                    <!-- Liste des quêtes -->
+                </div>
+            </div>
+            
+            <div class="admin-tab-content" id="admin-users">
+                <h4>Gestion des utilisateurs</h4>
+                <button id="add-user-btn" class="btn-primary">Ajouter un utilisateur</button>
+                <div id="admin-users-list" class="admin-list">
+                    <!-- Liste des utilisateurs -->
+                </div>
+            </div>
+            
+            <div class="admin-tab-content" id="admin-badges">
+                <h4>Gestion des badges</h4>
+                <button id="add-badge-btn" class="btn-primary">Ajouter un badge</button>
+                <div id="admin-badges-list" class="admin-list">
+                    <!-- Liste des badges -->
+                </div>
+            </div>
+            
+            <div class="admin-tab-content" id="admin-roles">
+                <h4>Gestion des rôles</h4>
+                <button id="add-role-btn" class="btn-primary">Ajouter un rôle</button>
+                <div id="admin-roles-list" class="admin-list">
+                    <!-- Liste des rôles -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter/modifier une quête -->
+<div id="quest-form-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="quest-form-title">Ajouter une quête</h3>
+            <button id="close-quest-form" class="icon-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="quest-form">
+                <input type="hidden" id="quest-id">
+                <div class="form-group">
+                    <label for="quest-title-input">Titre</label>
+                    <input type="text" id="quest-title-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="quest-description-input">Description</label>
+                    <textarea id="quest-description-input" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="quest-type-input">Type</label>
+                    <select id="quest-type-input" required>
+                        <option value="daily">Quotidienne</option>
+                        <option value="weekly">Hebdomadaire</option>
+                        <option value="special">Spéciale</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quest-xp-input">XP</label>
+                    <input type="number" id="quest-xp-input" min="1" value="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="quest-deadline-input">Date limite</label>
+                    <input type="date" id="quest-deadline-input">
+                </div>
+                <div class="form-group">
+                    <label>Assignée à</label>
+                    <div id="quest-assignees" class="checkbox-group">
+                        <!-- Rempli dynamiquement -->
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter/modifier un utilisateur -->
+<div id="user-form-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="user-form-title">Ajouter un utilisateur</h3>
+            <button id="close-user-form" class="icon-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="user-form">
+                <input type="hidden" id="user-id">
+                <div class="form-group">
+                    <label for="user-name-input">Nom</label>
+                    <input type="text" id="user-name-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-email-input">Email</label>
+                    <input type="email" id="user-email-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-xp-input">XP</label>
+                    <input type="number" id="user-xp-input" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Rôles</label>
+                    <div id="user-roles" class="role-checkboxes">
+                        <!-- Rempli dynamiquement -->
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bouton d'administration (visible uniquement pour les admins) -->
+<button id="admin-btn" class="admin-fab hidden">
+    <i class="fas fa-cog"></i>
+</button>
+
 </body>
 </html>
