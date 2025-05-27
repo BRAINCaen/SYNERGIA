@@ -182,6 +182,160 @@
                 left: 100%;
             }
         }
+/* Ajouter ce CSS à la section style de ton index.html */
+.nav-btn, .btn-primary, .admin-btn, .tab {
+    min-height: 44px; /* Taille minimale pour les éléments tactiles */
+    padding: 12px; /* Plus d'espace pour les doigts */
+}
+
+/* Espacement amélioré pour les listes d'éléments */
+.quest-item, .team-member-card, .activity-item {
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+/* Position fixe pour la barre de navigation en bas */
+nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+/* Espace pour éviter que le contenu soit caché sous la barre de navigation */
+main {
+    padding-bottom: 70px;
+}
+
+/* Animation de feedback tactile */
+.btn-primary:active, .nav-btn:active, .tab:active {
+    transform: scale(0.97);
+    transition: transform 0.1s;
+}
+
+/* Interface administrative plus adaptée au mobile */
+.admin-modal {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border-radius: 0;
+}
+
+.admin-tabs {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding: 10px 0;
+}
+/* Style pour le panneau d'administration mobile */
+.admin-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Amélioration des formulaires sur mobile */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    font-size: 16px; /* Évite le zoom automatique sur iOS */
+    padding: 12px;
+}
+
+/* Bouton fermer en haut à droite */
+.modal-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding: 16px;
+}
+
+.modal-header .icon-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+/* Palettes de couleurs plus ludiques */
+:root {
+    --primary: #8e44ad; /* Violet plus vif */
+    --primary-light: #9b59b6;
+    --primary-dark: #6c3483;
+    --secondary: #2ecc71; /* Vert émeraude */
+    --secondary-light: #2ecc71;
+    --secondary-dark: #27ae60;
+    --accent: #f39c12; /* Orange doré */
+    --background: #f9f9f9;
+}
+
+/* Fond texturé subtil */
+body {
+    background-image: url('https://www.transparenttextures.com/patterns/subtle-dark-vertical.png');
+    background-color: var(--background);
+}
+
+/* Cartes avec effet de profondeur */
+.quest-item, .stats-card, .role-card, .welcome-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+    border-left: 4px solid var(--primary);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.quest-item:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Style de RPG pour les niveaux et XP */
+#level-badge {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
+    border: 2px solid white;
+}
+
+.xp-bar, .level-progress, .mastery-progress {
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+#xp-progress, #level-bar, #mastery-bar {
+    background: linear-gradient(90deg, var(--secondary-light) 0%, var(--secondary) 100%);
+    box-shadow: 0 0 5px var(--secondary-light);
+}
+
+/* Animations pour les accomplissements */
+@keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.new-badge, .level-up {
+    animation: celebrate 0.5s ease-in-out;
+}
 
         /* Écran de connexion */
         #login-screen {
@@ -2838,7 +2992,51 @@ document.addEventListener('DOMContentLoaded', () => {
                             adminBtn.className = 'admin-fab';
                             adminBtn.innerHTML = '<i class="fas fa-cog"></i>';
                             document.body.appendChild(adminBtn);
-                            
+                            /* Améliorer l'interface admin sur mobile */
+.admin-fab {
+    width: 65px;
+    height: 65px;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    animation: pulse-admin 2s infinite;
+}
+
+@keyframes pulse-admin {
+    0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+/* Style pour les onglets admin */
+.admin-tabs {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+}
+
+.admin-tab {
+    flex: 0 0 auto;
+    padding: 12px 20px;
+    margin-right: 8px;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+.admin-tab.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Boutons d'action plus grands sur mobile */
+.admin-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+}
+
                             // Ajouter du style
                             const style = document.createElement('style');
                             style.textContent = `
@@ -3019,6 +3217,81 @@ document.addEventListener('DOMContentLoaded', () => {
 <button id="admin-btn" class="admin-fab hidden">
     <i class="fas fa-cog"></i>
 </button>
+<!-- Ajouter avant la fermeture de body -->
+<div class="game-elements hidden">
+    <!-- Petites particules qui apparaissent lors des accomplissements -->
+    <div class="particles-container"></div>
+    
+    <!-- Sons pour les accomplissements -->
+    <audio id="complete-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-video-game-treasure-2066.mp3"></audio>
+    <audio id="levelup-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-complete-or-approved-mission-205.mp3"></audio>
+</div>
+
+<script>
+// Ajouter à ton JavaScript existant
+function playCompleteSound() {
+    document.getElementById('complete-sound').play();
+}
+
+function playLevelUpSound() {
+    document.getElementById('levelup-sound').play();
+}
+
+function createParticles(x, y) {
+    const container = document.querySelector('.particles-container');
+    container.classList.remove('hidden');
+    
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Position aléatoire autour du point d'origine
+        const posX = x + (Math.random() * 100 - 50);
+        const posY = y + (Math.random() * 100 - 50);
+        
+        // Couleur aléatoire
+        const colors = ['#8e44ad', '#2ecc71', '#f39c12', '#3498db'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.cssText = `
+            position: fixed;
+            left: ${posX}px;
+            top: ${posY}px;
+            width: ${Math.random() * 10 + 5}px;
+            height: ${Math.random() * 10 + 5}px;
+            background-color: ${color};
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 1;
+            z-index: 1000;
+        `;
+        
+        container.appendChild(particle);
+        
+        // Animation de la particule
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 100 + 50;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        
+        setTimeout(() => {
+            particle.style.transition = 'all 1s ease-out';
+            particle.style.transform = `translate(${vx}px, ${vy}px)`;
+            particle.style.opacity = '0';
+            
+            // Supprimer après l'animation
+            setTimeout(() => {
+                particle.remove();
+            }, 1000);
+        }, 10);
+    }
+    
+    // Nettoyer le conteneur après quelques secondes
+    setTimeout(() => {
+        container.classList.add('hidden');
+    }, 2000);
+}
+</script>
 
 </body>
 </html>
