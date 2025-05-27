@@ -2003,6 +2003,778 @@ const firebaseConfig = {
                 }
             }
         });
+        // Fonctionnalités d'administration
+let isAdmin = false;
+
+// Vérifier si l'utilisateur est administrateur
+auth.onAuthStateChanged(async (user) => {
+    if (!user) return;
+    
+    try {
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        isAdmin = userDoc.exists && (userDoc.data().role === 'admin' || user.email === 'allan@example.com');
+        
+        // Afficher/masquer le bouton d'administration
+        document.getElementById('admin-btn').classList.toggle('hidden', !isAdmin);
+        
+        // Si admin, initialiser le panneau d'administration
+        if (isAdmin) {
+            initAdminPanel();
+        }
+    } catch (error) {
+        console.error("Erreur lors de la vérification des droits admin:", error);
+    }
+});
+
+// Initialiser le panneau d'administration
+function initAdminPanel() {
+    // Gestionnaire pour le bouton d'administration
+    document.getElementById('admin-btn').addEventListener('click', () => {
+        document.getElementById('admin-panel').classList.remove('hidden');
+        loadAdminData('quests'); // Chargement par défaut
+    });
+    
+    // Fermer le panneau
+    document.getElementById('close-admin').addEventListener('click', () => {
+        document.getElementById('admin-panel').classList.add('hidden');
+    });
+    
+    // Gestionnaire pour les onglets admin
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Mettre à jour les onglets actifs
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Mettre à jour le contenu actif
+            const tabName = tab.getAttribute('data-admin-tab');
+            document.querySelectorAll('.admin-tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `admin-${tabName}`);
+            });
+            
+            // Charger les données
+            loadAdminData(tabName);
+        });
+    });
+    
+    // Gestionnaire pour le formulaire de quête
+    document.getElementById('add-quest-btn').addEventListener('click', () => {
+        openQuestForm();
+    });
+    
+    document.getElementById('close-quest-form').addEventListener('click', () => {
+        document.getElementById('quest-form-modal').classList.add('hidden');
+    });
+    
+    document.getElementById('quest-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveQuest();
+    });
+    
+    // Gestionnaire pour le formulaire utilisateur
+    document.getElementById('add-user-btn').addEventListener('click', () => {
+        openUserForm();
+    });
+    
+    document.getElementById('close-user-form').addEventListener('click', () => {
+        document.getElementById('user-form-modal').classList.add('hidden');
+    });
+    
+    document.getElementById('user-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveUser();
+    });
+    
+    // Autres gestionnaires...
+    document.getElementById('add-badge-btn').addEventListener('click', () => {
+        alert('Fonctionnalité en cours de développement');
+    });
+    
+    document.getElementById('add-role-btn').addEventListener('click', () => {
+        alert('Fonctionnalité en cours de développement');
+    });
+}
+
+// Charger les données d'administration
+async function loadAdminData(tabName) {
+    try {
+        switch (tabName) {
+            case 'quests':
+                await loadAdminQuests();
+                break;
+            case 'users':
+                await loadAdminUsers();
+                break;
+            case 'badges':
+                await loadAdminBadges();
+                break;
+            case 'roles':
+                await loadAdminRoles();
+                break;
+        }
+    } catch (error) {
+        console.error(`Erreur lors du chargement des données admin (${tabName}):`, error);
+    }
+}
+
+// Charger les quêtes pour l'admin
+async function loadAdminQuests() {
+    const questsList = document.getElementById('admin-quests-list');
+    questsList.innerHTML = '<div class="loading">Chargement des quêtes...</div>';
+    
+    try {
+        const snapshot = await db.collection('quests').get();
+        
+        questsList.innerHTML = '';
+        
+        if (snapshot.empty) {
+            questsList.innerHTML = '<div class="no-data">Aucune quête trouvée</div>';
+            return;
+        }
+        
+        snapshot.forEach(doc => {
+            const quest = doc.data();
+            const questItem = document.createElement('div');
+            questItem.className = 'admin-item';
+            
+            // Type de quête
+            let typeLabel = '';
+            switch (quest.type) {
+                case 'daily': typeLabel = 'Quotidienne'; break;
+                case 'weekly': typeLabel = 'Hebdomadaire'; break;
+                case 'special': typeLabel = 'Spéciale'; break;
+                default: typeLabel = quest.type;
+            }
+            
+            // Deadline
+            let deadline = '';
+            if (quest.deadline) {
+                const date = quest.deadline.toDate();
+                deadline = date.toLocaleDateString('fr-FR');
+            }
+            
+            questItem.innerHTML = `
+                <div class="admin-item-info">
+                    <h4 class="admin-item-title">${quest.title}</h4>
+                    <div class="admin-item-subtitle">
+                        ${typeLabel} • ${quest.xp} XP ${deadline ? '• Échéance: ' + deadline : ''}
+                    </div>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-btn edit-btn" data-id="${doc.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-btn delete-btn" data-id="${doc.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            questsList.appendChild(questItem);
+            
+            // Ajouter les gestionnaires d'événements
+            questItem.querySelector('.edit-btn').addEventListener('click', () => {
+                openQuestForm(doc.id, quest);
+            });
+            
+            questItem.querySelector('.delete-btn').addEventListener('click', async () => {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette quête ?')) {
+                    await db.collection('quests').doc(doc.id).delete();
+                    loadAdminQuests();
+                }
+            });
+        });
+    } catch (error) {
+        console.error("Erreur lors du chargement des quêtes pour l'admin:", error);
+        questsList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+    }
+}
+
+// Formulaire de quête
+async function openQuestForm(questId = null, questData = null) {
+    const modal = document.getElementById('quest-form-modal');
+    const form = document.getElementById('quest-form');
+    const titleInput = document.getElementById('quest-title-input');
+    const descriptionInput = document.getElementById('quest-description-input');
+    const typeInput = document.getElementById('quest-type-input');
+    const xpInput = document.getElementById('quest-xp-input');
+    const deadlineInput = document.getElementById('quest-deadline-input');
+    const assigneesContainer = document.getElementById('quest-assignees');
+    
+    // Titre du formulaire
+    document.getElementById('quest-form-title').textContent = questId ? 'Modifier la quête' : 'Ajouter une quête';
+    
+    // Reset du formulaire
+    form.reset();
+    document.getElementById('quest-id').value = questId || '';
+    
+    // Remplir avec les données existantes si modification
+    if (questId && questData) {
+        titleInput.value = questData.title || '';
+        descriptionInput.value = questData.description || '';
+        typeInput.value = questData.type || 'daily';
+        xpInput.value = questData.xp || 10;
+        
+        if (questData.deadline) {
+            const date = questData.deadline.toDate();
+            deadlineInput.value = date.toISOString().split('T')[0];
+        }
+    }
+    
+    // Charger les utilisateurs pour les assignations
+    assigneesContainer.innerHTML = '<div class="loading">Chargement des utilisateurs...</div>';
+    
+    try {
+        const usersSnapshot = await db.collection('users').get();
+        assigneesContainer.innerHTML = '';
+        
+        if (!usersSnapshot.empty) {
+            const assignedUsers = questData?.assignedTo || [];
+            
+            usersSnapshot.forEach(doc => {
+                const user = doc.data();
+                const isChecked = assignedUsers.includes(doc.id);
+                
+                const checkbox = document.createElement('div');
+                checkbox.className = 'checkbox-item';
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="user-${doc.id}" name="assignees" value="${doc.id}" ${isChecked ? 'checked' : ''}>
+                    <label for="user-${doc.id}">${user.displayName || user.email}</label>
+                `;
+                
+                assigneesContainer.appendChild(checkbox);
+            });
+        }
+    } catch (error) {
+        console.error("Erreur lors du chargement des utilisateurs:", error);
+        assigneesContainer.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+    }
+    
+    // Afficher la modale
+    modal.classList.remove('hidden');
+}
+
+// Enregistrer une quête
+async function saveQuest() {
+    const questId = document.getElementById('quest-id').value;
+    const title = document.getElementById('quest-title-input').value;
+    const description = document.getElementById('quest-description-input').value;
+    const type = document.getElementById('quest-type-input').value;
+    const xp = parseInt(document.getElementById('quest-xp-input').value);
+    const deadlineValue = document.getElementById('quest-deadline-input').value;
+    
+    // Récupérer les utilisateurs assignés
+    const assignees = [];
+    document.querySelectorAll('input[name="assignees"]:checked').forEach(checkbox => {
+        assignees.push(checkbox.value);
+    });
+    
+    // Préparer les données
+    const questData = {
+        title,
+        description,
+        type,
+        xp,
+        assignedTo: assignees,
+        completed: false,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    // Ajouter la deadline si spécifiée
+    if (deadlineValue) {
+        questData.deadline = firebase.firestore.Timestamp.fromDate(new Date(deadlineValue));
+    }
+    
+    try {
+        if (questId) {
+            // Mise à jour
+            await db.collection('quests').doc(questId).update(questData);
+        } else {
+            // Création
+            questData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            await db.collection('quests').add(questData);
+        }
+        
+        // Fermer la modale et recharger les quêtes
+        document.getElementById('quest-form-modal').classList.add('hidden');
+        loadAdminQuests();
+        
+        // Notifier l'utilisateur
+        alert(questId ? 'Quête mise à jour avec succès' : 'Quête créée avec succès');
+    } catch (error) {
+        console.error("Erreur lors de l'enregistrement de la quête:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
+
+// Charger les utilisateurs pour l'admin
+async function loadAdminUsers() {
+    const usersList = document.getElementById('admin-users-list');
+    usersList.innerHTML = '<div class="loading">Chargement des utilisateurs...</div>';
+    
+    try {
+        const snapshot = await db.collection('users').get();
+        
+        usersList.innerHTML = '';
+        
+        if (snapshot.empty) {
+            usersList.innerHTML = '<div class="no-data">Aucun utilisateur trouvé</div>';
+            return;
+        }
+        
+        snapshot.forEach(doc => {
+            const user = doc.data();
+            const userItem = document.createElement('div');
+            userItem.className = 'admin-item';
+            
+            userItem.innerHTML = `
+                <div class="admin-item-info">
+                    <h4 class="admin-item-title">${user.displayName || user.email}</h4>
+                    <div class="admin-item-subtitle">
+                        ${user.xp || 0} XP • ${user.email}
+                    </div>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-btn edit-btn" data-id="${doc.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+            `;
+            
+            usersList.appendChild(userItem);
+            
+            // Ajouter le gestionnaire d'événement
+            userItem.querySelector('.edit-btn').addEventListener('click', () => {
+                openUserForm(doc.id, user);
+            });
+        });
+    } catch (error) {
+        console.error("Erreur lors du chargement des utilisateurs pour l'admin:", error);
+        usersList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+    }
+}
+
+// Formulaire utilisateur
+async function openUserForm(userId = null, userData = null) {
+    const modal = document.getElementById('user-form-modal');
+    const form = document.getElementById('user-form');
+    const nameInput = document.getElementById('user-name-input');
+    const emailInput = document.getElementById('user-email-input');
+    const xpInput = document.getElementById('user-xp-input');
+    const rolesContainer = document.getElementById('user-roles');
+    
+    // Titre du formulaire
+    document.getElementById('user-form-title').textContent = userId ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur';
+    
+    // Reset du formulaire
+    form.reset();
+    document.getElementById('user-id').value = userId || '';
+    
+    // Remplir avec les données existantes si modification
+    if (userId && userData) {
+        nameInput.value = userData.displayName || '';
+        emailInput.value = userData.email || '';
+        xpInput.value = userData.xp || 0;
+    }
+    
+    // Charger les rôles disponibles
+    rolesContainer.innerHTML = '<div class="loading">Chargement des rôles...</div>';
+    
+    try {
+        const rolesSnapshot = await db.collection('roles').get();
+        rolesContainer.innerHTML = '';
+        
+        if (rolesSnapshot.empty) {
+            // Créer des rôles par défaut si aucun n'existe
+            const defaultRoles = [
+                { id: 'maintenance', name: 'Entretien & Maintenance' },
+                { id: 'reviews', name: 'Gestion des Avis' },
+                { id: 'inventory', name: 'Gestion des Stocks' },
+                { id: 'organization', name: 'Organisation Interne' },
+                { id: 'content', name: 'Création de Contenu' },
+                { id: 'mentoring', name: 'Mentorat & Formation' },
+                { id: 'partnerships', name: 'Partenariats' },
+                { id: 'social', name: 'Communication & Réseaux Sociaux' }
+            ];
+            
+            for (const role of defaultRoles) {
+                // Afficher les rôles par défaut
+                const checkbox = document.createElement('div');
+                checkbox.className = 'checkbox-item';
+                
+                const isAssigned = userData?.roles?.some(r => r.role === role.id);
+                const mastery = isAssigned ? userData.roles.find(r => r.role === role.id).mastery || 0 : 0;
+                
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="role-${role.id}" name="roles" value="${role.id}" ${isAssigned ? 'checked' : ''}>
+                    <label for="role-${role.id}">${role.name}</label>
+                    <input type="number" placeholder="Maîtrise %" min="0" max="100" value="${mastery}" class="mastery-input" data-role="${role.id}">
+                `;
+                
+                rolesContainer.appendChild(checkbox);
+            }
+        } else {
+            rolesSnapshot.forEach(doc => {
+                const role = doc.data();
+                const checkbox = document.createElement('div');
+                checkbox.className = 'checkbox-item';
+                
+                const isAssigned = userData?.roles?.some(r => r.role === doc.id);
+                const mastery = isAssigned ? userData.roles.find(r => r.role === doc.id).mastery || 0 : 0;
+                
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="role-${doc.id}" name="roles" value="${doc.id}" ${isAssigned ? 'checked' : ''}>
+                    <label for="role-${doc.id}">${role.name}</label>
+                    <input type="number" placeholder="Maîtrise %" min="0" max="100" value="${mastery}" class="mastery-input" data-role="${doc.id}">
+                `;
+                
+                rolesContainer.appendChild(checkbox);
+            });
+        }
+    } catch (error) {
+        console.error("Erreur lors du chargement des rôles:", error);
+        rolesContainer.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+    }
+    
+    // Afficher la modale
+    modal.classList.remove('hidden');
+}
+
+// Enregistrer un utilisateur
+async function saveUser() {
+    const userId = document.getElementById('user-id').value;
+    const displayName = document.getElementById('user-name-input').value;
+    const email = document.getElementById('user-email-input').value;
+    const xp = parseInt(document.getElementById('user-xp-input').value);
+    
+    // Récupérer les rôles assignés
+    const roles = [];
+    document.querySelectorAll('input[name="roles"]:checked').forEach(checkbox => {
+        const roleId = checkbox.value;
+        const masteryInput = document.querySelector(`.mastery-input[data-role="${roleId}"]`);
+        const mastery = parseInt(masteryInput.value) || 0;
+        
+        roles.push({
+            role: roleId,
+            mastery: mastery,
+            assignedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    });
+    
+    // Préparer les données
+    const userData = {
+        displayName,
+        email,
+        xp,
+        roles,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    try {
+        if (userId) {
+            // Mise à jour
+            await db.collection('users').doc(userId).update(userData);
+        } else {
+            // Création (pour un nouvel utilisateur, il faut aussi créer le compte auth)
+            userData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            
+            // Pour la création d'un nouvel utilisateur, il faudrait utiliser les fonctions Firebase
+            // mais cela nécessite des Cloud Functions. Pour l'instant, nous allons juste créer le document.
+            const docRef = await db.collection('users').add(userData);
+        }
+        
+        // Fermer la modale et recharger les utilisateurs
+        document.getElementById('user-form-modal').classList.add('hidden');
+        loadAdminUsers();
+        
+        // Notifier l'utilisateur
+        alert(userId ? 'Utilisateur mis à jour avec succès' : 'Utilisateur créé avec succès');
+    } catch (error) {
+        console.error("Erreur lors de l'enregistrement de l'utilisateur:", error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
+
+// Charger les badges pour l'admin
+async function loadAdminBadges() {
+    const badgesList = document.getElementById('admin-badges-list');
+    badgesList.innerHTML = '<div class="loading">Chargement des badges...</div>';
+    
+    try {
+        const snapshot = await db.collection('badges').get();
+        
+        badgesList.innerHTML = '';
+        
+        if (snapshot.empty) {
+            badgesList.innerHTML = '<div class="no-data">Aucun badge trouvé</div>';
+            return;
+        }
+        
+        snapshot.forEach(doc => {
+            const badge = doc.data();
+            const badgeItem = document.createElement('div');
+            badgeItem.className = 'admin-item';
+            
+            badgeItem.innerHTML = `
+                <div class="admin-item-info">
+                    <h4 class="admin-item-title">${badge.name}</h
+                                    <div class="admin-item-info">
+                    <h4 class="admin-item-title">${badge.name}</h4>
+                    <div class="admin-item-subtitle">
+                        ${badge.description} • +${badge.xpBonus} XP
+                    </div>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-btn edit-btn" data-id="${doc.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-btn delete-btn" data-id="${doc.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            badgesList.appendChild(badgeItem);
+            
+            // Ajouter les gestionnaires d'événements
+            badgeItem.querySelector('.edit-btn').addEventListener('click', () => {
+                // À implémenter: formulaire d'édition de badge
+                alert("Fonction d'édition de badge en cours de développement");
+            });
+            
+            badgeItem.querySelector('.delete-btn').addEventListener('click', async () => {
+                if (confirm('Êtes-vous sûr de vouloir supprimer ce badge ?')) {
+                    await db.collection('badges').doc(doc.id).delete();
+                    loadAdminBadges();
+                }
+            });
+        });
+    } catch (error) {
+        console.error("Erreur lors du chargement des badges pour l'admin:", error);
+        badgesList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+    }
+}
+
+// Charger les rôles pour l'admin
+async function loadAdminRoles() {
+    const rolesList = document.getElementById('admin-roles-list');
+    rolesList.innerHTML = '<div class="loading">Chargement des rôles...</div>';
+    
+    try {
+        let snapshot = await db.collection('roles').get();
+        
+        rolesList.innerHTML = '';
+        
+        // Si aucun rôle n'existe, créer les rôles par défaut
+        if (snapshot.empty) {
+            const defaultRoles = [
+                { 
+                    id: 'maintenance',
+                    name: 'Entretien & Maintenance',
+                    description: 'Surveiller et entretenir l\'état général des espaces, réaliser des réparations techniques',
+                    icon: 'wrench',
+                    color: '#ef5350'
+                },
+                { 
+                    id: 'reviews',
+                    name: 'Gestion des Avis',
+                    description: 'Surveiller et analyser les avis sur toutes les plateformes, répondre aux avis',
+                    icon: 'star',
+                    color: '#ffca28'
+                },
+                { 
+                    id: 'inventory',
+                    name: 'Gestion des Stocks',
+                    description: 'Réaliser le suivi régulier des consommables et matériel',
+                    icon: 'box',
+                    color: '#66bb6a'
+                },
+                { 
+                    id: 'organization',
+                    name: 'Organisation Interne',
+                    description: 'Coordonner la répartition des sessions, organiser et suivre les demandes de congés',
+                    icon: 'calendar-alt',
+                    color: '#26c6da'
+                },
+                { 
+                    id: 'content',
+                    name: 'Création de Contenu',
+                    description: 'Créer des supports de communication, concevoir des contenus utiles pour l\'équipe',
+                    icon: 'paint-brush',
+                    color: '#ab47bc'
+                },
+                { 
+                    id: 'mentoring',
+                    name: 'Mentorat & Formation',
+                    description: 'Accueillir et accompagner les nouveaux arrivants, organiser des formations internes',
+                    icon: 'graduation-cap',
+                    color: '#7e57c2'
+                },
+                { 
+                    id: 'partnerships',
+                    name: 'Partenariats',
+                    description: 'Identifier et entretenir des relations avec les partenaires locaux',
+                    icon: 'handshake',
+                    color: '#ec407a'
+                },
+                { 
+                    id: 'social',
+                    name: 'Communication & Réseaux Sociaux',
+                    description: 'Gérer les comptes sur les différents réseaux sociaux, créer et publier des contenus',
+                    icon: 'hashtag',
+                    color: '#29b6f6'
+                }
+            ];
+            
+            // Créer les rôles
+            for (const role of defaultRoles) {
+                await db.collection('roles').doc(role.id).set(role);
+            }
+            
+            // Recharger les données
+            snapshot = await db.collection('roles').get();
+        }
+        
+        snapshot.forEach(doc => {
+            const role = doc.data();
+            const roleItem = document.createElement('div');
+            roleItem.className = 'admin-item';
+            
+            roleItem.innerHTML = `
+                <div class="admin-item-info">
+                    <h4 class="admin-item-title">${role.name}</h4>
+                    <div class="admin-item-subtitle">
+                        ${role.description || ''}
+                    </div>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-btn edit-btn" data-id="${doc.id}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+            `;
+            
+            rolesList.appendChild(roleItem);
+            
+            // Ajouter le gestionnaire d'événement
+            roleItem.querySelector('.edit-btn').addEventListener('click', () => {
+                // À implémenter: formulaire d'édition de rôle
+                alert("Fonction d'édition de rôle en cours de développement");
+            });
+        });
+    } catch (error) {
+        console.error("Erreur lors du chargement des rôles pour l'admin:", error);
+        rolesList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
+    }
+}
+
+// Fonction pour attribuer un badge à un utilisateur
+async function assignBadgeToUser(userId, badgeId) {
+    try {
+        // Récupérer les données utilisateur
+        const userDoc = await db.collection('users').doc(userId).get();
+        if (!userDoc.exists) {
+            throw new Error("Utilisateur non trouvé");
+        }
+        
+        // Récupérer les données du badge
+        const badgeDoc = await db.collection('badges').doc(badgeId).get();
+        if (!badgeDoc.exists) {
+            throw new Error("Badge non trouvé");
+        }
+        
+        const userData = userDoc.data();
+        const badgeData = badgeDoc.data();
+        
+        // Vérifier si l'utilisateur a déjà ce badge
+        const userBadges = userData.badges || [];
+        if (userBadges.includes(badgeId)) {
+            return false; // Déjà attribué
+        }
+        
+        // Mise à jour des données utilisateur
+        await db.collection('users').doc(userId).update({
+            badges: firebase.firestore.FieldValue.arrayUnion(badgeId),
+            xp: firebase.firestore.FieldValue.increment(badgeData.xpBonus || 0)
+        });
+        
+        // Créer une activité
+        await db.collection('activity').add({
+            userId: userId,
+            displayName: userData.displayName || userData.email,
+            photoURL: userData.photoURL || '',
+            type: 'badge_unlocked',
+            badgeId: badgeId,
+            badgeName: badgeData.name,
+            xpBonus: badgeData.xpBonus || 0,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        return true;
+    } catch (error) {
+        console.error("Erreur lors de l'attribution du badge:", error);
+        throw error;
+    }
+}
+
+// Fonction pour attribuer un rôle à un utilisateur
+async function assignRoleToUser(userId, roleId, mastery = 0) {
+    try {
+        // Récupérer les données utilisateur
+        const userDoc = await db.collection('users').doc(userId).get();
+        if (!userDoc.exists) {
+            throw new Error("Utilisateur non trouvé");
+        }
+        
+        // Récupérer les données du rôle
+        const roleDoc = await db.collection('roles').doc(roleId).get();
+        if (!roleDoc.exists) {
+            throw new Error("Rôle non trouvé");
+        }
+        
+        const userData = userDoc.data();
+        const roleData = roleDoc.data();
+        
+        // Vérifier si l'utilisateur a déjà ce rôle
+        const userRoles = userData.roles || [];
+        const existingRoleIndex = userRoles.findIndex(r => r.role === roleId);
+        
+        if (existingRoleIndex >= 0) {
+            // Mettre à jour le rôle existant
+            userRoles[existingRoleIndex].mastery = mastery;
+            userRoles[existingRoleIndex].updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+        } else {
+            // Ajouter le nouveau rôle
+            userRoles.push({
+                role: roleId,
+                mastery: mastery,
+                assignedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            // Créer une activité pour la nouvelle attribution
+            await db.collection('activity').add({
+                userId: userId,
+                displayName: userData.displayName || userData.email,
+                photoURL: userData.photoURL || '',
+                type: 'role_assigned',
+                roleId: roleId,
+                roleName: roleData.name,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+        
+        // Mise à jour des données utilisateur
+        await db.collection('users').doc(userId).update({
+            roles: userRoles
+        });
+        
+        return true;
+    } catch (error) {
+        console.error("Erreur lors de l'attribution du rôle:", error);
+        throw error;
+    }
+}
+
     </script>
     <!-- Panneau d'administration (visible uniquement pour les admin) -->
 <div id="admin-panel" class="modal hidden">
