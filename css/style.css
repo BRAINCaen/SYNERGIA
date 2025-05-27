@@ -88,3 +88,29 @@ h1, h2, h3, h4 {
   box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
   border: 2px solid white;
 }
+/* Ajouter ces styles pour améliorer l'aspect ludique */
+.quest-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.quest-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    opacity: 0.8;
+}
+
+/* Animation pour les nouveaux éléments */
+@keyframes slide-in {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.quest-item, .activity-item {
+    animation: slide-in 0.3s ease-out forwards;
+}
