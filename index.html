@@ -1217,7 +1217,17 @@ body {
                 height: calc(100vh - 180px);
             }
         }
+        <link rel="stylesheet" href="css/synergia-style.css">
     </style>
+    <script>
+  // Fallback pour le logo
+  window.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.src.includes('synergia-logo.png')) {
+      e.target.src = 'https://img.icons8.com/color/96/000000/s-key.png';
+      e.preventDefault();
+    }
+  }, true);
+</script>
 </head>
 <body>
     <!-- Écran de chargement -->
@@ -3291,6 +3301,46 @@ function createParticles(x, y) {
         container.classList.add('hidden');
     }, 2000);
 }
+    // Effets sonores pour SYNERGIA
+const synergiaAudio = {
+  sounds: {
+    complete: 'https://assets.mixkit.co/sfx/preview/mixkit-video-game-treasure-2066.mp3',
+    levelUp: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-complete-or-approved-mission-205.mp3'
+  },
+  
+  init: function() {
+    // Précharger les sons
+    this.audioElements = {};
+    for (const [name, url] of Object.entries(this.sounds)) {
+      const audio = new Audio();
+      audio.src = url;
+      audio.preload = 'auto';
+      this.audioElements[name] = audio;
+    }
+  },
+  
+  play: function(sound) {
+    if (this.audioElements && this.audioElements[sound]) {
+      this.audioElements[sound].currentTime = 0;
+      this.audioElements[sound].play().catch(e => console.log('Audio play prevented:', e));
+    }
+  }
+};
+
+// Initialiser les sons
+document.addEventListener('DOMContentLoaded', function() {
+  synergiaAudio.init();
+});
+
+// Étendre la fonction completeQuest pour ajouter du son
+const originalCompleteQuest = window.completeQuest || function(){};
+window.completeQuest = function(questId, quest) {
+  if (typeof synergiaAudio !== 'undefined') {
+    synergiaAudio.play('complete');
+  }
+  return originalCompleteQuest.apply(this, arguments);
+};
+
 </script>
 
 </body>
