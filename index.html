@@ -2014,21 +2014,57 @@ let isAdmin = false;
 auth.onAuthStateChanged(async (user) => {
     if (!user) return;
     
-    try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        isAdmin = userDoc.exists && (userDoc.data().role === 'admin' || user.email === 'alan.boehme61@gmail.com');
+    console.log("Vérification des droits admin pour:", user.uid);
+    
+    // Vérifier directement si l'ID correspond
+    if (user.uid === "3LlANr1IvlWkwKLL9iJJw36EF3d2") {
+        console.log("ID reconnu comme admin!");
+        isAdmin = true;
         
-        // Afficher/masquer le bouton d'administration
-        document.getElementById('admin-btn').classList.toggle('hidden', !isAdmin);
-        
-        // Si admin, initialiser le panneau d'administration
-        if (isAdmin) {
-            initAdminPanel();
+        // Afficher le bouton d'administration
+        const adminBtn = document.getElementById('admin-btn');
+        if (adminBtn) {
+            adminBtn.classList.remove('hidden');
+        } else {
+            console.error("Bouton admin non trouvé dans le DOM");
         }
-    } catch (error) {
-        console.error("Erreur lors de la vérification des droits admin:", error);
+        
+        // Initialiser le panneau d'administration
+        if (typeof initAdminPanel === 'function') {
+            initAdminPanel();
+        } else {
+            console.error("Fonction initAdminPanel non définie");
+        }
+    } else {
+        // Essai avec Firestore comme avant
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            console.log("Document utilisateur:", userDoc.exists ? "trouvé" : "non trouvé");
+            if (userDoc.exists) {
+                console.log("Données:", userDoc.data());
+            }
+            
+            isAdmin = userDoc.exists && (userDoc.data().role === 'admin' || user.email === 'alan.boehme61@gmail.com');
+            console.log("Est admin:", isAdmin);
+            
+            // Afficher/masquer le bouton d'administration
+            const adminBtn = document.getElementById('admin-btn');
+            if (adminBtn) {
+                adminBtn.classList.toggle('hidden', !isAdmin);
+            } else {
+                console.error("Bouton admin non trouvé dans le DOM");
+            }
+            
+            // Si admin, initialiser le panneau d'administration
+            if (isAdmin && typeof initAdminPanel === 'function') {
+                initAdminPanel();
+            }
+        } catch (error) {
+            console.error("Erreur lors de la vérification des droits admin:", error);
+        }
     }
 });
+
 
 // Initialiser le panneau d'administration
 function initAdminPanel() {
