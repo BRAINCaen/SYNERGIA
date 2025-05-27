@@ -2778,6 +2778,69 @@ async function assignRoleToUser(userId, roleId, mastery = 0) {
         throw error;
     }
 }
+// Code simple pour afficher le bouton d'administration
+document.addEventListener('DOMContentLoaded', () => {
+    // Vérifier si l'utilisateur est connecté
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log("Utilisateur connecté:", user.email);
+            
+            // Vérifier le rôle dans Firestore
+            db.collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    console.log("Données utilisateur:", userData);
+                    
+                    if (userData.role === 'admin') {
+                        console.log("L'utilisateur est admin!");
+                        
+                        // Créer le bouton d'administration s'il n'existe pas
+                        let adminBtn = document.getElementById('admin-btn');
+                        if (!adminBtn) {
+                            adminBtn = document.createElement('button');
+                            adminBtn.id = 'admin-btn';
+                            adminBtn.className = 'admin-fab';
+                            adminBtn.innerHTML = '<i class="fas fa-cog"></i>';
+                            document.body.appendChild(adminBtn);
+                            
+                            // Ajouter du style
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                .admin-fab {
+                                    position: fixed;
+                                    bottom: 80px;
+                                    right: 20px;
+                                    width: 60px;
+                                    height: 60px;
+                                    border-radius: 50%;
+                                    background-color: #26c6da;
+                                    color: white;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    font-size: 1.5rem;
+                                    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+                                    z-index: 1000;
+                                    cursor: pointer;
+                                }
+                            `;
+                            document.head.appendChild(style);
+                            
+                            // Ajouter un gestionnaire d'événement
+                            adminBtn.addEventListener('click', () => {
+                                alert('Panneau d\'administration - Fonctionnalité en cours de développement');
+                            });
+                        } else {
+                            adminBtn.classList.remove('hidden');
+                        }
+                    }
+                }
+            }).catch(error => {
+                console.error("Erreur lors de la récupération des données utilisateur:", error);
+            });
+        }
+    });
+});
 
     </script>
     <!-- Panneau d'administration (visible uniquement pour les admin) -->
