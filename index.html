@@ -1863,7 +1863,7 @@ const firebaseConfig = {
                     const users = [
                         {
                             displayName: "Allan Boehme",
-                            email: "allan@example.com",
+                            email: "alan.boehme61@gmail.com",
                             photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v1.png",
                             xp: 1200,
                             badges: ["founder", "mentor", "innovator"],
@@ -1995,7 +1995,7 @@ const firebaseConfig = {
 
         // Créer des données de test si l'utilisateur est administrateur
         auth.onAuthStateChanged(async (user) => {
-            if (user && user.email === "allan@example.com") {
+            if (user && user.email === "alan.boehme61@gmail.com") {
                 // Vérifier si l'utilisateur est admin
                 const userDoc = await db.collection('users').doc(user.uid).get();
                 if (userDoc.exists && userDoc.data().role === "admin") {
@@ -2012,7 +2012,7 @@ auth.onAuthStateChanged(async (user) => {
     
     try {
         const userDoc = await db.collection('users').doc(user.uid).get();
-        isAdmin = userDoc.exists && (userDoc.data().role === 'admin' || user.email === 'allan@example.com');
+        isAdmin = userDoc.exists && (userDoc.data().role === 'admin' || user.email === 'alan.boehme61@gmail.com');
         
         // Afficher/masquer le bouton d'administration
         document.getElementById('admin-btn').classList.toggle('hidden', !isAdmin);
