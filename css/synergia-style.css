@@ -918,11 +918,12 @@ p, span, div {
 .user-modal {
     max-width: 800px;
     width: 95%;
-    max-height: 90vh;
+    max-height: 85vh; /* RÉDUIRE DE 90vh à 85vh */
+    overflow-y: auto; /* FORCER le scroll */
 }
 
 .user-form-sections {
-    max-height: 60vh;
+    max-height: 50vh; /* RÉDUIRE DE 60vh à 50vh */
     overflow-y: auto;
     padding-right: var(--spacing-sm);
 }
