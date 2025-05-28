@@ -2335,18 +2335,25 @@
             `).join('');
         }
 
-        // Charger la liste des quêtes admin
-        function loadAdminQuests() {
-            const questsList = document.getElementById('quests-admin-list');
+       // Charger la liste des quêtes admin
+function loadAdminQuests() {
+    const questsList = document.getElementById('quests-admin-list');
+    
+    if (questsDatabase.length === 0) {
+        questsList.innerHTML = '<div class="no-quests">Aucune quête créée. Créez votre première quête !</div>';
+        return;
+    }
+    
+    questsList.innerHTML = questsDatabase.map(quest => {
+        const iconHtml = quest.icon 
+            ? `<img src="${quest.icon}" alt="Icône" class="admin-quest-icon">`
+            : `<div class="quest-icon-default"><i class="fas ${getDefaultQuestIcon(quest.type, quest.priority)}"></i></div>`;
             
-            if (questsDatabase.length === 0) {
-                questsList.innerHTML = '<div class="no-quests">Aucune quête créée. Créez votre première quête !</div>';
-                return;
-            }
-            
-            questsList.innerHTML = questsDatabase.map(quest => `
-                <div class="admin-item ${quest.active ? '' : 'inactive'}">
-                    <div class="admin-item-info">
+        return `
+            <div class="admin-item ${quest.active ? '' : 'inactive'}">
+                <div class="admin-item-info">
+                    ${iconHtml}
+                    <div class="admin-item-content">
                         <h5>
                             ${quest.title}
                             <span class="quest-priority priority-${quest.priority}">${getPriorityLabel(quest.priority)}</span>
@@ -2361,23 +2368,26 @@
                             <span><i class="fas fa-calendar"></i> ${quest.type}</span>
                         </div>
                     </div>
-                    <div class="admin-actions">
-                        <button class="icon-btn edit-btn" onclick="editQuest('${quest.id}')" title="Modifier">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="icon-btn ${quest.active ? 'toggle-btn' : 'success-btn'}" onclick="toggleQuest('${quest.id}')" title="${quest.active ? 'Désactiver' : 'Activer'}">
-                            <i class="fas fa-${quest.active ? 'eye-slash' : 'eye'}"></i>
-                        </button>
-                        <button class="icon-btn info-btn" onclick="viewQuestStats('${quest.id}')" title="Statistiques">
-                            <i class="fas fa-chart-bar"></i>
-                        </button>
-                        <button class="icon-btn delete-btn" onclick="deleteQuest('${quest.id}')" title="Supprimer">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
                 </div>
-            `).join('');
-        }
+                <div class="admin-actions">
+                    <button class="icon-btn edit-btn" onclick="editQuest('${quest.id}')" title="Modifier">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="icon-btn ${quest.active ? 'toggle-btn' : 'success-btn'}" onclick="toggleQuest('${quest.id}')" title="${quest.active ? 'Désactiver' : 'Activer'}">
+                        <i class="fas fa-${quest.active ? 'eye-slash' : 'eye'}"></i>
+                    </button>
+                    <button class="icon-btn info-btn" onclick="viewQuestStats('${quest.id}')" title="Statistiques">
+                        <i class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="icon-btn delete-btn" onclick="deleteQuest('${quest.id}')" title="Supprimer">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
 
         // Charger la liste des badges
         function loadAdminBadges() {
