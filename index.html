@@ -3611,145 +3611,109 @@ function closeUserModal() {
     userAvatarBase64 = null;
 }
 
+// Gestion de l'upload d'avatar
+function handleAvatarUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            userAvatarBase64 = e.target.result;
+            document.getElementById('preview-avatar').src = userAvatarBase64;
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
-        function messageTeamMember(memberId) {
-            const member = teamMembers.find(m => m.id === memberId);
-            if (member) {
-                alert(`Envoyer un message à ${member.name} - Fonctionnalité en développement`);
-            }
+// Supprimer l'avatar utilisateur
+function removeUserAvatar() {
+    userAvatarBase64 = null;
+    document.getElementById('preview-avatar').src = 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
+}
+
+// Ajouter une compétence
+function addSkill(skillName) {
+    if (skillName && skillName.length > 0) {
+        const skillsList = document.getElementById('skills-list');
+        const skillTag = document.createElement('span');
+        skillTag.className = 'skill-tag';
+        skillTag.innerHTML = `
+            ${skillName}
+            <button type="button" onclick="removeSkill('${skillName}')" class="remove-skill">×</button>
+        `;
+        skillsList.appendChild(skillTag);
+    }
+}
+
+// Supprimer une compétence
+function removeSkill(skillName) {
+    const skillsList = document.getElementById('skills-list');
+    const skillTags = skillsList.querySelectorAll('.skill-tag');
+    skillTags.forEach(tag => {
+        if (tag.textContent.trim().startsWith(skillName)) {
+            tag.remove();
         }
-
-function assignQuestToMember(memberId) {
-    const member = teamMembers.find(m => m.id === memberId);
-    if (member) {
-        showQuestAssignmentModal(member);
-    }
-}
-
-// Afficher le modal d'attribution de quête
-function showQuestAssignmentModal(member) {
-    // Récupérer les quêtes disponibles
-    const availableQuests = questsDatabase.filter(quest => quest.active);
-    
-    if (availableQuests.length === 0) {
-        showNotification('Aucune quête disponible à assigner', 'error');
-        return;
-    }
-    
-    const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.id = 'quest-assignment-modal';
-    modal.innerHTML = `
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Assigner une quête à ${member.name}</h3>
-                <button onclick="closeAssignmentModal()" class="icon-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="member-summary">
-                    <img src="${member.avatar}" alt="${member.name}" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
-                    <div>
-                        <h4>${member.name}</h4>
-                        <p>${member.role} • Niveau ${member.level} • ${member.xp} XP</p>
-                    </div>
-                </div>
-                
-                <h4 style="margin-top: 20px;">Sélectionner une quête :</h4>
-                <div class="quest-selection">
-                    ${availableQuests.map(quest => {
-                        const iconHtml = quest.icon 
-                            ? `<img src="${quest.icon}" alt="Icône" style="width: 32px; height: 32px; border-radius: 6px; margin-right: 12px;">`
-                            : `<div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%); color: white; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-right: 12px; font-size: 1rem;"><i class="fas ${getDefaultQuestIcon(quest.type, quest.priority)}"></i></div>`;
-                            
-                        return `
-                            <div class="quest-option" onclick="selectQuestForAssignment('${quest.id}', this)">
-                                ${iconHtml}
-                                <div class="quest-option-info">
-                                    <h5>${quest.title}</h5>
-                                    <p>${quest.description}</p>
-                                    <div class="quest-option-meta">
-                                        <span><i class="fas fa-star"></i> ${quest.xp} XP</span>
-                                        <span><i class="fas fa-clock"></i> ${quest.duration} min</span>
-                                        <span class="quest-priority priority-${quest.priority}">${getPriorityLabel(quest.priority)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-                
-                <div class="assignment-options" style="margin-top: 20px;">
-                    <label>
-                        <input type="date" id="assignment-deadline" style="margin-right: 10px;">
-                        Échéance (optionnel)
-                    </label>
-                    <label style="margin-top: 10px; display: block;">
-                        <textarea id="assignment-note" placeholder="Note pour ${member.name} (optionnel)" rows="3" style="width: 100%;"></textarea>
-                    </label>
-                </div>
-                
-                <div class="modal-actions" style="margin-top: 20px;">
-                    <button onclick="closeAssignmentModal()" class="btn-secondary">Annuler</button>
-                    <button onclick="confirmQuestAssignment('${member.id}')" class="btn-primary" id="confirm-assignment-btn" disabled>
-                        <i class="fas fa-check"></i> Assigner la quête
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-}
-
-// Variables pour l'attribution
-let selectedQuestId = null;
-
-// Sélectionner une quête pour attribution
-function selectQuestForAssignment(questId, element) {
-    // Désélectionner toutes les quêtes
-    document.querySelectorAll('.quest-option').forEach(option => {
-        option.classList.remove('selected');
     });
-    
-    // Sélectionner la quête cliquée
-    element.classList.add('selected');
-    selectedQuestId = questId;
-    
-    // Activer le bouton de confirmation
-    document.getElementById('confirm-assignment-btn').disabled = false;
 }
 
-// Confirmer l'attribution de quête
-function confirmQuestAssignment(memberId) {
-    if (!selectedQuestId) {
-        showNotification('Veuillez sélectionner une quête', 'error');
-        return;
-    }
-    
-    const member = teamMembers.find(m => m.id === memberId);
-    const quest = questsDatabase.find(q => q.id === selectedQuestId);
-    const deadline = document.getElementById('assignment-deadline').value;
-    const note = document.getElementById('assignment-note').value;
-    
-    // Créer l'attribution
-    const assignment = {
-        id: 'assign_' + Date.now(),
-        questId: selectedQuestId,
-        memberId: memberId,
-        assignedBy: currentUser.email,
-        assignedAt: new Date(),
-        deadline: deadline ? new Date(deadline) : null,
-        note: note,
-        status: 'assigned', // assigned, in_progress, completed, overdue
-        completedAt: null
+// Sauvegarder l'utilisateur
+function saveUser(userId = null) {
+    const formData = {
+        id: userId || Date.now(),
+        name: document.getElementById('user-name').value,
+        email: document.getElementById('user-email').value,
+        phone: document.getElementById('user-phone').value,
+        joinedAt: document.getElementById('user-hire-date').value,
+        role: document.getElementById('user-role').value,
+        contract: document.getElementById('user-contract').value,
+        experience: document.getElementById('user-experience').value,
+        trainings: parseInt(document.getElementById('user-trainings').value) || 0,
+        level: parseInt(document.getElementById('user-level').value) || 1,
+        xp: parseInt(document.getElementById('user-xp').value) || 0,
+        monthlyGoal: parseInt(document.getElementById('user-monthly-goal').value) || 10,
+        avatar: userAvatarBase64 || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png',
+        permissions: {
+            admin: document.getElementById('perm-admin').checked,
+            manageTeam: document.getElementById('perm-manage-team').checked,
+            createQuests: document.getElementById('perm-create-quests').checked,
+            viewReports: document.getElementById('perm-view-reports').checked
+        },
+        skills: Array.from(document.querySelectorAll('#skills-list .skill-tag')).map(tag => 
+            tag.textContent.trim().replace('×', '').trim()
+        )
     };
     
-    // Sauvegarder l'attribution
-    let assignments = JSON.parse(localStorage.getItem('synergiaAssignments')) || [];
-    assignments.push(assignment);
-    localStorage.setItem('synergiaAssignments', JSON.stringify(assignments));
+    // Validation
+    if (!formData.name || !formData.email || !formData.role) {
+        alert('Veuillez remplir tous les champs obligatoires (*)');
+        return;
+    }
+    
+    // Sauvegarder dans le localStorage (temporaire)
+    let users = JSON.parse(localStorage.getItem('synergia_users')) || [];
+    
+    if (userId) {
+        // Mode édition
+        const userIndex = users.findIndex(u => u.id === userId);
+        if (userIndex !== -1) {
+            users[userIndex] = formData;
+        }
+    } else {
+        // Mode création
+        users.push(formData);
+    }
+    
+    localStorage.setItem('synergia_users', JSON.stringify(users));
+    
+    // Fermer le modal et rafraîchir l'affichage
+    closeUserModal();
+    showSuccess(userId ? 'Utilisateur modifié avec succès !' : 'Utilisateur créé avec succès !');
+    
+    // Rafraîchir la liste des utilisateurs si on est sur la page équipe
+    if (typeof loadTeamMembers === 'function') {
+        loadTeamMembers();
+    }
+}
+
     
     // Fermer le modal
     closeAssignmentModal();
