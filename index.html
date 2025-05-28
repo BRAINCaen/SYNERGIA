@@ -2494,6 +2494,10 @@ function loadAdminQuests() {
             document.querySelector('#quest-creation-modal h3').textContent = 'Créer une nouvelle quête';
             document.querySelector('#quest-creation-form button[type="submit"]').innerHTML = '<i class="fas fa-plus"></i> Créer la quête';
             document.getElementById('quest-creation-form').removeAttribute('data-edit-id');
+                
+    // Réinitialiser l'icône
+    removeQuestIcon();
+
         }
 
         // Créer une nouvelle quête
