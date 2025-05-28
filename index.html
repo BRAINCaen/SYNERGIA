@@ -1355,6 +1355,301 @@
     margin-bottom: var(--spacing-sm);
     font-weight: 600;
 }
+/* Onglet Performances */
+.performance-overview {
+    margin-bottom: var(--spacing-xl);
+}
+
+.performance-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.perf-stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    border-left: 4px solid var(--primary);
+}
+
+.perf-stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: var(--spacing-md);
+}
+
+.perf-stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.perf-stat-label {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.performance-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.performance-section {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.performance-section h3 {
+    margin-top: 0;
+    color: var(--primary);
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: var(--spacing-sm);
+}
+
+/* Membre du mois */
+.top-performer-card {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, var(--warning) 0%, #f39c12 100%);
+    border-radius: var(--border-radius);
+    color: white;
+    position: relative;
+    margin-top: var(--spacing-md);
+}
+
+.top-performer-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid white;
+    margin-right: var(--spacing-lg);
+}
+
+.top-performer-info h4 {
+    margin: 0 0 var(--spacing-xs) 0;
+    font-size: 1.3rem;
+}
+
+.top-performer-role {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-sm);
+}
+
+.top-performer-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.top-stat {
+    text-align: center;
+}
+
+.top-stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.top-stat-label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.crown-icon {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-size: 2rem;
+    color: #FFD700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Classement */
+.team-ranking {
+    margin-top: var(--spacing-md);
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--light-gray);
+    transition: background 0.3s ease;
+}
+
+.ranking-item:hover {
+    background: rgba(142, 68, 173, 0.05);
+}
+
+.rank-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--light-gray);
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: var(--spacing-md);
+}
+
+.rank-number.top-rank {
+    background: linear-gradient(135deg, var(--warning) 0%, #f39c12 100%);
+    color: white;
+}
+
+.ranking-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: var(--spacing-md);
+}
+
+.ranking-info {
+    flex: 1;
+}
+
+.ranking-name {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.ranking-role {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.ranking-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-right: var(--spacing-md);
+}
+
+.ranking-stat {
+    text-align: center;
+}
+
+.ranking-stat-value {
+    display: block;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.ranking-stat-label {
+    font-size: 0.7rem;
+    color: var(--gray);
+}
+
+.ranking-badge {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--primary);
+    color: white;
+}
+
+/* Graphique d'activité */
+.weekly-activity {
+    margin-top: var(--spacing-md);
+}
+
+.chart-header h4 {
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--dark);
+}
+
+.chart-bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    height: 150px;
+    padding: var(--spacing-md);
+    background: var(--light);
+    border-radius: var(--border-radius);
+}
+
+.chart-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.bar {
+    width: 20px;
+    background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary) 100%);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    margin-bottom: var(--spacing-sm);
+    transition: all 0.3s ease;
+}
+
+.bar:hover {
+    background: linear-gradient(180deg, var(--secondary-light) 0%, var(--secondary) 100%);
+}
+
+.bar::after {
+    content: attr(data-value);
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.bar-label {
+    font-size: 0.8rem;
+    color: var(--gray);
+    text-align: center;
+}
+
+.performance-actions {
+    margin-top: var(--spacing-xl);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .performance-sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .top-performer-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .ranking-item {
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+    
+    .chart-bars {
+        height: 120px;
+    }
+}
 
 
         /* Responsive */
@@ -3221,7 +3516,14 @@ function loadTeamPerformance() {
     `;
 }
 
-// Actions
+// Actions pour les performances
+function exportPerformanceReport() {
+    alert('Export du rapport de performance - Fonctionnalité en développement');
+}
+
+function sendTeamFeedback() {
+    alert('Envoi de feedback à l\'équipe - Fonctionnalité en développement');
+}
 
         function loadTeamSchedule() {
             console.log('Chargement du planning d\'équipe');
