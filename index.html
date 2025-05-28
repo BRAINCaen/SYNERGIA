@@ -3813,15 +3813,28 @@ function removeUserAvatar() {
 function addSkill(skillName) {
     if (skillName && skillName.length > 0) {
         const skillsList = document.getElementById('skills-list');
-        const skillTag = document.createElement('span');
-        skillTag.className = 'skill-tag';
-        skillTag.innerHTML = `
-            ${skillName}
-            <button type="button" onclick="removeSkill('${skillName}')" class="remove-skill">×</button>
-        `;
-        skillsList.appendChild(skillTag);
+        if (skillsList) {
+            // Vérifier si la compétence existe déjà
+            const existingSkills = Array.from(skillsList.querySelectorAll('.skill-tag')).map(tag => 
+                tag.textContent.trim().replace('×', '').trim()
+            );
+            
+            if (existingSkills.includes(skillName)) {
+                showNotification('Cette compétence existe déjà !', 'error');
+                return;
+            }
+            
+            const skillTag = document.createElement('span');
+            skillTag.className = 'skill-tag';
+            skillTag.innerHTML = `
+                ${skillName}
+                <button type="button" onclick="removeSkill('${skillName}')" class="remove-skill">×</button>
+            `;
+            skillsList.appendChild(skillTag);
+        }
     }
 }
+
 
 // Supprimer une compétence
 function removeSkill(skillName) {
