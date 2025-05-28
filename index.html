@@ -1254,37 +1254,30 @@
             loadPage('dashboard');
         }
 
-        // Mettre à jour l'interface utilisateur
-        function updateUserInterface() {
-            if (!currentUser || !userProfile) return;
-            
-            try {
-                const userAvatar = document.getElementById('user-avatar');
-                const userName = document.getElementById('user-name');
-                const welcomeName = document.getElementById('welcome-name');
-                
-                if (userAvatar) {
-                    userAvatar.src = userProfile.photoURL || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
-                }
-                
-                if (userName) {
-                    userName.textContent = userProfile.displayName || currentUser.email;
-                }
-                
-                if (welcomeName) {
-                    welcomeName.textContent = userProfile.displayName || currentUser.email.split('@')[0];
-                }
-                
-                updateXP(userProfile.xp || 240, userProfile.level || 4);
-                
-                console.log('Interface utilisateur mise à jour');
-            
-                
-            } catch (error) {
-                console.error('Erreur mise à jour interface:', error);
-            }
+// Mettre à jour l'interface utilisateur (VERSION CORRIGÉE)
+function updateUserInterface() {
+    if (!currentUser || !userProfile) return;
+    
+    try {
+        const userAvatar = document.getElementById('user-avatar');
+        const userName = document.getElementById('user-name');
+        const welcomeName = document.getElementById('welcome-name');
+        
+        if (userAvatar) {
+            userAvatar.src = userProfile.photoURL || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
         }
-         // Vérifier et afficher le bouton admin
+        
+        if (userName) {
+            userName.textContent = userProfile.displayName || currentUser.email;
+        }
+        
+        if (welcomeName) {
+            welcomeName.textContent = userProfile.displayName || currentUser.email.split('@')[0];
+        }
+        
+        updateXP(userProfile.xp || 240, userProfile.level || 4);
+        
+        // AJOUTER ICI : Vérifier et afficher le bouton admin
         if (currentUser.email === 'allan.boehme61@gmail.com') {
             const adminBtn = document.getElementById('admin-btn');
             if (adminBtn) {
@@ -1298,7 +1291,10 @@
     } catch (error) {
         console.error('Erreur mise à jour interface:', error);
     }
-}
+} // ← Cette accolade ferme la fonction (ne pas la supprimer !)
+
+// Le reste de votre code continue ici...
+
 
         // Mise à jour de l'XP et du niveau
         function updateXP(xp, level) {
