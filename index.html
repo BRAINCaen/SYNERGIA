@@ -2503,6 +2503,8 @@
                 photoRequired: document.getElementById('quest-photo-required').checked,
                 recurring: document.getElementById('quest-recurring').checked,
                 frequency: document.getElementById('quest-frequency').value,
+                        icon: questIconBase64, // NOUVELLE PROPRIÉTÉ
+
                 active: true,
                 createdAt: editId ? questsDatabase.find(q => q.id === editId)?.createdAt || new Date() : new Date(),
                 createdBy: currentUser.email,
