@@ -2181,7 +2181,12 @@
         // Initialisation de l'administration
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Application SYNERGIA initialisée');
-            
+                        // Initialiser l'upload d'images
+            const questIconInput = document.getElementById('quest-icon');
+            if (questIconInput) {
+                questIconInput.addEventListener('change', handleQuestIconUpload);
+            }
+
             // Initialiser la navigation
             const navButtons = document.querySelectorAll('.nav-btn');
             navButtons.forEach(button => {
