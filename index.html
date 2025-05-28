@@ -3317,6 +3317,37 @@ const synergiaAudio = {
 
 
 </script>
+    <script>
+  // Script de déblocage pour l'écran de chargement
+  document.addEventListener('DOMContentLoaded', function() {
+    // Forcer la disparition de l'écran de chargement après 3 secondes si bloqué
+    setTimeout(() => {
+      const loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen && !loadingScreen.classList.contains('hidden')) {
+        console.log("Déblocage forcé de l'écran de chargement");
+        loadingScreen.classList.add('hidden');
+        
+        // Vérifier si l'utilisateur est connecté
+        const app = document.getElementById('app');
+        const loginScreen = document.getElementById('login-screen');
+        
+        if (firebase.auth().currentUser) {
+          app.classList.remove('hidden');
+        } else {
+          loginScreen.classList.remove('hidden');
+        }
+      }
+    }, 3000);
+  });
+  
+  // Capturer les erreurs pour éviter le blocage
+  window.addEventListener('error', function(e) {
+    console.warn('Erreur interceptée:', e.message);
+    // Empêcher les erreurs bloquantes
+    return true;
+  });
+</script>
+
 
 </body>
 </html>
