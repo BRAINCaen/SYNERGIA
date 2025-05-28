@@ -1497,6 +1497,298 @@
                 });
             });
         });
+        // Gestion de l'administration
+document.addEventListener('DOMContentLoaded', function() {
+    // Afficher le bouton admin seulement pour les admins
+    if (isUserAdmin()) {
+        document.getElementById('admin-btn').classList.remove('hidden');
+    }
+    
+    // Gestionnaire pour ouvrir l'admin
+    document.getElementById('admin-btn').addEventListener('click', openAdminPanel);
+    
+    // Gestionnaire pour fermer l'admin
+    document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+    
+    // Gestionnaires pour les onglets admin
+    initAdminTabs();
+});
+
+// Vérifier si l'utilisateur est admin
+function isUserAdmin() {
+    // Pour l'instant, on considère Allan comme admin
+    return currentUser && (
+        currentUser.email === 'allan.boehme61@gmail.com' || 
+        currentUser.email === 'admin@synergia.com' ||
+        userProfile.roles?.includes('admin')
+    );
+}
+
+// Ouvrir le panneau d'administration
+function openAdminPanel() {
+    document.getElementById('admin-panel').classList.remove('hidden');
+    loadAdminData();
+}
+
+// Fermer le panneau d'administration
+function closeAdminPanel() {
+    document.getElementById('admin-panel').classList.add('hidden');
+}
+
+// Initialiser les onglets d'administration
+function initAdminTabs() {
+    const adminTabs = document.querySelectorAll('.admin-tabs .tab');
+    adminTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.dataset.tab;
+            
+            // Désactiver tous les onglets admin
+            adminTabs.forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#admin-panel .tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Activer l'onglet sélectionné
+            this.classList.add('active');
+            const targetContent = document.getElementById(`${tabName}-tab`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+            
+            // Charger les données pour cet onglet
+            loadAdminTabData(tabName);
+        });
+    });
+}
+
+// Charger les données d'administration
+function loadAdminData() {
+    loadAdminTabData('users');
+}
+
+// Charger les données pour un onglet spécifique
+function loadAdminTabData(tabName) {
+    switch(tabName) {
+        case 'users':
+            loadAdminUsers();
+            break;
+        case 'quests':
+            loadAdminQuests();
+            break;
+        case 'badges':
+            loadAdminBadges();
+            break;
+        case 'roles':
+            loadAdminRoles();
+            break;
+        case 'settings':
+            loadAdminSettings();
+            break;
+    }
+}
+
+// Charger la liste des utilisateurs
+function loadAdminUsers() {
+    const usersList = document.getElementById('users-list');
+    
+    // Données d'exemple
+    const users = [
+        {
+            id: '1',
+            name: 'Allan Boehme',
+            email: 'allan.boehme61@gmail.com',
+            level: 4,
+            xp: 240,
+            role: 'Admin',
+            active: true
+        },
+        {
+            id: '2',
+            name: 'Utilisateur Test',
+            email: 'test@example.com',
+            level: 2,
+            xp: 120,
+            role: 'Entretien',
+            active: true
+        }
+    ];
+    
+    usersList.innerHTML = users.map(user => `
+        <div class="admin-item">
+            <div class="admin-item-info">
+                <h5>${user.name}</h5>
+                <p>${user.email} • Niveau ${user.level} • ${user.xp} XP • ${user.role}</p>
+            </div>
+            <div class="admin-actions">
+                <button class="icon-btn edit-btn" onclick="editUser('${user.id}')" title="Modifier">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="icon-btn toggle-btn" onclick="toggleUser('${user.id}')" title="${user.active ? 'Désactiver' : 'Activer'}">
+                    <i class="fas fa-${user.active ? 'user-slash' : 'user-check'}"></i>
+                </button>
+                <button class="icon-btn delete-btn" onclick="deleteUser('${user.id}')" title="Supprimer">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Charger la liste des quêtes
+function loadAdminQuests() {
+    const questsList = document.getElementById('quests-admin-list');
+    
+    const quests = [
+        {
+            id: '1',
+            title: 'Vérifier l\'accueil',
+            type: 'daily',
+            xp: 10,
+            active: true
+        },
+        {
+            id: '2',
+            title: 'Nettoyage complet',
+            type: 'weekly',
+            xp: 50,
+            active: true
+        }
+    ];
+    
+    questsList.innerHTML = quests.map(quest => `
+        <div class="admin-item">
+            <div class="admin-item-info">
+                <h5>${quest.title}</h5>
+                <p>Type: ${quest.type} • ${quest.xp} XP</p>
+            </div>
+            <div class="admin-actions">
+                <button class="icon-btn edit-btn" onclick="editQuest('${quest.id}')" title="Modifier">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="icon-btn toggle-btn" onclick="toggleQuest('${quest.id}')" title="${quest.active ? 'Désactiver' : 'Activer'}">
+                    <i class="fas fa-${quest.active ? 'eye-slash' : 'eye'}"></i>
+                </button>
+                <button class="icon-btn delete-btn" onclick="deleteQuest('${quest.id}')" title="Supprimer">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Charger la liste des badges
+function loadAdminBadges() {
+    const badgesList = document.getElementById('badges-admin-list');
+    
+    const badges = [
+        {
+            id: '1',
+            name: 'Premier pas',
+            description: 'Première connexion',
+            icon: 'fa-star',
+            active: true
+        },
+        {
+            id: '2',
+            name: 'Travailleur assidu',
+            description: '10 quêtes complétées',
+            icon: 'fa-trophy',
+            active: true
+        }
+    ];
+    
+    badgesList.innerHTML = badges.map(badge => `
+        <div class="admin-item">
+            <div class="admin-item-info">
+                <h5><i class="fas ${badge.icon}"></i> ${badge.name}</h5>
+                <p>${badge.description}</p>
+            </div>
+            <div class="admin-actions">
+                <button class="icon-btn edit-btn" onclick="editBadge('${badge.id}')" title="Modifier">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="icon-btn toggle-btn" onclick="toggleBadge('${badge.id}')" title="${badge.active ? 'Désactiver' : 'Activer'}">
+                    <i class="fas fa-${badge.active ? 'eye-slash' : 'eye'}"></i>
+                </button>
+                <button class="icon-btn delete-btn" onclick="deleteBadge('${badge.id}')" title="Supprimer">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Charger la liste des rôles
+function loadAdminRoles() {
+    const rolesList = document.getElementById('roles-admin-list');
+    
+    const roles = [
+        {
+            id: 'entretien',
+            name: 'Entretien & Maintenance',
+            description: 'Responsable de l\'entretien des équipements',
+            color: '#2ecc71',
+            active: true
+        },
+        {
+            id: 'accueil',
+            name: 'Accueil Client',
+            description: 'Gestion de l\'accueil et relation client',
+            color: '#3498db',
+            active: true
+        }
+    ];
+    
+    rolesList.innerHTML = roles.map(role => `
+        <div class="admin-item">
+            <div class="admin-item-info">
+                <h5><span style="color: ${role.color};">●</span> ${role.name}</h5>
+                <p>${role.description}</p>
+            </div>
+            <div class="admin-actions">
+                <button class="icon-btn edit-btn" onclick="editRole('${role.id}')" title="Modifier">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="icon-btn toggle-btn" onclick="toggleRole('${role.id}')" title="${role.active ? 'Désactiver' : 'Activer'}">
+                    <i class="fas fa-${role.active ? 'eye-slash' : 'eye'}"></i>
+                </button>
+                <button class="icon-btn delete-btn" onclick="deleteRole('${role.id}')" title="Supprimer">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Charger les paramètres
+function loadAdminSettings() {
+    document.getElementById('app-name').value = 'SYNERGIA';
+    document.getElementById('xp-per-level').value = '100';
+    document.getElementById('app-theme').value = 'default';
+}
+
+// Fonctions d'action (placeholders pour l'instant)
+function addUser() { alert('Fonction d\'ajout d\'utilisateur - En développement'); }
+function editUser(id) { alert(`Modification utilisateur ${id} - En développement`); }
+function toggleUser(id) { alert(`Activation/Désactivation utilisateur ${id} - En développement`); }
+function deleteUser(id) { if(confirm('Supprimer cet utilisateur ?')) alert(`Suppression utilisateur ${id} - En développement`); }
+
+function addQuest() { alert('Fonction d\'ajout de quête - En développement'); }
+function editQuest(id) { alert(`Modification quête ${id} - En développement`); }
+function toggleQuest(id) { alert(`Activation/Désactivation quête ${id} - En développement`); }
+function deleteQuest(id) { if(confirm('Supprimer cette quête ?')) alert(`Suppression quête ${id} - En développement`); }
+
+function addBadge() { alert('Fonction d\'ajout de badge - En développement'); }
+function editBadge(id) { alert(`Modification badge ${id} - En développement`); }
+function toggleBadge(id) { alert(`Activation/Désactivation badge ${id} - En développement`); }
+function deleteBadge(id) { if(confirm('Supprimer ce badge ?')) alert(`Suppression badge ${id} - En développement`); }
+
+function addRole() { alert('Fonction d\'ajout de rôle - En développement'); }
+function editRole(id) { alert(`Modification rôle ${id} - En développement`); }
+function toggleRole(id) { alert(`Activation/Désactivation rôle ${id} - En développement`); }
+function deleteRole(id) { if(confirm('Supprimer ce rôle ?')) alert(`Suppression rôle ${id} - En développement`); }
+
+function saveSettings() { alert('Sauvegarde des paramètres - En développement'); }
     </script>
     <!-- Panneau d'administration -->
 <div id="admin-panel" class="modal hidden">
