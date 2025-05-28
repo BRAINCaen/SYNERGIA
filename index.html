@@ -200,9 +200,31 @@
             z-index: 100;
         }
 
-        main {
-            padding-bottom: 70px;
-        }
+main {
+    padding-bottom: 100px; /* Augmenté de 70px à 100px */
+}
+/* Correction responsive pour les performances */
+.performance-actions {
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl); /* Espace supplémentaire en bas */
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    padding-bottom: var(--spacing-lg); /* Padding en bas pour éviter le menu */
+}
+
+/* Correction générale pour toutes les pages sur mobile */
+@media (max-width: 768px) {
+    main {
+        padding-bottom: 120px; /* Encore plus d'espace sur mobile */
+    }
+    
+    .team-page,
+    .performance-sections {
+        margin-bottom: var(--spacing-xl);
+    }
+}
+
 
         .btn-primary:active, .nav-btn:active, .tab:active {
             transform: scale(0.97);
