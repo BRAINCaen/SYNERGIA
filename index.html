@@ -1498,5 +1498,108 @@
             });
         });
     </script>
+    <!-- Panneau d'administration -->
+<div id="admin-panel" class="modal hidden">
+    <div class="modal-content admin-modal">
+        <div class="modal-header">
+            <h3>Administration SYNERGIA</h3>
+            <button id="close-admin" class="icon-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="admin-tabs">
+                <button class="tab active" data-tab="users">Utilisateurs</button>
+                <button class="tab" data-tab="quests">Quêtes</button>
+                <button class="tab" data-tab="badges">Badges</button>
+                <button class="tab" data-tab="roles">Rôles</button>
+                <button class="tab" data-tab="settings">Paramètres</button>
+            </div>
+            
+            <!-- Onglet Utilisateurs -->
+            <div class="tab-content active" id="users-tab">
+                <div class="admin-section">
+                    <h4>Gestion des utilisateurs</h4>
+                    <button class="btn-secondary" onclick="addUser()">
+                        <i class="fas fa-plus"></i> Ajouter un utilisateur
+                    </button>
+                    <div id="users-list" class="admin-list">
+                        <!-- Sera rempli dynamiquement -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Quêtes -->
+            <div class="tab-content" id="quests-tab">
+                <div class="admin-section">
+                    <h4>Gestion des quêtes</h4>
+                    <button class="btn-secondary" onclick="addQuest()">
+                        <i class="fas fa-plus"></i> Créer une quête
+                    </button>
+                    <div id="quests-admin-list" class="admin-list">
+                        <!-- Sera rempli dynamiquement -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Badges -->
+            <div class="tab-content" id="badges-tab">
+                <div class="admin-section">
+                    <h4>Gestion des badges</h4>
+                    <button class="btn-secondary" onclick="addBadge()">
+                        <i class="fas fa-plus"></i> Créer un badge
+                    </button>
+                    <div id="badges-admin-list" class="admin-list">
+                        <!-- Sera rempli dynamiquement -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Rôles -->
+            <div class="tab-content" id="roles-tab">
+                <div class="admin-section">
+                    <h4>Gestion des rôles</h4>
+                    <button class="btn-secondary" onclick="addRole()">
+                        <i class="fas fa-plus"></i> Créer un rôle
+                    </button>
+                    <div id="roles-admin-list" class="admin-list">
+                        <!-- Sera rempli dynamiquement -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Onglet Paramètres -->
+            <div class="tab-content" id="settings-tab">
+                <div class="admin-section">
+                    <h4>Paramètres de l'application</h4>
+                    <div class="form-group">
+                        <label>Nom de l'application</label>
+                        <input type="text" id="app-name" value="SYNERGIA">
+                    </div>
+                    <div class="form-group">
+                        <label>XP par niveau</label>
+                        <input type="number" id="xp-per-level" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Thème</label>
+                        <select id="app-theme">
+                            <option value="default">Par défaut</option>
+                            <option value="dark">Sombre</option>
+                            <option value="light">Clair</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save"></i> Sauvegarder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bouton d'administration flottant -->
+<button id="admin-btn" class="admin-fab hidden">
+    <i class="fas fa-cog"></i>
+</button>
 </body>
 </html>
