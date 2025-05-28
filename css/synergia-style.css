@@ -1,5 +1,341 @@
 /* Styles pour l'amélioration mobile et ludique de SYNERGIA */
 
+/* DARK MODE GAMING RÉVOLUTIONNAIRE */
+:root {
+    /* Couleurs dark gaming */
+    --gaming-bg-primary: #0a0a0a;
+    --gaming-bg-secondary: #111111;
+    --gaming-bg-card: #1a1a1a;
+    --gaming-bg-elevated: #222222;
+    
+    /* Couleurs d'accent dark */
+    --gaming-primary: #ff4757;
+    --gaming-secondary: #3742fa;
+    --gaming-accent: #ffa502;
+    --gaming-success: #2ed573;
+    --gaming-danger: #ff3838;
+    --gaming-warning: #ffa502;
+    --gaming-info: #70a1ff;
+    
+    /* Textes dark */
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #707070;
+    --text-disabled: #404040;
+    
+    /* Borders dark */
+    --border-primary: #333333;
+    --border-secondary: #2a2a2a;
+    --border-accent: #404040;
+    
+    /* Gradients dark gaming */
+    --gradient-dark-primary: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #1a1a1a 100%);
+    --gradient-dark-card: linear-gradient(135deg, #1a1a1a 0%, #222222 50%, #2a2a2a 100%);
+    --gradient-accent: linear-gradient(135deg, #ff4757 0%, #3742fa 100%);
+    --gradient-success: linear-gradient(135deg, #2ed573 0%, #1dd1a1 100%);
+    
+    /* Ombres dark */
+    --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.8);
+    --shadow-accent: 0 4px 20px rgba(255, 71, 87, 0.3);
+    --shadow-glow: 0 0 20px rgba(55, 66, 250, 0.4);
+}
+
+/* BASE DARK */
+body {
+    background: var(--gaming-bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', 'Poppins', sans-serif;
+}
+
+/* ANIMATIONS DARK GAMING */
+@keyframes darkPulse {
+    0% { box-shadow: 0 0 0 0 rgba(55, 66, 250, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(55, 66, 250, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(55, 66, 250, 0); }
+}
+
+@keyframes darkGlow {
+    0% { box-shadow: 0 0 5px rgba(255, 71, 87, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(255, 71, 87, 0.6), 0 0 25px rgba(255, 71, 87, 0.3); }
+    100% { box-shadow: 0 0 5px rgba(255, 71, 87, 0.3); }
+}
+
+@keyframes slideInDark {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* HEADER DARK */
+header {
+    background: var(--gaming-bg-secondary);
+    border-bottom: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-dark);
+    backdrop-filter: blur(10px);
+}
+
+/* NAVIGATION DARK */
+nav {
+    background: var(--gaming-bg-secondary);
+    border-top: 1px solid var(--border-primary);
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.nav-btn {
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    margin: 4px;
+}
+
+.nav-btn:hover {
+    background: var(--gaming-bg-elevated);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+.nav-btn.active {
+    background: var(--gradient-accent);
+    color: white;
+    animation: darkPulse 2s infinite;
+    box-shadow: var(--shadow-accent);
+}
+
+/* CARDS DARK GAMING */
+.welcome-card {
+    background: var(--gradient-accent);
+    border: 1px solid var(--border-accent);
+    box-shadow: var(--shadow-accent);
+}
+
+.stats-card, .role-card, .team-member-card, .quest-item, .admin-item {
+    background: var(--gaming-bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 16px;
+    box-shadow: var(--shadow-dark);
+    transition: all 0.3s ease;
+    animation: slideInDark 0.5s ease-out;
+}
+
+.team-member-card:hover, .quest-item:hover, .admin-item:hover {
+    background: var(--gaming-bg-elevated);
+    border-color: var(--gaming-secondary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* BOUTONS DARK GAMING */
+.btn-primary {
+    background: var(--gradient-accent);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-accent);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 71, 87, 0.4);
+    animation: darkGlow 0.8s ease;
+}
+
+.btn-secondary {
+    background: var(--gaming-bg-elevated);
+    border: 1px solid var(--border-accent);
+    color: var(--text-primary);
+    border-radius: 12px;
+}
+
+.btn-secondary:hover {
+    background: var(--gaming-bg-card);
+    border-color: var(--gaming-secondary);
+}
+
+/* INPUTS DARK */
+input, select, textarea {
+    background: var(--gaming-bg-elevated);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 12px 16px;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+}
+
+input:focus, select:focus, textarea:focus {
+    background: var(--gaming-bg-card);
+    border-color: var(--gaming-secondary);
+    box-shadow: 0 0 0 3px rgba(55, 66, 250, 0.1);
+}
+
+/* MODAL DARK */
+.modal {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: var(--gaming-bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+}
+
+.modal-header {
+    background: var(--gaming-bg-secondary);
+    border-bottom: 1px solid var(--border-primary);
+    border-radius: 16px 16px 0 0;
+}
+
+/* XP BARS DARK */
+.xp-bar, .level-progress, .mastery-progress {
+    background: var(--gaming-bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+}
+
+.xp-progress, .level-bar, .mastery-bar {
+    background: var(--gradient-success);
+    border-radius: 7px;
+    position: relative;
+    overflow: hidden;
+}
+
+.xp-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: slideInDark 2s infinite;
+}
+
+/* BADGES DARK */
+.level-badge {
+    background: var(--gradient-accent);
+    border: 2px solid var(--gaming-bg-primary);
+    box-shadow: var(--shadow-accent);
+    animation: darkGlow 3s infinite;
+}
+
+/* NOTIFICATIONS DARK */
+.notification {
+    background: var(--gaming-bg-elevated);
+    border: 1px solid var(--border-accent);
+    border-radius: 12px;
+    box-shadow: var(--shadow-dark);
+    color: var(--text-primary);
+}
+
+.notification-success {
+    border-left: 4px solid var(--gaming-success);
+}
+
+.notification-error {
+    border-left: 4px solid var(--gaming-danger);
+}
+
+/* ADMIN FAB DARK */
+.admin-fab {
+    background: var(--gradient-accent);
+    box-shadow: var(--shadow-accent);
+    animation: darkPulse 2s infinite;
+}
+
+/* ONGLETS DARK */
+.tabs {
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.tab {
+    color: var(--text-secondary);
+    border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+    color: var(--gaming-secondary);
+    border-bottom-color: var(--gaming-secondary);
+    background: var(--gaming-bg-elevated);
+    border-radius: 8px 8px 0 0;
+}
+
+/* STATS DARK */
+.stat-value {
+    color: var(--gaming-secondary);
+    text-shadow: 0 0 10px rgba(55, 66, 250, 0.3);
+}
+
+.perf-stat-icon {
+    background: var(--gradient-accent);
+}
+
+/* SCROLLBARS DARK */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gaming-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gaming-bg-elevated);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-accent);
+}
+
+/* RESPONSIVE DARK */
+@media (max-width: 768px) {
+    .team-member-card, .quest-item {
+        margin-bottom: 16px;
+    }
+    
+    nav {
+        padding: 8px 0;
+    }
+    
+    .nav-btn {
+        padding: 12px 8px;
+    }
+}
+
+/* LOADING DARK */
+.loading-screen {
+    background: var(--gaming-bg-primary);
+}
+
+.loading-progress {
+    background: var(--gradient-accent);
+}
+
+/* TEXT COLORS */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+}
+
+p, span, div {
+    color: var(--text-secondary);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* SELECTIONS */
+::selection {
+    background: rgba(55, 66, 250, 0.3);
+    color: var(--text-primary);
+}
+
+
 /* PALETTE GAMING RÉVOLUTIONNAIRE */
 :root {
     /* Couleurs principales gaming */
