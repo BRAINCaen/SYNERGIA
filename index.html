@@ -1278,11 +1278,27 @@
                 updateXP(userProfile.xp || 240, userProfile.level || 4);
                 
                 console.log('Interface utilisateur mise à jour');
+            
                 
             } catch (error) {
                 console.error('Erreur mise à jour interface:', error);
             }
         }
+         // Vérifier et afficher le bouton admin
+        if (currentUser.email === 'allan.boehme61@gmail.com') {
+            const adminBtn = document.getElementById('admin-btn');
+            if (adminBtn) {
+                adminBtn.classList.remove('hidden');
+                console.log('Bouton admin activé pour Allan');
+            }
+        }
+        
+        console.log('Interface utilisateur mise à jour');
+        
+    } catch (error) {
+        console.error('Erreur mise à jour interface:', error);
+    }
+}
 
         // Mise à jour de l'XP et du niveau
         function updateXP(xp, level) {
