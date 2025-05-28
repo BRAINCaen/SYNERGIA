@@ -74,7 +74,6 @@ p, span, div, .quest-description, .member-role, .stat-label {
 /* 5. QUEST ITEMS - Améliorer contraste */
 .quest-item {
     background: rgba(15, 15, 25, 0.98) !important;
-    backdrop-filter: blur(25px) !important;
     border: 2px solid rgba(167, 139, 250, 0.6) !important;
 }
 
@@ -93,7 +92,6 @@ p, span, div, .quest-description, .member-role, .stat-label {
 /* 6. CARDS BACKGROUNDS - Plus sombres */
 .stats-card, .role-card, .team-member-card, .performance-section {
     background: rgba(10, 10, 20, 0.98) !important;
-    backdrop-filter: blur(30px) !important;
     border: 2px solid rgba(139, 92, 246, 0.5) !important;
 }
 
@@ -174,10 +172,7 @@ p, span, div, .quest-description, .member-role, .stat-label {
     --shadow-premium: 0 20px 60px rgba(109, 40, 217, 0.3);
     --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.5);
     
-    /* Blur effects */
-    --blur-light: blur(10px);
-    --blur-medium: blur(20px);
-    --blur-heavy: blur(40px);
+
     
     /* Espacement */
     --spacing-xs: 4px;
@@ -238,8 +233,8 @@ body {
 }
 
 @keyframes slideInGlass {
-    0% { transform: translateY(30px); opacity: 0; backdrop-filter: blur(0px); }
-    100% { transform: translateY(0); opacity: 1; backdrop-filter: var(--blur-medium); }
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes floatPremium {
@@ -255,7 +250,6 @@ body {
 /* HEADER PREMIUM */
 header {
     background: var(--premium-bg-secondary);
-    backdrop-filter: var(--blur-medium);
     border-bottom: 1px solid var(--gray-700);
     box-shadow: var(--shadow-glass);
     position: relative;
@@ -275,7 +269,6 @@ header::before {
 /* NAVIGATION PREMIUM */
 nav {
     background: var(--premium-bg-secondary);
-    backdrop-filter: var(--blur-medium);
     border-top: 1px solid var(--gray-700);
     box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
     position: relative;
@@ -315,7 +308,6 @@ nav::before {
 
 .nav-btn:hover {
     background: var(--premium-bg-glass);
-    backdrop-filter: var(--blur-light);
     color: var(--gray-100);
     transform: translateY(-3px);
 }
@@ -329,7 +321,6 @@ nav::before {
     color: white;
     animation: premiumPulse 3s infinite;
     box-shadow: var(--shadow-mauve);
-    backdrop-filter: var(--blur-light);
 }
 
 /* TEXTES PLUS LISIBLES SUR CARDS */
@@ -382,7 +373,6 @@ h1, h2, h3, h4, h5, h6 {
 .welcome-card {
     background: var(--gradient-premium);
     border: 1px solid var(--gray-600);
-    backdrop-filter: var(--blur-medium);
     box-shadow: var(--shadow-premium);
     color: white;
     position: relative;
@@ -403,7 +393,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .stats-card, .role-card, .team-member-card, .quest-item, .admin-item {
     background: var(--gradient-card);
-    backdrop-filter: var(--blur-medium);
     border: 1px solid var(--gray-600);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-glass);
@@ -416,7 +405,6 @@ h1, h2, h3, h4, h5, h6 {
 /* CARDS ENCORE PLUS SOMBRES */
 .stats-card, .role-card, .team-member-card, .quest-item, .admin-item {
     background: var(--gradient-card) !important;
-    backdrop-filter: var(--blur-medium) !important;
     border: 1px solid rgba(109, 40, 217, 0.5) !important;
     border-radius: var(--border-radius-lg) !important;
     box-shadow: var(--shadow-glass) !important;
@@ -429,7 +417,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .team-member-card:hover, .quest-item:hover, .admin-item:hover {
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-light);
     border-color: var(--mauve-secondary);
     transform: translateY(-8px) scale(1.02);
     box-shadow: var(--shadow-premium);
@@ -445,7 +432,6 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-mauve);
-    backdrop-filter: var(--blur-light);
     position: relative;
     overflow: hidden;
 }
@@ -473,7 +459,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-secondary {
     background: var(--premium-bg-glass);
-    backdrop-filter: var(--blur-medium);
     border: 1px solid var(--gray-500);
     color: var(--gray-100);
     border-radius: var(--border-radius);
@@ -489,7 +474,6 @@ h1, h2, h3, h4, h5, h6 {
 /* INPUTS PREMIUM */
 input, select, textarea {
     background: var(--premium-bg-glass);
-    backdrop-filter: var(--blur-light);
     border: 1px solid var(--gray-600);
     border-radius: var(--border-radius-sm);
     color: var(--gray-100);
@@ -504,7 +488,6 @@ input::placeholder, textarea::placeholder {
 
 input:focus, select:focus, textarea:focus {
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-medium);
     border-color: var(--mauve-secondary);
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2), var(--shadow-glass);
     outline: none;
@@ -513,12 +496,10 @@ input:focus, select:focus, textarea:focus {
 /* MODAL PREMIUM */
 .modal {
     background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: var(--blur-heavy);
 }
 
 .modal-content {
     background: var(--gradient-card);
-    backdrop-filter: var(--blur-medium);
     border: 1px solid var(--gray-600);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-premium);
@@ -539,7 +520,6 @@ input:focus, select:focus, textarea:focus {
 
 .modal-header {
     background: var(--premium-bg-secondary);
-    backdrop-filter: var(--blur-light);
     border-bottom: 1px solid var(--gray-700);
     border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
 }
@@ -556,7 +536,6 @@ input:focus, select:focus, textarea:focus {
 /* XP BARS PREMIUM */
 .xp-bar, .level-progress, .mastery-progress {
     background: var(--premium-bg-secondary);
-    backdrop-filter: var(--blur-light);
     border: 1px solid var(--gray-600);
     border-radius: var(--border-radius-sm);
     overflow: hidden;
@@ -585,7 +564,6 @@ input:focus, select:focus, textarea:focus {
 /* BADGES PREMIUM */
 .level-badge {
     background: var(--gradient-premium);
-    backdrop-filter: var(--blur-light);
     border: 2px solid var(--gray-600);
     box-shadow: var(--shadow-mauve);
     animation: glassGlow 4s infinite;
@@ -607,7 +585,6 @@ input:focus, select:focus, textarea:focus {
 /* NOTIFICATIONS PREMIUM (suite) */
 .notification {
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-medium);
     border: 1px solid var(--gray-600);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-premium);
@@ -645,7 +622,6 @@ input:focus, select:focus, textarea:focus {
 /* ADMIN FAB PREMIUM */
 .admin-fab {
     background: var(--gradient-premium);
-    backdrop-filter: var(--blur-light);
     box-shadow: var(--shadow-premium);
     animation: premiumPulse 3s infinite, floatPremium 4s ease-in-out infinite;
     position: fixed;
@@ -668,7 +644,6 @@ input:focus, select:focus, textarea:focus {
 .tabs {
     border-bottom: 1px solid var(--gray-700);
     background: var(--premium-bg-glass);
-    backdrop-filter: var(--blur-light);
     border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
@@ -688,7 +663,6 @@ input:focus, select:focus, textarea:focus {
     color: var(--mauve-accent);
     border-bottom-color: var(--mauve-secondary);
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-light);
     border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
     box-shadow: 0 -4px 12px rgba(139, 92, 246, 0.2);
 }
@@ -705,7 +679,6 @@ input:focus, select:focus, textarea:focus {
 
 .perf-stat-icon {
     background: var(--gradient-premium);
-    backdrop-filter: var(--blur-light);
     box-shadow: var(--shadow-mauve);
 }
 
@@ -825,7 +798,6 @@ p, span, div {
     color: white;
     font-weight: bold;
     margin-left: var(--spacing-xs);
-    backdrop-filter: var(--blur-light);
 }
 
 .priority-low { 
@@ -862,7 +834,6 @@ p, span, div {
     padding: 0;
     overflow-x: auto;
     background: var(--premium-bg-glass);
-    backdrop-filter: var(--blur-light);
 }
 
 .admin-tabs .tab {
@@ -883,7 +854,6 @@ p, span, div {
     border-bottom-color: var(--mauve-secondary);
     color: var(--mauve-accent);
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-light);
 }
 
 .admin-section {
@@ -917,7 +887,6 @@ p, span, div {
     border-radius: 50%;
     border: none;
     cursor: pointer;
-    backdrop-filter: var(--blur-light);
     transition: all 0.3s ease;
 }
 
@@ -960,7 +929,6 @@ p, span, div {
 
 .form-section {
     background: var(--premium-bg-glass);
-    backdrop-filter: var(--blur-light);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
@@ -1013,7 +981,6 @@ p, span, div {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: var(--blur-light);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1040,7 +1007,6 @@ p, span, div {
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-light);
     border-radius: var(--border-radius-sm);
     border: 1px solid rgba(139, 92, 246, 0.2);
     cursor: pointer;
@@ -1062,7 +1028,6 @@ p, span, div {
 /* Compétences premium */
 .skills-input {
     background: var(--premium-bg-elevated);
-    backdrop-filter: var(--blur-light);
     border: 1px solid rgba(139, 92, 246, 0.3);
     border-radius: var(--border-radius);
     padding: var(--spacing-sm);
@@ -1084,7 +1049,6 @@ p, span, div {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-    backdrop-filter: var(--blur-light);
     box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
 }
 
