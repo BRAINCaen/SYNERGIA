@@ -9,15 +9,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/synergia-style.css">
+    
     <style>
         /* Variables globales */
         :root {
-            --primary: #7e57c2;
-            --primary-light: #b085f5;
-            --primary-dark: #4d2c91;
-            --secondary: #26c6da;
-            --secondary-light: #6ff9ff;
-            --secondary-dark: #0095a8;
+            --primary: #8e44ad;
+            --primary-light: #9b59b6;
+            --primary-dark: #6c3483;
+            --secondary: #2ecc71;
+            --secondary-light: #2ecc71;
+            --secondary-dark: #27ae60;
+            --accent: #f39c12;
             --success: #66bb6a;
             --danger: #ef5350;
             --warning: #ffca28;
@@ -26,7 +29,7 @@
             --dark: #263238;
             --gray: #757575;
             --light-gray: #e0e0e0;
-            --background: #fafafa;
+            --background: #f9f9f9;
             
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
             --shadow-md: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -56,6 +59,7 @@
         body {
             font-family: var(--font-family);
             background-color: var(--background);
+            background-image: url('https://www.transparenttextures.com/patterns/subtle-dark-vertical.png');
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
@@ -136,18 +140,9 @@
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(0.95);
-                opacity: 0.7;
-            }
-            70% {
-                transform: scale(1.05);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0.95);
-                opacity: 0.7;
-            }
+            0% { transform: scale(0.95); opacity: 0.7; }
+            70% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
         }
 
         .loading-bar {
@@ -170,172 +165,78 @@
         }
 
         @keyframes loading {
-            0% {
-                width: 0%;
-                left: 0;
-            }
-            50% {
-                width: 70%;
-            }
-            100% {
-                width: 0%;
-                left: 100%;
-            }
+            0% { width: 0%; left: 0; }
+            50% { width: 70%; }
+            100% { width: 0%; left: 100%; }
         }
-/* Ajouter ce CSS à la section style de ton index.html */
-.nav-btn, .btn-primary, .admin-btn, .tab {
-    min-height: 44px; /* Taille minimale pour les éléments tactiles */
-    padding: 12px; /* Plus d'espace pour les doigts */
-}
 
-/* Espacement amélioré pour les listes d'éléments */
-.quest-item, .team-member-card, .activity-item {
-    padding: 16px;
-    margin-bottom: 12px;
-}
+        /* Navigation et interface */
+        .nav-btn, .btn-primary, .admin-btn, .tab {
+            min-height: 44px;
+            padding: 12px;
+        }
 
-/* Position fixe pour la barre de navigation en bas */
-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    z-index: 100;
-}
+        .quest-item, .team-member-card, .activity-item {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-/* Espace pour éviter que le contenu soit caché sous la barre de navigation */
-main {
-    padding-bottom: 70px;
-}
+        .quest-item:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-/* Animation de feedback tactile */
-.btn-primary:active, .nav-btn:active, .tab:active {
-    transform: scale(0.97);
-    transition: transform 0.1s;
-}
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
 
-/* Interface administrative plus adaptée au mobile */
-.admin-modal {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    max-height: none;
-    margin: 0;
-    border-radius: 0;
-}
+        main {
+            padding-bottom: 70px;
+        }
 
-.admin-tabs {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 10;
-    padding: 10px 0;
-}
-/* Style pour le panneau d'administration mobile */
-.admin-item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 10px;
-}
+        .btn-primary:active, .nav-btn:active, .tab:active {
+            transform: scale(0.97);
+            transition: transform 0.1s;
+        }
 
-.admin-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+        /* Style RPG */
+        #level-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
+            border: 2px solid white;
+        }
 
-/* Amélioration des formulaires sur mobile */
-.form-group {
-    margin-bottom: 20px;
-}
+        .xp-bar, .level-progress, .mastery-progress {
+            height: 10px;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
+        #xp-progress, #level-bar, #mastery-bar {
+            background: linear-gradient(90deg, var(--secondary-light) 0%, var(--secondary) 100%);
+            box-shadow: 0 0 5px var(--secondary-light);
+        }
 
-input, select, textarea {
-    font-size: 16px; /* Évite le zoom automatique sur iOS */
-    padding: 12px;
-}
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
 
-/* Bouton fermer en haut à droite */
-.modal-header {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 10;
-    padding: 16px;
-}
-
-.modal-header .icon-btn {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-}
-/* Palettes de couleurs plus ludiques */
-:root {
-    --primary: #8e44ad; /* Violet plus vif */
-    --primary-light: #9b59b6;
-    --primary-dark: #6c3483;
-    --secondary: #2ecc71; /* Vert émeraude */
-    --secondary-light: #2ecc71;
-    --secondary-dark: #27ae60;
-    --accent: #f39c12; /* Orange doré */
-    --background: #f9f9f9;
-}
-
-/* Fond texturé subtil */
-body {
-    background-image: url('https://www.transparenttextures.com/patterns/subtle-dark-vertical.png');
-    background-color: var(--background);
-}
-
-/* Cartes avec effet de profondeur */
-.quest-item, .stats-card, .role-card, .welcome-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-    border-left: 4px solid var(--primary);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.quest-item:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Style de RPG pour les niveaux et XP */
-#level-badge {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
-    border: 2px solid white;
-}
-
-.xp-bar, .level-progress, .mastery-progress {
-    height: 10px;
-    border-radius: 5px;
-    background: rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-#xp-progress, #level-bar, #mastery-bar {
-    background: linear-gradient(90deg, var(--secondary-light) 0%, var(--secondary) 100%);
-    box-shadow: 0 0 5px var(--secondary-light);
-}
-
-/* Animations pour les accomplissements */
-@keyframes celebrate {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.new-badge, .level-up {
-    animation: celebrate 0.5s ease-in-out;
-}
+        .new-badge, .level-up {
+            animation: celebrate 0.5s ease-in-out;
+        }
 
         /* Écran de connexion */
         #login-screen {
@@ -426,7 +327,7 @@ body {
             font-size: 0.9rem;
         }
 
-        /* Layout principal de l'application */
+        /* Layout principal */
         #app {
             display: flex;
             flex-direction: column;
@@ -527,7 +428,7 @@ body {
             overflow-y: auto;
         }
 
-        /* Navigation du bas */
+        /* Navigation */
         nav {
             background-color: white;
             display: flex;
@@ -557,18 +458,22 @@ body {
             color: var(--primary);
         }
 
-        /* Tableau de bord */
+        /* Dashboard et cartes */
         .dashboard {
             margin-bottom: var(--spacing-lg);
+        }
+
+        .welcome-card, .stats-card, .role-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .welcome-card {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            border-radius: var(--border-radius);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-md);
-            box-shadow: var(--shadow-md);
         }
 
         .welcome-card h2 {
@@ -579,14 +484,6 @@ body {
         .stat-highlight {
             font-size: 1.2rem;
             font-weight: 600;
-        }
-
-        .stats-card, .role-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-md);
-            box-shadow: var(--shadow-sm);
         }
 
         .stats-card h3, .role-card h3 {
@@ -765,163 +662,7 @@ body {
             color: white;
         }
 
-        /* Activity feed */
-        .activity-item {
-            display: flex;
-            align-items: start;
-            padding: var(--spacing-md) 0;
-            border-bottom: 1px solid var(--light-gray);
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: var(--spacing-md);
-            font-size: 1rem;
-        }
-
-        .quest-completed {
-            background-color: rgba(102, 187, 106, 0.2);
-            color: var(--success);
-        }
-
-        .badge-unlocked {
-            background-color: rgba(255, 202, 40, 0.2);
-            color: var(--warning);
-        }
-
-        .role-assigned {
-            background-color: rgba(126, 87, 194, 0.2);
-            color: var(--primary);
-        }
-
-        .level-up {
-            background-color: rgba(41, 182, 246, 0.2);
-            color: var(--info);
-        }
-
-        .activity-content {
-            flex: 1;
-        }
-
-        .activity-content p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-
-        .activity-time {
-            color: var(--gray);
-            font-size: 0.8rem;
-        }
-
-        /* Additionnels pour quêtes, badges, etc. */
-        .no-quests, .no-activity, .no-events {
-            text-align: center;
-            padding: var(--spacing-lg);
-            color: var(--gray);
-            font-style: italic;
-        }
-
-        /* Calendrier */
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-md);
-        }
-
-        #current-month {
-            margin: 0;
-            text-align: center;
-        }
-
-        .weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
-            text-align: center;
-        }
-
-        .calendar-day {
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            border-radius: var(--border-radius-sm);
-        }
-
-        .calendar-day:hover {
-            background-color: var(--light-gray);
-        }
-
-        .today {
-            background-color: var(--primary-light);
-            color: white;
-            font-weight: bold;
-        }
-
-        .has-events {
-            font-weight: bold;
-        }
-
-        .event-indicator {
-            position: absolute;
-            bottom: 3px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background-color: var(--info);
-            color: white;
-            font-size: 0.7rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .prev-month, .next-month {
-            color: var(--light-gray);
-        }
-
-        .floating-btn {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            z-index: 5;
-        }
-
-        .floating-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        /* Tableaux */
+        /* Onglets */
         .tabs {
             display: flex;
             border-bottom: 2px solid var(--light-gray);
@@ -950,7 +691,15 @@ body {
             display: block;
         }
 
-        /* Formulaires et modales */
+        /* Utilitaires */
+        .no-quests, .no-activity {
+            text-align: center;
+            padding: var(--spacing-lg);
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -991,18 +740,6 @@ body {
             padding: var(--spacing-md);
         }
 
-        .form-group {
-            margin-bottom: var(--spacing-md);
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: var(--spacing-xs);
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 0.9rem;
-        }
-
         .success-content {
             text-align: center;
         }
@@ -1027,161 +764,6 @@ body {
             color: var(--warning);
             font-size: 1.2rem;
             margin: var(--spacing-md) 0;
-        }
-
-        .badge-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--warning);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            margin: 0 auto var(--spacing-md) auto;
-        }
-
-        /* Chat */
-        .chat-channels {
-            display: flex;
-            overflow-x: auto;
-            padding: var(--spacing-xs) 0;
-            margin-bottom: var(--spacing-md);
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .chat-channel {
-            background-color: var(--light);
-            color: var(--gray);
-            border-radius: 20px;
-            padding: var(--spacing-xs) var(--spacing-md);
-            margin-right: var(--spacing-sm);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .chat-channel.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        #chat-container {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 220px);
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        #chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: var(--spacing-md);
-        }
-
-        .date-separator {
-            text-align: center;
-            margin: var(--spacing-md) 0;
-            font-size: 0.8rem;
-            color: var(--gray);
-            position: relative;
-        }
-
-        .date-separator:before, .date-separator:after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 30%;
-            height: 1px;
-            background-color: var(--light-gray);
-        }
-
-        .date-separator:before {
-            left: 0;
-        }
-
-        .date-separator:after {
-            right: 0;
-        }
-
-        .chat-message {
-            display: flex;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .message-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            margin-right: var(--spacing-sm);
-            object-fit: cover;
-        }
-
-        .message-content {
-            flex: 1;
-        }
-
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .message-author {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .message-time {
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-
-        .message-text {
-            background-color: var(--light);
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--border-radius);
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        .own-message {
-            flex-direction: row-reverse;
-        }
-
-        .own-message .message-avatar {
-            margin-right: 0;
-            margin-left: var(--spacing-sm);
-        }
-
-        .own-message .message-header {
-            flex-direction: row-reverse;
-        }
-
-        .own-message .message-text {
-            background-color: var(--primary-light);
-            color: white;
-        }
-
-        .typing-indicator {
-            padding: var(--spacing-xs) var(--spacing-md);
-            font-size: 0.8rem;
-            color: var(--gray);
-            font-style: italic;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: var(--spacing-sm);
-            border-top: 1px solid var(--light-gray);
-        }
-
-        .chat-input input {
-            flex: 1;
-            margin-right: var(--spacing-sm);
         }
 
         /* Responsive */
@@ -1212,22 +794,8 @@ body {
                 max-width: 800px;
                 margin: 0 auto;
             }
-
-            #chat-container {
-                height: calc(100vh - 180px);
-            }
         }
-        <link rel="stylesheet" href="css/synergia-style.css">
     </style>
-    <script>
-  // Fallback pour le logo
-  window.addEventListener('error', function(e) {
-    if (e.target.tagName === 'IMG' && e.target.src.includes('synergia-logo.png')) {
-      e.target.src = 'https://img.icons8.com/color/96/000000/s-key.png';
-      e.preventDefault();
-    }
-  }, true);
-</script>
 </head>
 <body>
     <!-- Écran de chargement -->
@@ -1247,7 +815,7 @@ body {
             <img src="https://img.icons8.com/color/96/000000/s-key.png" alt="SYNERGIA Logo">
             <h1>SYNERGIA</h1>
             <p>L'aventure commence ici</p>
-               <form id="login-form">
+            <form id="login-form">
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
                     <input type="email" id="email" placeholder="Email" required>
@@ -1282,7 +850,7 @@ body {
             </button>
         </header>
 
-        <!-- Contenu principal (changera selon la navigation) -->
+        <!-- Contenu principal -->
         <main id="main-content">
             <!-- Sera rempli dynamiquement par JavaScript -->
         </main>
@@ -1311,62 +879,25 @@ body {
                 <span id="chat-badge" class="badge hidden">0</span>
             </button>
         </nav>
-<!-- Bouton d'administration (visible uniquement pour les admins) -->
-<button id="admin-btn" class="admin-fab hidden">
-    <i class="fas fa-cog"></i>
-</button>
-
-        <!-- Panneau de notifications (caché par défaut) -->
-        <div id="notifications-panel" class="panel hidden">
-            <div class="panel-header">
-                <h3>Notifications</h3>
-                <button id="close-notifications" class="icon-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="panel-content" id="notifications-list">
-                <!-- Sera rempli dynamiquement -->
-            </div>
-        </div>
     </div>
-// Gestion des onglets
-document.addEventListener('DOMContentLoaded', function() {
-    // Activer les onglets des quêtes
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const tabName = this.dataset.tab;
-            
-            // Désactiver tous les onglets
-            tabs.forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Activer l'onglet sélectionné
-            this.classList.add('active');
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-        });
-    });
-});
 
     <!-- Templates pour les pages -->
     <template id="dashboard-template">
         <div class="dashboard">
             <section class="welcome-card">
                 <h2>Bienvenue, <span id="welcome-name">Coéquipier</span> !</h2>
-                <p class="stat-highlight"><span id="quests-today">0</span> quêtes aujourd'hui</p>
+                <p class="stat-highlight"><span id="quests-today">2</span> quêtes aujourd'hui</p>
             </section>
             
             <section class="stats-card">
                 <h3>Ton niveau</h3>
                 <div class="level-display">
-                    <div id="level-badge">1</div>
+                    <div id="level-badge">4</div>
                     <div class="level-info">
-                        <h4 id="level-title">Novice</h4>
+                        <h4 id="level-title">Expert</h4>
                         <div class="level-progress">
                             <div id="level-bar" style="width: 60%;"></div>
-                            <span id="level-text">60/100 XP</span>
+                            <span id="level-text">240/400 XP</span>
                         </div>
                     </div>
                 </div>
@@ -1381,8 +912,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="role-info">
                         <h4 id="role-name">Entretien & Maintenance</h4>
                         <div class="mastery-progress">
-                            <div id="mastery-bar" style="width: 40%;"></div>
-                            <span id="mastery-text">Novice</span>
+                            <div id="mastery-bar" style="width: 80%;"></div>
+                            <span id="mastery-text">Expert</span>
                         </div>
                     </div>
                 </div>
@@ -1391,17 +922,42 @@ document.addEventListener('DOMContentLoaded', function() {
             <section class="quests-preview">
                 <div class="section-header">
                     <h3>Quêtes du jour</h3>
-                    <button class="btn-text" data-page="quests">Voir tout</button>
+                    <button class="btn-text" onclick="navigateToPage('quests')">Voir tout</button>
                 </div>
                 <div id="daily-quests">
-                    <!-- Sera rempli dynamiquement -->
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Vérifier l'accueil</h4>
+                            <p class="quest-description">S'assurer que l'espace d'accueil est propre et accueillant</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 10 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> 18h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(1)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="quest-item">
+                         <div class="quest-info">
+                            <h4 class="quest-title">Contrôle équipements</h4>
+                            <p class="quest-description">Vérifier le bon fonctionnement des jeux</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 15 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> 20h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(2)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
                 </div>
             </section>
             
             <section class="team-activity">
                 <h3>Activité de l'équipe</h3>
                 <div id="team-feed">
-                    <!-- Sera rempli dynamiquement -->
+                    <div class="no-activity">Aucune activité récente</div>
                 </div>
             </section>
         </div>
@@ -1417,19 +973,107 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <div class="tab-content active" id="daily-tab">
                 <div class="quests-list" id="daily-quests-list">
-                    <!-- Sera rempli dynamiquement -->
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Vérifier l'accueil</h4>
+                            <p class="quest-description">S'assurer que l'espace d'accueil est propre et accueillant</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 10 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Aujourd'hui 18h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(1)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Contrôle équipements</h4>
+                            <p class="quest-description">Vérifier le bon fonctionnement des jeux</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 15 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Aujourd'hui 20h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(2)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Nettoyage rapide</h4>
+                            <p class="quest-description">Nettoyage des zones communes</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 8 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Aujourd'hui 22h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(3)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             
             <div class="tab-content" id="weekly-tab">
                 <div class="quests-list" id="weekly-quests-list">
-                    <!-- Sera rempli dynamiquement -->
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Nettoyage complet</h4>
+                            <p class="quest-description">Nettoyage approfondi de toutes les zones de jeu</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 50 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Vendredi 18h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(4)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Maintenance préventive</h4>
+                            <p class="quest-description">Vérification complète de tous les équipements</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 75 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Samedi 16h00</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(5)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             
             <div class="tab-content" id="special-tab">
                 <div class="quests-list" id="special-quests-list">
-                    <!-- Sera rempli dynamiquement -->
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Animation événement</h4>
+                            <p class="quest-description">Organiser une animation spéciale pour les clients</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 100 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Fin du mois</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(7)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    <div class="quest-item">
+                        <div class="quest-info">
+                            <h4 class="quest-title">Formation équipe</h4>
+                            <p class="quest-description">Animer une session de formation pour l'équipe</p>
+                            <div class="quest-meta">
+                                <span class="quest-xp"><i class="fas fa-star"></i> 150 XP</span>
+                                <span class="quest-deadline"><i class="fas fa-clock"></i> Selon planning</span>
+                            </div>
+                        </div>
+                        <button class="btn-complete" onclick="completeQuest(8)">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1441,48 +1085,56 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage-compat.js"></script>
 
-    <!-- Configuration et logique de l'application -->
+    <!-- Scripts de l'application -->
     <script>
-// Configuration Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
-  authDomain: "synergia-app-f27e7.firebaseapp.com",
-  projectId: "synergia-app-f27e7",
-  storageBucket: "synergia-app-f27e7.firebasestorage.app",
-  messagingSenderId: "201912738922",
-  appId: "1:201912738922:web:2fcc1e49293bb632899613",
-  measurementId: "G-EGJ79SCMWX"
-};
+        // Fallback pour le logo
+        window.addEventListener('error', function(e) {
+            if (e.target.tagName === 'IMG' && e.target.src.includes('synergia-logo.png')) {
+                e.target.src = 'https://img.icons8.com/color/96/000000/s-key.png';
+                e.preventDefault();
+            }
+        }, true);
 
-// Initialisation Firebase (UNE SEULE FOIS)
-let firebaseApp;
-let auth;
-let db;
-let storage;
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
+            authDomain: "synergia-app-f27e7.firebaseapp.com",
+            projectId: "synergia-app-f27e7",
+            storageBucket: "synergia-app-f27e7.firebasestorage.app",
+            messagingSenderId: "201912738922",
+            appId: "1:201912738922:web:2fcc1e49293bb632899613",
+            measurementId: "G-EGJ79SCMWX"
+        };
 
-try {
-    if (firebase.apps.length) {
-        firebaseApp = firebase.app();
-    } else {
-        firebaseApp = firebase.initializeApp(firebaseConfig);
-        console.log("Firebase initialisé avec succès");
-    }
-    
-    // Assigner les services Firebase (pas redéclarer)
-    auth = firebase.auth();
-    db = firebase.firestore();
-    storage = firebase.storage();
-    
-} catch (e) {
-    console.error("Erreur d'initialisation Firebase:", e);
-    auth = { onAuthStateChanged: (callback) => callback(null) };
-    db = { collection: () => ({ doc: () => ({ get: () => Promise.resolve({ exists: false }) }) }) };
-    storage = {};
-}
+        // Initialisation Firebase
+        let firebaseApp;
+        let auth;
+        let db;
+        let storage;
+        let currentUser = null;
+        let userProfile = {};
 
+        try {
+            if (firebase.apps.length) {
+                firebaseApp = firebase.app();
+            } else {
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                console.log("Firebase initialisé avec succès");
+            }
+            
+            auth = firebase.auth();
+            db = firebase.firestore();
+            storage = firebase.storage();
+            
+        } catch (e) {
+            console.error("Erreur d'initialisation Firebase:", e);
+            auth = { onAuthStateChanged: (callback) => callback(null) };
+            db = { collection: () => ({ doc: () => ({ get: () => Promise.resolve({ exists: false }) }) }) };
+            storage = {};
+        }
 
-
-
+        // Variables globales pour la navigation
+        let currentPage = 'dashboard';
 
         // Gestion de l'authentification
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -1492,462 +1144,201 @@ try {
             const password = document.getElementById('password').value;
             
             try {
+                document.querySelector('.loading-progress').style.width = '50%';
                 await auth.signInWithEmailAndPassword(email, password);
                 console.log('Connexion réussie');
             } catch (error) {
                 console.error('Erreur de connexion:', error);
                 alert('Erreur de connexion: ' + error.message);
+                document.querySelector('.loading-progress').style.width = '0%';
             }
         });
 
-        // Vérifier l'état de l'authentification
-        auth.onAuthStateChanged(user => {
+        // Observer les changements d'état d'authentification
+        auth.onAuthStateChanged(async user => {
             const loadingScreen = document.getElementById('loading-screen');
             const loginScreen = document.getElementById('login-screen');
             const app = document.getElementById('app');
             
             if (user) {
-                // Utilisateur connecté
-                loginScreen.classList.add('hidden');
-                app.classList.remove('hidden');
+                currentUser = user;
                 
-                // Charger les données de l'utilisateur
-                loadUserData(user);
-                
-                // Charger le tableau de bord
-                loadPage('dashboard');
+                try {
+                    // Vérifier si le profil existe
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    
+                    if (!userDoc.exists) {
+                        console.log('Création du profil utilisateur...');
+                        userProfile = await createUserProfile(user);
+                    } else {
+                        userProfile = userDoc.data();
+                        console.log('Profil utilisateur chargé:', userProfile);
+                    }
+                    
+                    // Cacher les écrans de chargement/connexion
+                    loginScreen.classList.add('hidden');
+                    loadingScreen.classList.add('hidden');
+                    app.classList.remove('hidden');
+                    
+                    // Mettre à jour l'interface
+                    updateUserInterface();
+                    
+                    // Charger le dashboard
+                    loadPage('dashboard');
+                    
+                    console.log('Connexion réussie pour:', user.email);
+                    
+                } catch (error) {
+                    console.error('Erreur lors du chargement:', error);
+                    handleMissingProfile(user);
+                }
             } else {
-                // Utilisateur non connecté
+                currentUser = null;
+                userProfile = {};
+                
                 app.classList.add('hidden');
+                loadingScreen.classList.add('hidden');
                 loginScreen.classList.remove('hidden');
             }
-            
-            // Masquer l'écran de chargement après un délai
-            setTimeout(() => {
-                loadingScreen.classList.add('hidden');
-            }, 1000);
         });
 
-        // Chargement des données utilisateur
-        async function loadUserData(user) {
-            try {
-                // Mettre à jour l'interface utilisateur avec les informations de base
-                document.getElementById('user-name').textContent = user.displayName || user.email;
-                document.getElementById('welcome-name').textContent = user.displayName || 'Coéquipier';
-                
-                if (user.photoURL) {
-                    document.getElementById('user-avatar').src = user.photoURL;
+        // Fonction pour créer un profil utilisateur automatiquement
+        async function createUserProfile(user) {
+            const defaultProfile = {
+                displayName: user.displayName || user.email.split('@')[0],
+                email: user.email,
+                photoURL: user.photoURL || '',
+                xp: 240,
+                level: 4,
+                roles: ['entretien'],
+                badges: [],
+                completedQuests: [],
+                joinedAt: new Date(),
+                lastActive: new Date(),
+                preferences: {
+                    notifications: true,
+                    theme: 'default'
                 }
-                
-                // Charger les données depuis Firestore
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    
-                    // Mettre à jour XP et niveau
-                    const xp = userData.xp || 0;
-                    const level = calculateLevel(xp);
-                    
-                    // Interface XP
-                    updateXpDisplay(xp, level);
-                    
-                    // Rôle principal
-                    if (userData.roles && userData.roles.length > 0) {
-                        updateMainRole(userData.roles[0]);
-                    }
-                } else {
-                    // Créer un document pour le nouvel utilisateur
-                    await db.collection('users').doc(user.uid).set({
-                        displayName: user.displayName || '',
-                        email: user.email,
-                        photoURL: user.photoURL || '',
-                        xp: 0,
-                        roles: [],
-                        badges: [],
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-            } catch (error) {
-                console.error("Erreur lors du chargement des données utilisateur:", error);
-            }
-        }
-
-        // Calculer le niveau en fonction de l'XP
-        function calculateLevel(xp) {
-            return Math.floor(Math.sqrt(xp / 100)) + 1;
-        }
-
-        // Mettre à jour l'affichage XP
-        function updateXpDisplay(xp, level) {
-            const xpForCurrentLevel = 100 * Math.pow(level - 1, 2);
-            const xpForNextLevel = 100 * Math.pow(level, 2);
-            const xpProgress = xp - xpForCurrentLevel;
-            const xpNeeded = xpForNextLevel - xpForCurrentLevel;
-            const progressPercent = (xpProgress / xpNeeded) * 100;
-            
-            document.getElementById('xp-progress').style.width = progressPercent + '%';
-            document.getElementById('xp-text').textContent = xp + ' XP';
-            
-            // Tableau de bord
-            document.getElementById('level-badge').textContent = level;
-            document.getElementById('level-bar').style.width = progressPercent + '%';
-            document.getElementById('level-text').textContent = xpProgress + '/' + xpNeeded + ' XP';
-            
-            // Titre du niveau
-            const levelTitles = ['Novice', 'Apprenti', 'Initié', 'Compétent', 'Expert', 'Maître', 'Champion', 'Légende'];
-            document.getElementById('level-title').textContent = levelTitles[Math.min(level - 1, levelTitles.length - 1)];
-        }
-
-        // Mettre à jour le rôle principal
-        function updateMainRole(role) {
-            const roleIcons = {
-                'maintenance': 'fa-wrench',
-                'reviews': 'fa-star',
-                'inventory': 'fa-box',
-                'organization': 'fa-calendar-alt',
-                'content': 'fa-paint-brush',
-                'mentoring': 'fa-graduation-cap',
-                'partnerships': 'fa-handshake',
-                'social': 'fa-hashtag'
             };
             
-            const roleNames = {
-                'maintenance': 'Entretien & Maintenance',
-                'reviews': 'Gestion des Avis',
-                'inventory': 'Gestion des Stocks',
-                'organization': 'Organisation Interne',
-                'content': 'Création de Contenu',
-                'mentoring': 'Mentorat & Formation',
-                'partnerships': 'Partenariats',
-                'social': 'Communication & Réseaux Sociaux'
+            try {
+                await db.collection('users').doc(user.uid).set(defaultProfile);
+                console.log('Profil créé avec succès pour:', user.email);
+                return defaultProfile;
+            } catch (error) {
+                console.error('Erreur création profil:', error);
+                return defaultProfile;
+            }
+        }
+
+        // Fonction de secours si le profil pose problème
+        function handleMissingProfile(user) {
+            console.log('Mode dégradé activé');
+            userProfile = {
+                displayName: user.email.split('@')[0],
+                email: user.email,
+                xp: 240,
+                level: 4,
+                roles: ['entretien']
             };
             
-            document.getElementById('role-name').textContent = roleNames[role.role] || role.role;
+            const loginScreen = document.getElementById('login-screen');
+            const loadingScreen = document.getElementById('loading-screen');
+            const app = document.getElementById('app');
             
-            const roleIcon = document.querySelector('.role-icon i');
-            roleIcon.className = `fas ${roleIcons[role.role] || 'fa-user'}`;
+            loginScreen.classList.add('hidden');
+            loadingScreen.classList.add('hidden');
+            app.classList.remove('hidden');
             
-            // Mastery
-            const masteryLevel = Math.min(Math.floor(role.mastery / 20), 4);
-            const masteryLabels = ['Novice', 'Intermédiaire', 'Avancé', 'Expert', 'Maître'];
-            
-            document.getElementById('mastery-bar').style.width = (role.mastery || 0) + '%';
-            document.getElementById('mastery-text').textContent = masteryLabels[masteryLevel];
+            updateUserInterface();
+            loadPage('dashboard');
         }
 
-        // Chargement des quêtes
-        async function loadQuests() {
+        // Mettre à jour l'interface utilisateur
+        function updateUserInterface() {
+            if (!currentUser || !userProfile) return;
+            
             try {
-                const dailyQuestsContainer = document.getElementById('daily-quests');
-                if (!dailyQuestsContainer) return;
+                const userAvatar = document.getElementById('user-avatar');
+                const userName = document.getElementById('user-name');
+                const welcomeName = document.getElementById('welcome-name');
                 
-                dailyQuestsContainer.innerHTML = '<div class="loading">Chargement des quêtes...</div>';
-                
-                // Vérifier si la collection existe, sinon créer des exemples
-                const questsRef = db.collection('quests');
-                const snapshot = await questsRef.get();
-                
-                if (snapshot.empty) {
-                    // Créer des quêtes d'exemples
-                    const exampleQuests = [
-                        {
-                            title: "Réparer le mécanisme du coffre - Salle 2",
-                            description: "Le mécanisme d'ouverture du coffre ne fonctionne plus correctement. À réparer avant le weekend.",
-                            type: "daily",
-                            xp: 15,
-                            assignedTo: [auth.currentUser.uid],
-                            completed: false,
-                            deadline: new Date(Date.now() + 86400000 * 2), // Dans 2 jours
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        },
-                        {
-                            title: "Créer un post Instagram pour le nouvel escape game",
-                            description: "Créer un contenu engageant pour annoncer le lancement du nouvel escape game. Photos + texte accrocheur.",
-                            type: "daily",
-                            xp: 10,
-                            assignedTo: [auth.currentUser.uid],
-                            completed: false,
-                            deadline: new Date(Date.now() + 86400000 * 3), // Dans 3 jours
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        },
-                        {
-                            title: "Commander les stocks de consommables pour juin",
-                            description: "Vérifier et commander les stocks de piles, ampoules, accessoires et matériel d'entretien pour le mois prochain.",
-                            type: "daily",
-                            xp: 5,
-                            assignedTo: [auth.currentUser.uid],
-                            completed: false,
-                            deadline: new Date(Date.now() + 86400000 * 1), // Dans 1 jour
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        }
-                    ];
-                    
-                    // Ajouter les quêtes d'exemple à Firestore
-                    for (const quest of exampleQuests) {
-                        await questsRef.add(quest);
-                    }
+                if (userAvatar) {
+                    userAvatar.src = userProfile.photoURL || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
                 }
                 
-                // Charger les quêtes pour l'utilisateur actuel
-                const userQuests = await questsRef
-                    .where('assignedTo', 'array-contains', auth.currentUser.uid)
-                    .where('completed', '==', false)
-                    .where('type', '==', 'daily')
-                    .limit(3)
-                    .get();
-                
-                // Vider le conteneur
-                dailyQuestsContainer.innerHTML = '';
-                
-                if (userQuests.empty) {
-                    dailyQuestsContainer.innerHTML = '<div class="no-quests">Aucune quête pour aujourd\'hui !</div>';
-                    document.getElementById('quests-today').textContent = '0';
-                    return;
+                if (userName) {
+                    userName.textContent = userProfile.displayName || currentUser.email;
                 }
                 
-                // Mettre à jour le compteur de quêtes
-                document.getElementById('quests-today').textContent = userQuests.size;
+                if (welcomeName) {
+                    welcomeName.textContent = userProfile.displayName || currentUser.email.split('@')[0];
+                }
                 
-                // Afficher les quêtes
-                userQuests.forEach(doc => {
-                    const quest = doc.data();
-                    const questItem = document.createElement('div');
-                    questItem.className = 'quest-item';
-                    
-                    // Formater la deadline
-                    let deadlineText = "Pas de date limite";
-                    if (quest.deadline) {
-                        const deadline = quest.deadline.toDate();
-                        const now = new Date();
-                        const tomorrow = new Date(now);
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        
-                        if (deadline.toDateString() === now.toDateString()) {
-                            deadlineText = "Aujourd'hui";
-                        } else if (deadline.toDateString() === tomorrow.toDateString()) {
-                            deadlineText = "Demain";
-                        } else {
-                            deadlineText = deadline.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-                        }
-                    }
-                    
-                    questItem.innerHTML = `
-                        <div class="quest-info">
-                            <h4 class="quest-title">${quest.title}</h4>
-                            <p class="quest-description">${quest.description}</p>
-                            <div class="quest-meta">
-                                <span class="quest-xp"><i class="fas fa-star"></i> ${quest.xp} XP</span>
-                                <span class="quest-deadline"><i class="fas fa-clock"></i> ${deadlineText}</span>
-                            </div>
-                        </div>
-                        <button class="btn-complete" data-id="${doc.id}">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    `;
-                    
-                    // Ajouter au conteneur
-                    dailyQuestsContainer.appendChild(questItem);
-                    
-                    // Ajouter l'événement pour compléter la quête
-                    const completeButton = questItem.querySelector('.btn-complete');
-                    completeButton.addEventListener('click', () => completeQuest(doc.id, quest));
-                });
+                updateXP(userProfile.xp || 240, userProfile.level || 4);
+                
+                console.log('Interface utilisateur mise à jour');
                 
             } catch (error) {
-                console.error("Erreur lors du chargement des quêtes:", error);
+                console.error('Erreur mise à jour interface:', error);
             }
         }
 
-        // Compléter une quête
-        async function completeQuest(questId, quest) {
+        // Mise à jour de l'XP et du niveau
+        function updateXP(xp, level) {
             try {
-                // Mettre à jour la quête
-                await db.collection('quests').doc(questId).update({
-                    completed: true,
-                    completedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    completedBy: auth.currentUser.uid
-                });
+                const xpProgress = document.getElementById('xp-progress');
+                const xpText = document.getElementById('xp-text');
+                const levelBadge = document.getElementById('level-badge');
                 
-                // Ajouter XP à l'utilisateur
-                await db.collection('users').doc(auth.currentUser.uid).update({
-                    xp: firebase.firestore.FieldValue.increment(quest.xp)
-                });
+                const xpForCurrentLevel = 100 * level;
+                const xpInCurrentLevel = xp - (100 * (level - 1));
+                const progressPercent = Math.max(0, Math.min(100, (xpInCurrentLevel / 100) * 100));
                 
-                // Ajouter une activité
-                await db.collection('activity').add({
-                    userId: auth.currentUser.uid,
-                    displayName: auth.currentUser.displayName || auth.currentUser.email,
-                    photoURL: auth.currentUser.photoURL || '',
-                    type: 'quest_completed',
-                    questId: questId,
-                    questTitle: quest.title,
-                    xp: quest.xp,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                // Afficher un message de succès
-                alert(`Quête terminée ! +${quest.xp} XP`);
-                
-                // Recharger les quêtes et les données utilisateur
-                loadQuests();
-                loadUserData(auth.currentUser);
-                loadTeamActivity();
-            } catch (error) {
-                console.error("Erreur lors de la validation de la quête:", error);
-                alert("Erreur: " + error.message);
-            }
-        }
-
-        // Chargement de l'activité d'équipe
-        async function loadTeamActivity() {
-            try {
-                const teamFeed = document.getElementById('team-feed');
-                if (!teamFeed) return;
-                
-                teamFeed.innerHTML = '<div class="loading">Chargement de l\'activité...</div>';
-                
-                // Charger les activités récentes
-                const activityRef = db.collection('activity')
-                    .orderBy('timestamp', 'desc')
-                    .limit(5);
-                    
-                const snapshot = await activityRef.get();
-                
-                // Vider le conteneur
-                teamFeed.innerHTML = '';
-                
-                if (snapshot.empty) {
-                    teamFeed.innerHTML = '<div class="no-activity">Aucune activité récente</div>';
-                    return;
+                if (xpProgress) {
+                    xpProgress.style.width = `${progressPercent}%`;
                 }
                 
-                // Afficher les activités
-                snapshot.forEach(doc => {
-                    const activity = doc.data();
-                    const activityItem = document.createElement('div');
-                    activityItem.className = 'activity-item';
-                    
-                    // Type d'icône selon le type d'activité
-                    let iconClass = 'fa-bell';
-                    let activityType = '';
-                    
-                    switch (activity.type) {
-                        case 'quest_completed':
-                            iconClass = 'fa-check-circle';
-                            activityType = 'quest-completed';
-                            break;
-                        case 'badge_unlocked':
-                            iconClass = 'fa-award';
-                            activityType = 'badge-unlocked';
-                            break;
-                        case 'role_assigned':
-                            iconClass = 'fa-user-tag';
-                            activityType = 'role-assigned';
-                            break;
-                        case 'level_up':
-                            iconClass = 'fa-level-up-alt';
-                            activityType = 'level-up';
-                            break;
-                    }
-                    
-                    // Formater le temps écoulé
-                    let timeAgo = 'à l\'instant';
-                    if (activity.timestamp) {
-                        const now = Date.now();
-                        const timestamp = activity.timestamp.toDate().getTime();
-                        const diffSeconds = Math.floor((now - timestamp) / 1000);
-                        
-                        if (diffSeconds < 60) {
-                            timeAgo = 'à l\'instant';
-                        } else if (diffSeconds < 3600) {
-                            timeAgo = `il y a ${Math.floor(diffSeconds / 60)} min`;
-                        } else if (diffSeconds < 86400) {
-                            timeAgo = `il y a ${Math.floor(diffSeconds / 3600)} h`;
-                        } else {
-                            timeAgo = `il y a ${Math.floor(diffSeconds / 86400)} j`;
-                        }
-                    }
-                    
-                    // Contenu selon le type d'activité
-                    let activityText = '';
-                    
-                    switch (activity.type) {
-                        case 'quest_completed':
-                            activityText = `<strong>${activity.displayName}</strong> a terminé la quête <strong>${activity.questTitle}</strong> (+${activity.xp} XP)`;
-                            break;
-                        case 'badge_unlocked':
-                            activityText = `<strong>${activity.displayName}</strong> a débloqué le badge <strong>${activity.badgeName}</strong>`;
-                            break;
-                        case 'role_assigned':
-                            activityText = `<strong>${activity.displayName}</strong> a été assigné au rôle <strong>${activity.roleName}</strong>`;
-                            break;
-                        case 'level_up':
-                            activityText = `<strong>${activity.displayName}</strong> a atteint le niveau <strong>${activity.level}</strong>`;
-                            break;
-                        default:
-                            activityText = `<strong>${activity.displayName}</strong> a effectué une action`;
-                    }
-                    
-                    activityItem.innerHTML = `
-                        <div class="activity-icon ${activityType}">
-                            <i class="fas ${iconClass}"></i>
-                        </div>
-                        <div class="activity-content">
-                            <p>${activityText}</p>
-                            <span class="activity-time">${timeAgo}</span>
-                        </div>
-                    `;
-                    
-                    // Ajouter au conteneur
-                    teamFeed.appendChild(activityItem);
-                });
+                if (xpText) {
+                    xpText.textContent = `${xp} XP`;
+                }
+                
+                if (levelBadge) {
+                    levelBadge.textContent = level;
+                }
                 
             } catch (error) {
-                console.error("Erreur lors du chargement de l'activité d'équipe:", error);
+                console.error('Erreur mise à jour XP:', error);
             }
         }
 
         // Navigation entre les pages
-        function loadPage(pageName) {
-            // Mettre à jour les boutons de navigation
-            const navButtons = document.querySelectorAll('.nav-btn');
-            navButtons.forEach(button => {
-                if (button.getAttribute('data-page') === pageName) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
+        function navigateToPage(page) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
             
-            // Récupérer le template de la page
-            const template = document.getElementById(`${pageName}-template`);
-            if (!template) {
-                console.error(`Template non trouvé pour la page ${pageName}`);
-                return;
-            }
+            document.querySelector(`[data-page="${page}"]`).classList.add('active');
             
-            // Cloner le contenu du template
-            const content = document.importNode(template.content, true);
+            loadPage(page);
+            currentPage = page;
             
-            // Effacer le contenu actuel
+            console.log('Navigation vers:', page);
+        }
+
+        // Charger une page spécifique
+        function loadPage(page) {
             const mainContent = document.getElementById('main-content');
-            mainContent.innerHTML = '';
             
-            // Ajouter le nouveau contenu
-            mainContent.appendChild(content);
-            
-            // Initialiser la page spécifique
-            switch (pageName) {
+            switch(page) {
                 case 'dashboard':
-                    loadQuests();
-                    loadTeamActivity();
+                    loadDashboard();
                     break;
                 case 'quests':
-                    loadAllQuests();
+                    loadQuests();
                     break;
                 case 'team':
-                    loadTeamMembers();
+                    loadTeam();
                     break;
                 case 'calendar':
                     loadCalendar();
@@ -1955,1442 +1346,157 @@ try {
                 case 'chat':
                     loadChat();
                     break;
+                default:
+                    loadDashboard();
+            }
+        }
+
+        // Charger le tableau de bord
+        function loadDashboard() {
+            const template = document.getElementById('dashboard-template');
+            if (!template) {
+                console.error('Template dashboard non trouvé');
+                return;
             }
             
-            // Faire défiler vers le haut
-            window.scrollTo(0, 0);
+            const content = template.content.cloneNode(true);
+            const mainContent = document.getElementById('main-content');
+            
+            mainContent.innerHTML = '';
+            mainContent.appendChild(content);
+            
+            console.log('Dashboard chargé');
         }
 
-        // Chargement de toutes les quêtes
-        function loadAllQuests() {
-            // À implémenter pour les onglets de quêtes
+        // Charger les quêtes
+        function loadQuests() {
+            const template = document.getElementById('quests-template');
+            if (!template) {
+                console.error('Template quests non trouvé');
+                return;
+            }
+            
+            const content = template.content.cloneNode(true);
+            const mainContent = document.getElementById('main-content');
+            
+            mainContent.innerHTML = '';
+            mainContent.appendChild(content);
+            
+            initQuestTabs();
+            
+            console.log('Quêtes chargées');
         }
 
-        // Chargement des membres de l'équipe
-        function loadTeamMembers() {
-            // À implémenter pour la page Équipe
-        }
-
-        // Chargement du calendrier
-        function loadCalendar() {
-            // À implémenter pour la page Calendrier
-        }
-
-        // Chargement du chat
-        function loadChat() {
-            // À implémenter pour la page Chat
-        }
-
-        // Initialiser les gestionnaires d'événements
-        function initEventListeners() {
-            // Gestionnaire pour les boutons de navigation
-            document.querySelectorAll('.nav-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const page = button.getAttribute('data-page');
-                    loadPage(page);
+        // Initialiser les onglets des quêtes
+        function initQuestTabs() {
+            const tabs = document.querySelectorAll('.quests-page .tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.quests-page .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    const targetContent = document.getElementById(`${tabName}-tab`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    
+                    console.log('Onglet quête activé:', tabName);
                 });
             });
-            
-            // Bouton de notifications
-            document.getElementById('notifications-btn').addEventListener('click', () => {
-                const panel = document.getElementById('notifications-panel');
-                panel.classList.toggle('hidden');
-            });
-            
-            // Fermer les notifications
-            document.getElementById('close-notifications').addEventListener('click', () => {
-                document.getElementById('notifications-panel').classList.add('hidden');
-            });
-            
-            // Gestionnaire global pour les boutons data-page
-            document.addEventListener('click', e => {
-                if (e.target.matches('[data-page]') || e.target.closest('[data-page]')) {
-                    const target = e.target.matches('[data-page]') ? e.target : e.target.closest('[data-page]');
-                    const page = target.getAttribute('data-page');
-                    loadPage(page);
-                    e.preventDefault();
-                }
-                
-                if (e.target.matches('[data-tab]') || e.target.closest('[data-tab]')) {
-                    const target = e.target.matches('[data-tab]') ? e.target : e.target.closest('[data-tab]');
-                    const tab = target.getAttribute('data-tab');
-                    
-                    // Mettre à jour les onglets
-                    const tabs = document.querySelectorAll('.tab');
-                    tabs.forEach(t => {
-                        if (t.getAttribute('data-tab') === tab) {
-                            t.classList.add('active');
-                        } else {
-                            t.classList.remove('active');
-                        }
-                    });
-                    
-                    // Mettre à jour le contenu des onglets
-                    const tabContents = document.querySelectorAll('.tab-content');
-                    tabContents.forEach(c => {
-                        if (c.id === `${tab}-tab`) {
-                            c.classList.add('active');
-                        } else {
-                            c.classList.remove('active');
-                        }
-                    });
-                }
-            });
         }
 
-        // Initialisation après chargement du DOM
-          // Initialisation après chargement du DOM
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialiser les gestionnaires d'événements
-            initEventListeners();
-            
-            // Simuler un chargement
-            const loadingProgress = document.querySelector('.loading-progress');
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 5;
-                loadingProgress.style.width = progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                }
-            }, 50);
-        });
-
-        // Créer des données de test si nécessaire
-        async function createTestData() {
-            try {
-                // Utilisateurs
-                const usersRef = db.collection('users');
-                const usersSnapshot = await usersRef.get();
-                
-                if (usersSnapshot.empty) {
-                    // Créer des utilisateurs de test
-                    const users = [
-                        {
-                            displayName: "Allan Boehme",
-                            email: "alan.boehme61@gmail.com",
-                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v1.png",
-                            xp: 1200,
-                            badges: ["founder", "mentor", "innovator"],
-                            roles: [
-                                { role: "mentoring", mastery: 85 },
-                                { role: "organization", mastery: 90 }
-                            ]
-                        },
-                        {
-                            displayName: "Paris Amélie",
-                            email: "paris@example.com",
-                            photoURL: "https://img.icons8.com/color/96/000000/user-female-circle--v1.png",
-                            xp: 850,
-                            badges: ["communicator", "creative"],
-                            roles: [
-                                { role: "content", mastery: 75 },
-                                { role: "social", mastery: 80 }
-                            ]
-                        },
-                        {
-                            displayName: "Red Houlette",
-                            email: "red@example.com",
-                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v2.png",
-                            xp: 920,
-                            badges: ["team_player", "includer"],
-                            roles: [
-                                { role: "social", mastery: 70 },
-                                { role: "reviews", mastery: 65 }
-                            ]
-                        },
-                        {
-                            displayName: "Léo Mercier",
-                            email: "leo@example.com",
-                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v3.png",
-                            xp: 780,
-                            badges: ["builder", "technical"],
-                            roles: [
-                                { role: "maintenance", mastery: 90 },
-                                { role: "inventory", mastery: 65 }
-                            ]
-                        },
-                        {
-                            displayName: "Polar Caron",
-                            email: "polar@example.com",
-                            photoURL: "https://img.icons8.com/color/96/000000/user-male-circle--v4.png",
-                            xp: 950,
-                            badges: ["organizer", "helper"],
-                            roles: [
-                                { role: "organization", mastery: 85 },
-                                { role: "partnerships", mastery: 75 }
-                            ]
-                        }
-                    ];
-                    
-                    // Ajouter les utilisateurs
-                    for (const user of users) {
-                        await usersRef.add({
-                            ...user,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-                }
-                
-                // Badges
-                const badgesRef = db.collection('badges');
-                const badgesSnapshot = await badgesRef.get();
-                
-                if (badgesSnapshot.empty) {
-                    // Créer des badges de test
-                    const badges = [
-                        {
-                            id: "founder",
-                            name: "Fondateur",
-                            description: "A participé à la fondation de SYNERGIA",
-                            icon: "crown",
-                            color: "#ffd700",
-                            xpBonus: 100,
-                            requirements: { special: true }
-                        },
-                        {
-                            id: "team_player",
-                            name: "Esprit d'équipe",
-                            description: "A participé à 10 événements d'équipe",
-                            icon: "users",
-                            color: "#26c6da",
-                            xpBonus: 50,
-                            requirements: { events: 10 }
-                        },
-                        {
-                            id: "communicator",
-                            name: "Communicateur",
-                            description: "A créé 15 messages dans le chat d'équipe",
-                            icon: "comments",
-                            color: "#29b6f6",
-                            xpBonus: 30,
-                            requirements: { messages: 15 }
-                        },
-                        {
-                            id: "builder",
-                            name: "Constructeur",
-                            description: "A réalisé 20 réparations ou améliorations",
-                            icon: "hammer",
-                            color: "#ef5350",
-                            xpBonus: 40,
-                            requirements: { repairs: 20 }
-                        },
-                        {
-                            id: "creative",
-                            name: "Créatif",
-                            description: "A créé 10 contenus originaux",
-                            icon: "paint-brush",
-                            color: "#66bb6a",
-                            xpBonus: 35,
-                            requirements: { content: 10 }
-                        }
-                    ];
-                    
-                    // Ajouter les badges
-                    for (const badge of badges) {
-                        await badgesRef.doc(badge.id).set(badge);
-                    }
-                }
-                
-                console.log("Données de test créées avec succès");
-            } catch (error) {
-                console.error("Erreur lors de la création des données de test:", error);
-            }
-        }
-
-        // Créer des données de test si l'utilisateur est administrateur
-        auth.onAuthStateChanged(async (user) => {
-            if (user && user.email === "alan.boehme61@gmail.com") {
-                // Vérifier si l'utilisateur est admin
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                if (userDoc.exists && userDoc.data().role === "admin") {
-                    createTestData();
-                }
-            }
-        });
-        // Fonctionnalités d'administration
-let isAdmin = false;
-
-// Vérifier si l'utilisateur est administrateur
-auth.onAuthStateChanged(async (user) => {
-    if (!user) return;
-    
-    console.log("Vérification des droits admin pour:", user.uid);
-    
-    // Vérifier directement si l'ID correspond
-    if (user.uid === "3LlANr1IvlWkwKLL9iJJw36EF3d2") {
-        console.log("ID reconnu comme admin!");
-        isAdmin = true;
-        
-        // Afficher le bouton d'administration
-        const adminBtn = document.getElementById('admin-btn');
-        if (adminBtn) {
-            adminBtn.classList.remove('hidden');
-        } else {
-            console.error("Bouton admin non trouvé dans le DOM");
-        }
-        
-        // Initialiser le panneau d'administration
-        if (typeof initAdminPanel === 'function') {
-            initAdminPanel();
-        } else {
-            console.error("Fonction initAdminPanel non définie");
-        }
-    } else {
-        // Essai avec Firestore comme avant
-        try {
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            console.log("Document utilisateur:", userDoc.exists ? "trouvé" : "non trouvé");
-            if (userDoc.exists) {
-                console.log("Données:", userDoc.data());
-            }
-            
-            isAdmin = userDoc.exists && (userDoc.data().role === 'admin' || user.email === 'alan.boehme61@gmail.com');
-            console.log("Est admin:", isAdmin);
-            
-            // Afficher/masquer le bouton d'administration
-            const adminBtn = document.getElementById('admin-btn');
-            if (adminBtn) {
-                adminBtn.classList.toggle('hidden', !isAdmin);
-            } else {
-                console.error("Bouton admin non trouvé dans le DOM");
-            }
-            
-            // Si admin, initialiser le panneau d'administration
-            if (isAdmin && typeof initAdminPanel === 'function') {
-                initAdminPanel();
-            }
-        } catch (error) {
-            console.error("Erreur lors de la vérification des droits admin:", error);
-        }
-    }
-});
-
-
-// Initialiser le panneau d'administration
-function initAdminPanel() {
-    // Gestionnaire pour le bouton d'administration
-    document.getElementById('admin-btn').addEventListener('click', () => {
-        document.getElementById('admin-panel').classList.remove('hidden');
-        loadAdminData('quests'); // Chargement par défaut
-    });
-    
-    // Fermer le panneau
-    document.getElementById('close-admin').addEventListener('click', () => {
-        document.getElementById('admin-panel').classList.add('hidden');
-    });
-    
-    // Gestionnaire pour les onglets admin
-    document.querySelectorAll('.admin-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Mettre à jour les onglets actifs
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // Mettre à jour le contenu actif
-            const tabName = tab.getAttribute('data-admin-tab');
-            document.querySelectorAll('.admin-tab-content').forEach(content => {
-                content.classList.toggle('active', content.id === `admin-${tabName}`);
-            });
-            
-            // Charger les données
-            loadAdminData(tabName);
-        });
-    });
-    
-    // Gestionnaire pour le formulaire de quête
-    document.getElementById('add-quest-btn').addEventListener('click', () => {
-        openQuestForm();
-    });
-    
-    document.getElementById('close-quest-form').addEventListener('click', () => {
-        document.getElementById('quest-form-modal').classList.add('hidden');
-    });
-    
-    document.getElementById('quest-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await saveQuest();
-    });
-    
-    // Gestionnaire pour le formulaire utilisateur
-    document.getElementById('add-user-btn').addEventListener('click', () => {
-        openUserForm();
-    });
-    
-    document.getElementById('close-user-form').addEventListener('click', () => {
-        document.getElementById('user-form-modal').classList.add('hidden');
-    });
-    
-    document.getElementById('user-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await saveUser();
-    });
-    
-    // Autres gestionnaires...
-    document.getElementById('add-badge-btn').addEventListener('click', () => {
-        alert('Fonctionnalité en cours de développement');
-    });
-    
-    document.getElementById('add-role-btn').addEventListener('click', () => {
-        alert('Fonctionnalité en cours de développement');
-    });
-}
-
-// Charger les données d'administration
-async function loadAdminData(tabName) {
-    try {
-        switch (tabName) {
-            case 'quests':
-                await loadAdminQuests();
-                break;
-            case 'users':
-                await loadAdminUsers();
-                break;
-            case 'badges':
-                await loadAdminBadges();
-                break;
-            case 'roles':
-                await loadAdminRoles();
-                break;
-        }
-    } catch (error) {
-        console.error(`Erreur lors du chargement des données admin (${tabName}):`, error);
-    }
-}
-
-// Charger les quêtes pour l'admin
-async function loadAdminQuests() {
-    const questsList = document.getElementById('admin-quests-list');
-    questsList.innerHTML = '<div class="loading">Chargement des quêtes...</div>';
-    
-    try {
-        const snapshot = await db.collection('quests').get();
-        
-        questsList.innerHTML = '';
-        
-        if (snapshot.empty) {
-            questsList.innerHTML = '<div class="no-data">Aucune quête trouvée</div>';
-            return;
-        }
-        
-        snapshot.forEach(doc => {
-            const quest = doc.data();
-            const questItem = document.createElement('div');
-            questItem.className = 'admin-item';
-            
-            // Type de quête
-            let typeLabel = '';
-            switch (quest.type) {
-                case 'daily': typeLabel = 'Quotidienne'; break;
-                case 'weekly': typeLabel = 'Hebdomadaire'; break;
-                case 'special': typeLabel = 'Spéciale'; break;
-                default: typeLabel = quest.type;
-            }
-            
-            // Deadline
-            let deadline = '';
-            if (quest.deadline) {
-                const date = quest.deadline.toDate();
-                deadline = date.toLocaleDateString('fr-FR');
-            }
-            
-            questItem.innerHTML = `
-                <div class="admin-item-info">
-                    <h4 class="admin-item-title">${quest.title}</h4>
-                    <div class="admin-item-subtitle">
-                        ${typeLabel} • ${quest.xp} XP ${deadline ? '• Échéance: ' + deadline : ''}
-                    </div>
+        // Charger les autres pages (placeholder)
+        function loadTeam() {
+            document.getElementById('main-content').innerHTML = `
+                <div class="team-page">
+                    <h2>Équipe</h2>
+                    <p>Gestion de l'équipe - En cours de développement</p>
                 </div>
-                <div class="admin-actions">
-                    <button class="admin-btn edit-btn" data-id="${doc.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="admin-btn delete-btn" data-id="${doc.id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
+            `;
+        }
+
+        function loadCalendar() {
+            document.getElementById('main-content').innerHTML = `
+                <div class="calendar-page">
+                    <h2>Planning</h2>
+                    <p>Calendrier et planification - En cours de développement</p>
+                </div>
+            `;
+        }
+
+        function loadChat() {
+            document.getElementById('main-content').innerHTML = `
+                <div class="chat-page">
+                    <h2>Chat</h2>
+                    <p>Messagerie d'équipe - En cours de développement</p>
+                </div>
+            `;
+        }
+
+        // Fonction pour compléter une quête
+        function completeQuest(questId) {
+            // Animation de succès
+            showQuestCompletionModal(questId);
+            
+            // Mettre à jour l'XP
+            if (userProfile) {
+                const xpGain = questId <= 3 ? 10 : questId <= 6 ? 50 : 100;
+                userProfile.xp = (userProfile.xp || 240) + xpGain;
+                updateUserInterface();
+            }
+        }
+
+        // Afficher un modal de réussite
+        function showQuestCompletionModal(questId) {
+            const xpGain = questId <= 3 ? 10 : questId <= 6 ? 50 : 100;
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="success-header">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Quête terminée !</h3>
+                    </div>
+                    <div class="success-body">
+                        <h4>Excellent travail !</h4>
+                        <p class="xp-gained">+${xpGain} XP gagné !</p>
+                        <button class="btn-primary" onclick="this.closest('.modal').remove()">Continuer</button>
+                    </div>
                 </div>
             `;
             
-            questsList.appendChild(questItem);
+            document.body.appendChild(modal);
             
-            // Ajouter les gestionnaires d'événements
-            questItem.querySelector('.edit-btn').addEventListener('click', () => {
-                openQuestForm(doc.id, quest);
-            });
-            
-            questItem.querySelector('.delete-btn').addEventListener('click', async () => {
-                if (confirm('Êtes-vous sûr de vouloir supprimer cette quête ?')) {
-                    await db.collection('quests').doc(doc.id).delete();
-                    loadAdminQuests();
-                }
-            });
-        });
-    } catch (error) {
-        console.error("Erreur lors du chargement des quêtes pour l'admin:", error);
-        questsList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
-    }
-}
-
-// Formulaire de quête
-async function openQuestForm(questId = null, questData = null) {
-    const modal = document.getElementById('quest-form-modal');
-    const form = document.getElementById('quest-form');
-    const titleInput = document.getElementById('quest-title-input');
-    const descriptionInput = document.getElementById('quest-description-input');
-    const typeInput = document.getElementById('quest-type-input');
-    const xpInput = document.getElementById('quest-xp-input');
-    const deadlineInput = document.getElementById('quest-deadline-input');
-    const assigneesContainer = document.getElementById('quest-assignees');
-    
-    // Titre du formulaire
-    document.getElementById('quest-form-title').textContent = questId ? 'Modifier la quête' : 'Ajouter une quête';
-    
-    // Reset du formulaire
-    form.reset();
-    document.getElementById('quest-id').value = questId || '';
-    
-    // Remplir avec les données existantes si modification
-    if (questId && questData) {
-        titleInput.value = questData.title || '';
-        descriptionInput.value = questData.description || '';
-        typeInput.value = questData.type || 'daily';
-        xpInput.value = questData.xp || 10;
-        
-        if (questData.deadline) {
-            const date = questData.deadline.toDate();
-            deadlineInput.value = date.toISOString().split('T')[0];
-        }
-    }
-    
-    // Charger les utilisateurs pour les assignations
-    assigneesContainer.innerHTML = '<div class="loading">Chargement des utilisateurs...</div>';
-    
-    try {
-        const usersSnapshot = await db.collection('users').get();
-        assigneesContainer.innerHTML = '';
-        
-        if (!usersSnapshot.empty) {
-            const assignedUsers = questData?.assignedTo || [];
-            
-            usersSnapshot.forEach(doc => {
-                const user = doc.data();
-                const isChecked = assignedUsers.includes(doc.id);
-                
-                const checkbox = document.createElement('div');
-                checkbox.className = 'checkbox-item';
-                checkbox.innerHTML = `
-                    <input type="checkbox" id="user-${doc.id}" name="assignees" value="${doc.id}" ${isChecked ? 'checked' : ''}>
-                    <label for="user-${doc.id}">${user.displayName || user.email}</label>
-                `;
-                
-                assigneesContainer.appendChild(checkbox);
-            });
-        }
-    } catch (error) {
-        console.error("Erreur lors du chargement des utilisateurs:", error);
-        assigneesContainer.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
-    }
-    
-    // Afficher la modale
-    modal.classList.remove('hidden');
-}
-
-// Enregistrer une quête
-async function saveQuest() {
-    const questId = document.getElementById('quest-id').value;
-    const title = document.getElementById('quest-title-input').value;
-    const description = document.getElementById('quest-description-input').value;
-    const type = document.getElementById('quest-type-input').value;
-    const xp = parseInt(document.getElementById('quest-xp-input').value);
-    const deadlineValue = document.getElementById('quest-deadline-input').value;
-    
-    // Récupérer les utilisateurs assignés
-    const assignees = [];
-    document.querySelectorAll('input[name="assignees"]:checked').forEach(checkbox => {
-        assignees.push(checkbox.value);
-    });
-    
-    // Préparer les données
-    const questData = {
-        title,
-        description,
-        type,
-        xp,
-        assignedTo: assignees,
-        completed: false,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    // Ajouter la deadline si spécifiée
-    if (deadlineValue) {
-        questData.deadline = firebase.firestore.Timestamp.fromDate(new Date(deadlineValue));
-    }
-    
-    try {
-        if (questId) {
-            // Mise à jour
-            await db.collection('quests').doc(questId).update(questData);
-        } else {
-            // Création
-            questData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-            await db.collection('quests').add(questData);
-        }
-        
-        // Fermer la modale et recharger les quêtes
-        document.getElementById('quest-form-modal').classList.add('hidden');
-        loadAdminQuests();
-        
-        // Notifier l'utilisateur
-        alert(questId ? 'Quête mise à jour avec succès' : 'Quête créée avec succès');
-    } catch (error) {
-        console.error("Erreur lors de l'enregistrement de la quête:", error);
-        alert(`Erreur: ${error.message}`);
-    }
-}
-
-// Charger les utilisateurs pour l'admin
-async function loadAdminUsers() {
-    const usersList = document.getElementById('admin-users-list');
-    usersList.innerHTML = '<div class="loading">Chargement des utilisateurs...</div>';
-    
-    try {
-        const snapshot = await db.collection('users').get();
-        
-        usersList.innerHTML = '';
-        
-        if (snapshot.empty) {
-            usersList.innerHTML = '<div class="no-data">Aucun utilisateur trouvé</div>';
-            return;
-        }
-        
-        snapshot.forEach(doc => {
-            const user = doc.data();
-            const userItem = document.createElement('div');
-            userItem.className = 'admin-item';
-            
-            userItem.innerHTML = `
-                <div class="admin-item-info">
-                    <h4 class="admin-item-title">${user.displayName || user.email}</h4>
-                    <div class="admin-item-subtitle">
-                        ${user.xp || 0} XP • ${user.email}
-                    </div>
-                </div>
-                <div class="admin-actions">
-                    <button class="admin-btn edit-btn" data-id="${doc.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                </div>
-            `;
-            
-            usersList.appendChild(userItem);
-            
-            // Ajouter le gestionnaire d'événement
-            userItem.querySelector('.edit-btn').addEventListener('click', () => {
-                openUserForm(doc.id, user);
-            });
-        });
-    } catch (error) {
-        console.error("Erreur lors du chargement des utilisateurs pour l'admin:", error);
-        usersList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
-    }
-}
-
-// Formulaire utilisateur
-async function openUserForm(userId = null, userData = null) {
-    const modal = document.getElementById('user-form-modal');
-    const form = document.getElementById('user-form');
-    const nameInput = document.getElementById('user-name-input');
-    const emailInput = document.getElementById('user-email-input');
-    const xpInput = document.getElementById('user-xp-input');
-    const rolesContainer = document.getElementById('user-roles');
-    
-    // Titre du formulaire
-    document.getElementById('user-form-title').textContent = userId ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur';
-    
-    // Reset du formulaire
-    form.reset();
-    document.getElementById('user-id').value = userId || '';
-    
-    // Remplir avec les données existantes si modification
-    if (userId && userData) {
-        nameInput.value = userData.displayName || '';
-        emailInput.value = userData.email || '';
-        xpInput.value = userData.xp || 0;
-    }
-    
-    // Charger les rôles disponibles
-    rolesContainer.innerHTML = '<div class="loading">Chargement des rôles...</div>';
-    
-    try {
-        const rolesSnapshot = await db.collection('roles').get();
-        rolesContainer.innerHTML = '';
-        
-        if (rolesSnapshot.empty) {
-            // Créer des rôles par défaut si aucun n'existe
-            const defaultRoles = [
-                { id: 'maintenance', name: 'Entretien & Maintenance' },
-                { id: 'reviews', name: 'Gestion des Avis' },
-                { id: 'inventory', name: 'Gestion des Stocks' },
-                { id: 'organization', name: 'Organisation Interne' },
-                { id: 'content', name: 'Création de Contenu' },
-                { id: 'mentoring', name: 'Mentorat & Formation' },
-                { id: 'partnerships', name: 'Partenariats' },
-                { id: 'social', name: 'Communication & Réseaux Sociaux' }
-            ];
-            
-            for (const role of defaultRoles) {
-                // Afficher les rôles par défaut
-                const checkbox = document.createElement('div');
-                checkbox.className = 'checkbox-item';
-                
-                const isAssigned = userData?.roles?.some(r => r.role === role.id);
-                const mastery = isAssigned ? userData.roles.find(r => r.role === role.id).mastery || 0 : 0;
-                
-                checkbox.innerHTML = `
-                    <input type="checkbox" id="role-${role.id}" name="roles" value="${role.id}" ${isAssigned ? 'checked' : ''}>
-                    <label for="role-${role.id}">${role.name}</label>
-                    <input type="number" placeholder="Maîtrise %" min="0" max="100" value="${mastery}" class="mastery-input" data-role="${role.id}">
-                `;
-                
-                rolesContainer.appendChild(checkbox);
-            }
-        } else {
-            rolesSnapshot.forEach(doc => {
-                const role = doc.data();
-                const checkbox = document.createElement('div');
-                checkbox.className = 'checkbox-item';
-                
-                const isAssigned = userData?.roles?.some(r => r.role === doc.id);
-                const mastery = isAssigned ? userData.roles.find(r => r.role === doc.id).mastery || 0 : 0;
-                
-                checkbox.innerHTML = `
-                    <input type="checkbox" id="role-${doc.id}" name="roles" value="${doc.id}" ${isAssigned ? 'checked' : ''}>
-                    <label for="role-${doc.id}">${role.name}</label>
-                    <input type="number" placeholder="Maîtrise %" min="0" max="100" value="${mastery}" class="mastery-input" data-role="${doc.id}">
-                `;
-                
-                rolesContainer.appendChild(checkbox);
-            });
-        }
-    } catch (error) {
-        console.error("Erreur lors du chargement des rôles:", error);
-        rolesContainer.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
-    }
-    
-    // Afficher la modale
-    modal.classList.remove('hidden');
-}
-
-// Enregistrer un utilisateur
-async function saveUser() {
-    const userId = document.getElementById('user-id').value;
-    const displayName = document.getElementById('user-name-input').value;
-    const email = document.getElementById('user-email-input').value;
-    const xp = parseInt(document.getElementById('user-xp-input').value);
-    
-    // Récupérer les rôles assignés
-    const roles = [];
-    document.querySelectorAll('input[name="roles"]:checked').forEach(checkbox => {
-        const roleId = checkbox.value;
-        const masteryInput = document.querySelector(`.mastery-input[data-role="${roleId}"]`);
-        const mastery = parseInt(masteryInput.value) || 0;
-        
-        roles.push({
-            role: roleId,
-            mastery: mastery,
-            assignedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-    });
-    
-    // Préparer les données
-    const userData = {
-        displayName,
-        email,
-        xp,
-        roles,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    try {
-        if (userId) {
-            // Mise à jour
-            await db.collection('users').doc(userId).update(userData);
-        } else {
-            // Création (pour un nouvel utilisateur, il faut aussi créer le compte auth)
-            userData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-            
-            // Pour la création d'un nouvel utilisateur, il faudrait utiliser les fonctions Firebase
-            // mais cela nécessite des Cloud Functions. Pour l'instant, nous allons juste créer le document.
-            const docRef = await db.collection('users').add(userData);
-        }
-        
-        // Fermer la modale et recharger les utilisateurs
-        document.getElementById('user-form-modal').classList.add('hidden');
-        loadAdminUsers();
-        
-        // Notifier l'utilisateur
-        alert(userId ? 'Utilisateur mis à jour avec succès' : 'Utilisateur créé avec succès');
-    } catch (error) {
-        console.error("Erreur lors de l'enregistrement de l'utilisateur:", error);
-        alert(`Erreur: ${error.message}`);
-    }
-}
-
-// Charger les badges pour l'admin
-async function loadAdminBadges() {
-    const badgesList = document.getElementById('admin-badges-list');
-    badgesList.innerHTML = '<div class="loading">Chargement des badges...</div>';
-    
-    try {
-        const snapshot = await db.collection('badges').get();
-        
-        badgesList.innerHTML = '';
-        
-        if (snapshot.empty) {
-            badgesList.innerHTML = '<div class="no-data">Aucun badge trouvé</div>';
-            return;
-        }
-        
-        snapshot.forEach(doc => {
-            const badge = doc.data();
-            const badgeItem = document.createElement('div');
-            badgeItem.className = 'admin-item';
-            
-            badgeItem.innerHTML = `
-                <div class="admin-item-info">
-                    <h4 class="admin-item-title">${badge.name}</h
-                                    <div class="admin-item-info">
-                    <h4 class="admin-item-title">${badge.name}</h4>
-                    <div class="admin-item-subtitle">
-                        ${badge.description} • +${badge.xpBonus} XP
-                    </div>
-                </div>
-                <div class="admin-actions">
-                    <button class="admin-btn edit-btn" data-id="${doc.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="admin-btn delete-btn" data-id="${doc.id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            
-            badgesList.appendChild(badgeItem);
-            
-            // Ajouter les gestionnaires d'événements
-            badgeItem.querySelector('.edit-btn').addEventListener('click', () => {
-                // À implémenter: formulaire d'édition de badge
-                alert("Fonction d'édition de badge en cours de développement");
-            });
-            
-            badgeItem.querySelector('.delete-btn').addEventListener('click', async () => {
-                if (confirm('Êtes-vous sûr de vouloir supprimer ce badge ?')) {
-                    await db.collection('badges').doc(doc.id).delete();
-                    loadAdminBadges();
-                }
-            });
-        });
-    } catch (error) {
-        console.error("Erreur lors du chargement des badges pour l'admin:", error);
-        badgesList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
-    }
-}
-
-// Charger les rôles pour l'admin
-async function loadAdminRoles() {
-    const rolesList = document.getElementById('admin-roles-list');
-    rolesList.innerHTML = '<div class="loading">Chargement des rôles...</div>';
-    
-    try {
-        let snapshot = await db.collection('roles').get();
-        
-        rolesList.innerHTML = '';
-        
-        // Si aucun rôle n'existe, créer les rôles par défaut
-        if (snapshot.empty) {
-            const defaultRoles = [
-                { 
-                    id: 'maintenance',
-                    name: 'Entretien & Maintenance',
-                    description: 'Surveiller et entretenir l\'état général des espaces, réaliser des réparations techniques',
-                    icon: 'wrench',
-                    color: '#ef5350'
-                },
-                { 
-                    id: 'reviews',
-                    name: 'Gestion des Avis',
-                    description: 'Surveiller et analyser les avis sur toutes les plateformes, répondre aux avis',
-                    icon: 'star',
-                    color: '#ffca28'
-                },
-                { 
-                    id: 'inventory',
-                    name: 'Gestion des Stocks',
-                    description: 'Réaliser le suivi régulier des consommables et matériel',
-                    icon: 'box',
-                    color: '#66bb6a'
-                },
-                { 
-                    id: 'organization',
-                    name: 'Organisation Interne',
-                    description: 'Coordonner la répartition des sessions, organiser et suivre les demandes de congés',
-                    icon: 'calendar-alt',
-                    color: '#26c6da'
-                },
-                { 
-                    id: 'content',
-                    name: 'Création de Contenu',
-                    description: 'Créer des supports de communication, concevoir des contenus utiles pour l\'équipe',
-                    icon: 'paint-brush',
-                    color: '#ab47bc'
-                },
-                { 
-                    id: 'mentoring',
-                    name: 'Mentorat & Formation',
-                    description: 'Accueillir et accompagner les nouveaux arrivants, organiser des formations internes',
-                    icon: 'graduation-cap',
-                    color: '#7e57c2'
-                },
-                { 
-                    id: 'partnerships',
-                    name: 'Partenariats',
-                    description: 'Identifier et entretenir des relations avec les partenaires locaux',
-                    icon: 'handshake',
-                    color: '#ec407a'
-                },
-                { 
-                    id: 'social',
-                    name: 'Communication & Réseaux Sociaux',
-                    description: 'Gérer les comptes sur les différents réseaux sociaux, créer et publier des contenus',
-                    icon: 'hashtag',
-                    color: '#29b6f6'
-                }
-            ];
-            
-            // Créer les rôles
-            for (const role of defaultRoles) {
-                await db.collection('roles').doc(role.id).set(role);
-            }
-            
-            // Recharger les données
-            snapshot = await db.collection('roles').get();
-        }
-        
-        snapshot.forEach(doc => {
-            const role = doc.data();
-            const roleItem = document.createElement('div');
-            roleItem.className = 'admin-item';
-            
-            roleItem.innerHTML = `
-                <div class="admin-item-info">
-                    <h4 class="admin-item-title">${role.name}</h4>
-                    <div class="admin-item-subtitle">
-                        ${role.description || ''}
-                    </div>
-                </div>
-                <div class="admin-actions">
-                    <button class="admin-btn edit-btn" data-id="${doc.id}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                </div>
-            `;
-            
-            rolesList.appendChild(roleItem);
-            
-            // Ajouter le gestionnaire d'événement
-            roleItem.querySelector('.edit-btn').addEventListener('click', () => {
-                // À implémenter: formulaire d'édition de rôle
-                alert("Fonction d'édition de rôle en cours de développement");
-            });
-        });
-    } catch (error) {
-        console.error("Erreur lors du chargement des rôles pour l'admin:", error);
-        rolesList.innerHTML = `<div class="error">Erreur: ${error.message}</div>`;
-    }
-}
-
-// Fonction pour attribuer un badge à un utilisateur
-async function assignBadgeToUser(userId, badgeId) {
-    try {
-        // Récupérer les données utilisateur
-        const userDoc = await db.collection('users').doc(userId).get();
-        if (!userDoc.exists) {
-            throw new Error("Utilisateur non trouvé");
-        }
-        
-        // Récupérer les données du badge
-        const badgeDoc = await db.collection('badges').doc(badgeId).get();
-        if (!badgeDoc.exists) {
-            throw new Error("Badge non trouvé");
-        }
-        
-        const userData = userDoc.data();
-        const badgeData = badgeDoc.data();
-        
-        // Vérifier si l'utilisateur a déjà ce badge
-        const userBadges = userData.badges || [];
-        if (userBadges.includes(badgeId)) {
-            return false; // Déjà attribué
-        }
-        
-        // Mise à jour des données utilisateur
-        await db.collection('users').doc(userId).update({
-            badges: firebase.firestore.FieldValue.arrayUnion(badgeId),
-            xp: firebase.firestore.FieldValue.increment(badgeData.xpBonus || 0)
-        });
-        
-        // Créer une activité
-        await db.collection('activity').add({
-            userId: userId,
-            displayName: userData.displayName || userData.email,
-            photoURL: userData.photoURL || '',
-            type: 'badge_unlocked',
-            badgeId: badgeId,
-            badgeName: badgeData.name,
-            xpBonus: badgeData.xpBonus || 0,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
-        return true;
-    } catch (error) {
-        console.error("Erreur lors de l'attribution du badge:", error);
-        throw error;
-    }
-}
-
-// Fonction pour attribuer un rôle à un utilisateur
-async function assignRoleToUser(userId, roleId, mastery = 0) {
-    try {
-        // Récupérer les données utilisateur
-        const userDoc = await db.collection('users').doc(userId).get();
-        if (!userDoc.exists) {
-            throw new Error("Utilisateur non trouvé");
-        }
-        
-        // Récupérer les données du rôle
-        const roleDoc = await db.collection('roles').doc(roleId).get();
-        if (!roleDoc.exists) {
-            throw new Error("Rôle non trouvé");
-        }
-        
-        const userData = userDoc.data();
-        const roleData = roleDoc.data();
-        
-        // Vérifier si l'utilisateur a déjà ce rôle
-        const userRoles = userData.roles || [];
-        const existingRoleIndex = userRoles.findIndex(r => r.role === roleId);
-        
-        if (existingRoleIndex >= 0) {
-            // Mettre à jour le rôle existant
-            userRoles[existingRoleIndex].mastery = mastery;
-            userRoles[existingRoleIndex].updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-        } else {
-            // Ajouter le nouveau rôle
-            userRoles.push({
-                role: roleId,
-                mastery: mastery,
-                assignedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            // Créer une activité pour la nouvelle attribution
-            await db.collection('activity').add({
-                userId: userId,
-                displayName: userData.displayName || userData.email,
-                photoURL: userData.photoURL || '',
-                type: 'role_assigned',
-                roleId: roleId,
-                roleName: roleData.name,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        }
-        
-        // Mise à jour des données utilisateur
-        await db.collection('users').doc(userId).update({
-            roles: userRoles
-        });
-        
-        return true;
-    } catch (error) {
-        console.error("Erreur lors de l'attribution du rôle:", error);
-        throw error;
-    }
-}
-// Code simple pour afficher le bouton d'administration
-document.addEventListener('DOMContentLoaded', () => {
-    // Vérifier si l'utilisateur est connecté
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            console.log("Utilisateur connecté:", user.email);
-            
-            // Vérifier le rôle dans Firestore
-            db.collection('users').doc(user.uid).get().then(doc => {
-                if (doc.exists) {
-                    const userData = doc.data();
-                    console.log("Données utilisateur:", userData);
-                    
-                    if (userData.role === 'admin') {
-                        console.log("L'utilisateur est admin!");
-                        
-                        // Créer le bouton d'administration s'il n'existe pas
-                        let adminBtn = document.getElementById('admin-btn');
-                        if (!adminBtn) {
-                            adminBtn = document.createElement('button');
-                            adminBtn.id = 'admin-btn';
-                            adminBtn.className = 'admin-fab';
-                            adminBtn.innerHTML = '<i class="fas fa-cog"></i>';
-                            document.body.appendChild(adminBtn);
-
-
-
-// Remplacez le CSS mal placé par ce code JavaScript :
-const adminStyle = document.createElement('style');
-adminStyle.textContent = `
-.admin-fab {
-    width: 65px;
-    height: 65px;
-    font-size: 1.8rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    animation: pulse-admin 2s infinite;
-}
-
-@keyframes pulse-admin {
-    0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
-}
-
-.admin-tabs {
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    padding: 10px 0;
-}
-`;
-document.head.appendChild(adminStyle);
-
-
-                            // Ajouter du style
-                            const style = document.createElement('style');
-                            style.textContent = `
-                                .admin-fab {
-                                    position: fixed;
-                                    bottom: 80px;
-                                    right: 20px;
-                                    width: 60px;
-                                    height: 60px;
-                                    border-radius: 50%;
-                                    background-color: #26c6da;
-                                    color: white;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    font-size: 1.5rem;
-                                    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-                                    z-index: 1000;
-                                    cursor: pointer;
-                                }
-                            `;
-                            document.head.appendChild(style);
-                            
-                            // Ajouter un gestionnaire d'événement
-                            adminBtn.addEventListener('click', () => {
-                                alert('Panneau d\'administration - Fonctionnalité en cours de développement');
-                            });
-                        } else {
-                            adminBtn.classList.remove('hidden');
-                        }
-                    }
-                }
-            }).catch(error => {
-                console.error("Erreur lors de la récupération des données utilisateur:", error);
-            });
-        }
-    });
-});
-
-    </script>
-    <!-- Panneau d'administration (visible uniquement pour les admin) -->
-<div id="admin-panel" class="modal hidden">
-    <div class="modal-content admin-modal">
-        <div class="modal-header">
-            <h3>Panneau d'administration</h3>
-            <button id="close-admin" class="icon-btn">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-admin-tab="quests">Quêtes</button>
-                <button class="admin-tab" data-admin-tab="users">Utilisateurs</button>
-                <button class="admin-tab" data-admin-tab="badges">Badges</button>
-                <button class="admin-tab" data-admin-tab="roles">Rôles</button>
-            </div>
-            
-            <div class="admin-tab-content active" id="admin-quests">
-                <h4>Gestion des quêtes</h4>
-                <button id="add-quest-btn" class="btn-primary">Ajouter une quête</button>
-                <div id="admin-quests-list" class="admin-list">
-                    <!-- Liste des quêtes -->
-                </div>
-            </div>
-            
-            <div class="admin-tab-content" id="admin-users">
-                <h4>Gestion des utilisateurs</h4>
-                <button id="add-user-btn" class="btn-primary">Ajouter un utilisateur</button>
-                <div id="admin-users-list" class="admin-list">
-                    <!-- Liste des utilisateurs -->
-                </div>
-            </div>
-            
-            <div class="admin-tab-content" id="admin-badges">
-                <h4>Gestion des badges</h4>
-                <button id="add-badge-btn" class="btn-primary">Ajouter un badge</button>
-                <div id="admin-badges-list" class="admin-list">
-                    <!-- Liste des badges -->
-                </div>
-            </div>
-            
-            <div class="admin-tab-content" id="admin-roles">
-                <h4>Gestion des rôles</h4>
-                <button id="add-role-btn" class="btn-primary">Ajouter un rôle</button>
-                <div id="admin-roles-list" class="admin-list">
-                    <!-- Liste des rôles -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal pour ajouter/modifier une quête -->
-<div id="quest-form-modal" class="modal hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="quest-form-title">Ajouter une quête</h3>
-            <button id="close-quest-form" class="icon-btn">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="quest-form">
-                <input type="hidden" id="quest-id">
-                <div class="form-group">
-                    <label for="quest-title-input">Titre</label>
-                    <input type="text" id="quest-title-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="quest-description-input">Description</label>
-                    <textarea id="quest-description-input" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="quest-type-input">Type</label>
-                    <select id="quest-type-input" required>
-                        <option value="daily">Quotidienne</option>
-                        <option value="weekly">Hebdomadaire</option>
-                        <option value="special">Spéciale</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="quest-xp-input">XP</label>
-                    <input type="number" id="quest-xp-input" min="1" value="10" required>
-                </div>
-                <div class="form-group">
-                    <label for="quest-deadline-input">Date limite</label>
-                    <input type="date" id="quest-deadline-input">
-                </div>
-                <div class="form-group">
-                    <label>Assignée à</label>
-                    <div id="quest-assignees" class="checkbox-group">
-                        <!-- Rempli dynamiquement -->
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Enregistrer</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal pour ajouter/modifier un utilisateur -->
-<div id="user-form-modal" class="modal hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="user-form-title">Ajouter un utilisateur</h3>
-            <button id="close-user-form" class="icon-btn">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="user-form">
-                <input type="hidden" id="user-id">
-                <div class="form-group">
-                    <label for="user-name-input">Nom</label>
-                    <input type="text" id="user-name-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="user-email-input">Email</label>
-                    <input type="email" id="user-email-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="user-xp-input">XP</label>
-                    <input type="number" id="user-xp-input" min="0" value="0">
-                </div>
-                <div class="form-group">
-                    <label>Rôles</label>
-                    <div id="user-roles" class="role-checkboxes">
-                        <!-- Rempli dynamiquement -->
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Enregistrer</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Bouton d'administration (visible uniquement pour les admins) -->
-<button id="admin-btn" class="admin-fab hidden">
-    <i class="fas fa-cog"></i>
-</button>
-<!-- Ajouter avant la fermeture de body -->
-<div class="game-elements hidden">
-    <!-- Petites particules qui apparaissent lors des accomplissements -->
-    <div class="particles-container"></div>
-    
-    <!-- Sons pour les accomplissements -->
-    <audio id="complete-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-video-game-treasure-2066.mp3"></audio>
-    <audio id="levelup-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-complete-or-approved-mission-205.mp3"></audio>
-</div>
-
-<script>
-// Ajouter à ton JavaScript existant
-function playCompleteSound() {
-    document.getElementById('complete-sound').play();
-}
-
-function playLevelUpSound() {
-    document.getElementById('levelup-sound').play();
-}
-
-function createParticles(x, y) {
-    const container = document.querySelector('.particles-container');
-    container.classList.remove('hidden');
-    
-    for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        
-        // Position aléatoire autour du point d'origine
-        const posX = x + (Math.random() * 100 - 50);
-        const posY = y + (Math.random() * 100 - 50);
-        
-        // Couleur aléatoire
-        const colors = ['#8e44ad', '#2ecc71', '#f39c12', '#3498db'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        particle.style.cssText = `
-            position: fixed;
-            left: ${posX}px;
-            top: ${posY}px;
-            width: ${Math.random() * 10 + 5}px;
-            height: ${Math.random() * 10 + 5}px;
-            background-color: ${color};
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 1;
-            z-index: 1000;
-        `;
-        
-        container.appendChild(particle);
-        
-        // Animation de la particule
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 100 + 50;
-        const vx = Math.cos(angle) * velocity;
-        const vy = Math.sin(angle) * velocity;
-        
-        setTimeout(() => {
-            particle.style.transition = 'all 1s ease-out';
-            particle.style.transform = `translate(${vx}px, ${vy}px)`;
-            particle.style.opacity = '0';
-            
-            // Supprimer après l'animation
             setTimeout(() => {
-                particle.remove();
-            }, 1000);
-        }, 10);
-    }
-    
-    // Nettoyer le conteneur après quelques secondes
-    setTimeout(() => {
-        container.classList.add('hidden');
-    }, 2000);
-}
- // Remplacer dans le script à la fin de index.html
-// Effets sonores pour SYNERGIA
-const synergiaAudio = {
-  init: function() {
-    console.log("Audio initialisé");
-    // Sons désactivés temporairement en raison des restrictions de cross-origin
-  },
-  
-  play: function(sound) {
-    console.log("Tentative de lecture audio:", sound);
-    // Implémentation alternative à venir
-  }
-};
+                if (modal.parentNode) {
+                    modal.remove();
+                }
+            }, 3000);
+        }
 
+        // Déconnexion
+        function logout() {
+            auth.signOut();
+        }
 
-</script>
-<script>
-  // Script de déblocage pour l'écran de chargement
-  document.addEventListener('DOMContentLoaded', function() {
-    // Forcer la disparition de l'écran de chargement après 3 secondes si bloqué
-    setTimeout(() => {
-      const loadingScreen = document.getElementById('loading-screen');
-      if (loadingScreen && !loadingScreen.classList.contains('hidden')) {
-        console.log("Déblocage forcé de l'écran de chargement");
-        loadingScreen.classList.add('hidden');
-        
-        // Afficher l'écran de connexion par défaut
-        const loginScreen = document.getElementById('login-screen');
-        loginScreen.classList.remove('hidden');
-      }
-    }, 3000);
-  });
-  
-  // Capturer les erreurs pour éviter le blocage
-  window.addEventListener('error', function(e) {
-    console.warn('Erreur interceptée:', e.message);
-    // Empêcher les erreurs bloquantes
-    return true;
-  });
-</script>
-<script>
-  // Enregistrement du service worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(registration => {
-          console.log('Service Worker enregistré avec succès:', registration.scope);
-        })
-        .catch(error => {
-          console.log('Échec de l\'enregistrement du Service Worker:', error);
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Application SYNERGIA initialisée');
+            
+            // Initialiser la navigation
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    navigateToPage(page);
+                });
+            });
         });
-    });
-  }
-</script>
-<!-- Vos modules JavaScript dans l'ordre -->
-<script src="js/roles.js"></script>
-<script src="js/badges.js"></script>
-<script src="js/quests.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/calendar.js"></script>
-<script src="js/chat.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
-
-</html>
-
-
-
+    </script>
 </body>
 </html>
