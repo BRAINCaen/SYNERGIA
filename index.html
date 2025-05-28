@@ -3907,13 +3907,16 @@ function saveUser(userId = null) {
 }
 
     
-    // Fermer le modal
-    closeAssignmentModal();
-    
-    // Notification de succès
-    showNotification(`Quête "${quest.title}" assignée à ${member.name} !`, 'success');
-    
-    console.log('Attribution créée:', assignment);
+// Fermer le modal
+closeAssignmentModal();
+
+// Notification de succès
+const selectedQuestElement = document.querySelector('.quest-option.selected');
+const questTitle = selectedQuestElement ? selectedQuestElement.querySelector('h5').textContent : 'la quête sélectionnée';
+showNotification(`Quête "${questTitle}" assignée à ${member.name} !`, 'success');
+
+console.log('Attribution créée:', assignment);
+
 
 
 // Fermer le modal d'attribution
