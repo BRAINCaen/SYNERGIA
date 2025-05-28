@@ -3911,15 +3911,10 @@ function saveUser(userId = null) {
 closeAssignmentModal();
 
 // Notification de succès
-const selectedQuestElement = document.querySelector('.quest-option.selected');
-const questTitle = selectedQuestElement ? selectedQuestElement.querySelector('h5').textContent : 'la quête sélectionnée';
-// CORRIGÉ - récupérer le nom du membre depuis le modal
-const memberNameElement = document.querySelector('.member-summary h4');
-const memberName = memberNameElement ? memberNameElement.textContent : 'un membre de l\'équipe';
-showNotification(`Quête "${questTitle}" assignée à ${memberName} !`, 'success');
+showNotification('Quête assignée avec succès !', 'success');
 
+console.log('Attribution terminée');
 
-console.log('Attribution créée:', assignment);
 
 
 
