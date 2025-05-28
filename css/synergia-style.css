@@ -82,18 +82,13 @@ body {
     min-height: 100vh;
     position: relative;
 }
-
-
-/* Amélioration de la lisibilité des cards */
-.stats-card, .role-card, .team-member-card, .quest-item, .admin-item {
-    background: rgba(25, 25, 35, 0.95);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    border-radius: var(--border-radius-lg);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.8),
-        0 0 20px rgba(139, 92, 246, 0.3);
+body {
+    background: url('./images/neon-bg.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
 }
+
+
 
 /* Formes néon animées PRINCIPALES */
 body::after {
