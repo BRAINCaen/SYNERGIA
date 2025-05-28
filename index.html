@@ -1497,12 +1497,17 @@
                 });
             });
         });
-        // Gestion de l'administration
+      // Gestion de l'administration (VERSION CORRIGÉE)
 document.addEventListener('DOMContentLoaded', function() {
-    // Afficher le bouton admin seulement pour les admins
-    if (isUserAdmin()) {
-        document.getElementById('admin-btn').classList.remove('hidden');
-    }
+    // Attendre que l'utilisateur soit chargé
+    setTimeout(() => {
+        if (isUserAdmin()) {
+            console.log('Utilisateur admin détecté, affichage du bouton');
+            document.getElementById('admin-btn').classList.remove('hidden');
+        } else {
+            console.log('Utilisateur non-admin, bouton caché');
+        }
+    }, 2000); // Attendre 2 secondes après le chargement
     
     // Gestionnaire pour ouvrir l'admin
     document.getElementById('admin-btn').addEventListener('click', openAdminPanel);
@@ -1514,15 +1519,39 @@ document.addEventListener('DOMContentLoaded', function() {
     initAdminTabs();
 });
 
-// Vérifier si l'utilisateur est admin
+// Vérifier si l'utilisateur est admin (NOUVELLE VERSION)
 function isUserAdmin() {
-    // Pour l'instant, on considère Allan comme admin
-    return currentUser && (
-        currentUser.email === 'allan.boehme61@gmail.com' || 
-        currentUser.email === 'admin@synergia.com' ||
-        userProfile.roles?.includes('admin')
-    );
+    console.log('Vérification admin pour:', currentUser?.email);
+    
+    // Si pas d'utilisateur connecté
+    if (!currentUser) {
+        console.log('Pas d\'utilisateur connecté');
+        return false;
+    }
+    
+    // Liste des emails admin
+    const adminEmails = [
+        'allan.boehme61@gmail.com',
+        'admin@synergia.com',
+        'direction@brain-caen.fr'
+    ];
+    
+    // Vérifier l'email
+    const isAdmin = adminEmails.includes(currentUser.email.toLowerCase());
+    console.log('Est admin:', isAdmin);
+    
+    return isAdmin;
 }
+
+// Alternative : Bouton admin toujours visible (pour débugger)
+function forceShowAdminButton() {
+    const adminBtn = document.getElementById('admin-btn');
+    if (adminBtn) {
+        adminBtn.classList.remove('hidden');
+        console.log('Bouton admin forcé à s\'afficher');
+    }
+}
+
 
 // Ouvrir le panneau d'administration
 function openAdminPanel() {
