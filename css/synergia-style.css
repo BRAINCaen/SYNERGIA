@@ -1,5 +1,66 @@
 /* SYNERGIA - PREMIUM GLASSMORPHISM + MAUVE */
 
+/* FOND NÉON PREMIUM CSS PUR */
+body {
+    background: 
+        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.4) 0%, transparent 25%),
+        radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.4) 0%, transparent 25%),
+        radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.2) 0%, transparent 35%),
+        linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #16213e 100%);
+    color: var(--gray-100);
+    font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Lignes néon animées */
+body::after {
+    content: '';
+    position: fixed;
+    top: 10%;
+    left: 5%;
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(139, 92, 246, 0.6);
+    border-radius: 50% 20% 50% 20%;
+    filter: blur(1px);
+    animation: neonShape1 20s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    bottom: 10%;
+    right: 5%;
+    width: 150px;
+    height: 150px;
+    border: 2px solid rgba(236, 72, 153, 0.6);
+    border-radius: 20% 50% 20% 50%;
+    filter: blur(1px);
+    animation: neonShape2 25s linear infinite reverse;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes neonShape1 {
+    0% { transform: rotate(0deg) scale(1); opacity: 0.6; }
+    25% { transform: rotate(90deg) scale(1.2); opacity: 0.8; }
+    50% { transform: rotate(180deg) scale(0.8); opacity: 0.4; }
+    75% { transform: rotate(270deg) scale(1.1); opacity: 0.7; }
+    100% { transform: rotate(360deg) scale(1); opacity: 0.6; }
+}
+
+@keyframes neonShape2 {
+    0% { transform: rotate(0deg) scale(1); opacity: 0.5; }
+    30% { transform: rotate(108deg) scale(0.9); opacity: 0.8; }
+    60% { transform: rotate(216deg) scale(1.3); opacity: 0.3; }
+    100% { transform: rotate(360deg) scale(1); opacity: 0.5; }
+}
+
+
 /* FOND NÉON PREMIUM */
 body {
     background: #0a0a0f;
