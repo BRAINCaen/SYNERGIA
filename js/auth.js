@@ -26,17 +26,72 @@ loginForm.addEventListener('submit', async (e) => {
 });
 
 // Observer les changements d'état d'authentification
-auth.onAuthStateChanged(async (user) => {
+// Dans la fonction auth.onAuthStateChanged
+auth.onAuthStateChanged(async user => {
+    const loadingScreen = document.getElementById('loading-screen');
+    const loginScreen = document.getElementById('login-screen');
+    const app = document.getElementById('app');
+    
     if (user) {
-        // L'utilisateur est connecté
-        currentUser = user;
+        loginScreen.classList.add('hidden');
+        app.classList.remove('hidden');
         
         try {
-            // Récupérer le profil utilisateur depuis Firestore
-            const userDoc = await db.collection('users').doc(user.email).get();
+            // Vérifier si le profil existe
+            const userDoc = await db.collection('users').doc(user.uid).get();
             
-            if (userDoc.exists) {
-                userProfile = userDoc.data();
+            if (!userDoc.exists) {
+                // CRÉER automatiquement le profil
+                await createUserProfile(user);
+                console.log('Profil utilisateur créé automatiquement');
+            }
+            
+            // Charger les données
+            await loadUserData(user);
+            loadPage('dashboard');
+            
+        } catch (error) {
+            console.error('Erreur lors du chargement:', error);
+        }
+    } else {
+        app.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+    }
+    
+    setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+    }, 1000);
+});
+
+// Fonction pour créer un profil utilisateur automatiquement
+async function createUserProfile(user) {
+    const defaultProfile = {
+        displayName: user.displayName || user.email.split('@')[0],
+        email: user.email,
+        photoURL: user.photoURL || '',
+        xp: 0,
+        level: 1,
+        roles: ['entretien'], // Rôle par défaut
+        badges: [],
+        completedQuests: [],
+        joinedAt: new Date(),
+        lastActive: new Date(),
+        preferences: {
+            notifications: true,
+            theme: 'default'
+        }
+    };
+    
+    try {
+        await db.collection('users').doc(user.uid).set(defaultProfile);
+        console.log('Profil créé avec succès pour:', user.email);
+        return defaultProfile;
+    } catch (error) {
+        console.error('Erreur création profil:', error);
+        throw error;
+    }
+}
+
                 
                 // Mettre à jour l'interface utilisateur
                 document.getElementById('loading-screen').classList.add('hidden');
