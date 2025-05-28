@@ -1,16 +1,16 @@
 // Service Worker pour SYNERGIA - Version améliorée et corrigée
 
-const CACHE_NAME = 'synergia-cache-v1.2';
+const CACHE_NAME = 'synergia-cache-v1.3';
 const urlsToCache = [
   '/',
   '/index.html',
   '/css/style.css',
   '/css/synergia-style.css',
-  '/images/synergia-logo.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap',
   'https://img.icons8.com/color/96/000000/s-key.png',
   'https://www.transparenttextures.com/patterns/subtle-dark-vertical.png'
+  // Fichiers audio retirés pour éviter les erreurs 403
 ];
 
 // Installation
@@ -29,7 +29,7 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Activation et nettoyage 
+// Activation et nettoyage
 self.addEventListener('activate', event => {
   console.log('Service Worker: Activation');
   event.waitUntil(
@@ -49,12 +49,17 @@ self.addEventListener('activate', event => {
 
 // Interception des requêtes
 self.addEventListener('fetch', event => {
-  // Vérification du schéma d'URL valide
+  // Ignorer les URLs non HTTP/HTTPS
   if (!event.request.url.startsWith('http')) {
-    return; // Ignorer les schémas non-HTTP comme chrome-extension://
+    return;
   }
   
-  // Ignorer les requêtes Firebase (elles sont gérées par Firebase SDK)
+  // Ignorer les requêtes vers assets.mixkit.co qui causent des erreurs 403
+  if (event.request.url.includes('assets.mixkit.co')) {
+    return;
+  }
+  
+  // Ignorer les requêtes Firebase
   if (
     event.request.url.includes('firebaseio.com') || 
     event.request.url.includes('firestore.googleapis.com') ||
@@ -71,11 +76,11 @@ self.addEventListener('fetch', event => {
           return response;
         }
         
-        // Cloner la réponse car elle ne peut être utilisée qu'une fois
-        const responseToCache = response.clone();
-        
-        // Mettre en cache la nouvelle réponse si c'est une requête HTTP valide
-        if (event.request.url.startsWith('http')) {
+        try {
+          // Cloner la réponse car elle ne peut être utilisée qu'une fois
+          const responseToCache = response.clone();
+          
+          // Mettre en cache la nouvelle réponse
           caches.open(CACHE_NAME)
             .then(cache => {
               cache.put(event.request, responseToCache);
@@ -83,6 +88,8 @@ self.addEventListener('fetch', event => {
             .catch(err => {
               console.error('Erreur lors de la mise en cache:', err);
             });
+        } catch (error) {
+          console.error('Erreur lors du traitement de la réponse:', error);
         }
           
         return response;
@@ -98,6 +105,11 @@ self.addEventListener('fetch', event => {
             // Pour les requêtes de navigation, renvoyer la page d'accueil
             if (event.request.mode === 'navigate') {
               return caches.match('/index.html');
+            }
+            
+            // Fallback pour les images manquantes
+            if (event.request.url.endsWith('synergia-logo.png')) {
+              return caches.match('https://img.icons8.com/color/96/000000/s-key.png');
             }
             
             // Retourner une réponse par défaut pour les autres requêtes
