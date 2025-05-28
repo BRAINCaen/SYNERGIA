@@ -3547,9 +3547,261 @@ function sendTeamFeedback() {
     alert('Envoi de feedback à l\'équipe - Fonctionnalité en développement');
 }
 
-        function loadTeamSchedule() {
-            console.log('Chargement du planning d\'équipe');
+// Charger le planning de l'équipe
+function loadTeamSchedule() {
+    const container = document.getElementById('team-schedule');
+    if (!container) return;
+    
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const dayLabels = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    
+    container.innerHTML = `
+        <div class="schedule-header">
+            <div class="schedule-controls">
+                <button class="btn-secondary" onclick="addScheduleEntry()">
+                    <i class="fas fa-plus"></i> Ajouter un horaire
+                </button>
+                <button class="btn-secondary" onclick="exportSchedule()">
+                    <i class="fas fa-download"></i> Exporter planning
+                </button>
+            </div>
+        </div>
+        
+        <div class="schedule-grid">
+            <div class="schedule-header-row">
+                <div class="member-header">Membre</div>
+                ${dayLabels.map(day => `<div class="day-header">${day}</div>`).join('')}
+            </div>
+            
+            ${teamMembers.map(member => `
+                <div class="schedule-row" data-member="${member.id}">
+                    <div class="member-cell">
+                        <img src="${member.avatar}" alt="${member.name}" class="schedule-avatar">
+                        <div class="member-schedule-info">
+                            <div class="schedule-member-name">${member.name}</div>
+                            <div class="schedule-member-role">${member.role}</div>
+                        </div>
+                    </div>
+                    
+                    ${days.map(day => {
+                        const schedule = member.schedule[day];
+                        let cellContent = '';
+                        
+                        if (schedule === 'off') {
+                            cellContent = '<div class="schedule-off">Repos</div>';
+                        } else if (schedule && schedule.start && schedule.end) {
+                            const duration = calculateHours(schedule.start, schedule.end);
+                            cellContent = `
+                                <div class="schedule-time">
+                                    <div class="time-slot">${schedule.start} - ${schedule.end}</div>
+                                    <div class="duration">${duration}h</div>
+                                </div>
+                            `;
+                        } else {
+                            cellContent = '<div class="schedule-empty">Non défini</div>';
+                        }
+                        
+                        return `
+                            <div class="schedule-cell" onclick="editScheduleCell('${member.id}', '${day}')">
+                                ${cellContent}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `).join('')}
+        </div>
+        
+        <div class="schedule-summary">
+            <h3><i class="fas fa-chart-pie"></i> Résumé de la semaine</h3>
+            <div class="schedule-stats">
+                ${teamMembers.map(member => {
+                    const weeklyHours = calculateWeeklyHours(member.schedule);
+                    const workDays = countWorkDays(member.schedule);
+                    
+                    return `
+                        <div class="member-summary">
+                            <img src="${member.avatar}" alt="${member.name}" class="summary-avatar">
+                            <div class="summary-info">
+                                <div class="summary-name">${member.name}</div>
+                                <div class="summary-stats">
+                                    <span class="summary-stat">
+                                        <i class="fas fa-clock"></i> ${weeklyHours}h/semaine
+                                    </span>
+                                    <span class="summary-stat">
+                                        <i class="fas fa-calendar-day"></i> ${workDays} jours
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `;
+}
+
+// Calculer les heures entre deux créneaux
+function calculateHours(startTime, endTime) {
+    const start = new Date(`2000-01-01 ${startTime}`);
+    const end = new Date(`2000-01-01 ${endTime}`);
+    const diff = (end - start) / (1000 * 60 * 60);
+    return diff.toFixed(1);
+}
+
+// Calculer les heures hebdomadaires
+function calculateWeeklyHours(schedule) {
+    let totalHours = 0;
+    Object.values(schedule).forEach(day => {
+        if (day !== 'off' && day.start && day.end) {
+            totalHours += parseFloat(calculateHours(day.start, day.end));
         }
+    });
+    return totalHours.toFixed(1);
+}
+
+// Compter les jours de travail
+function countWorkDays(schedule) {
+    return Object.values(schedule).filter(day => day !== 'off').length;
+}
+
+// Éditer un créneau horaire
+function editScheduleCell(memberId, day) {
+    const member = teamMembers.find(m => m.id === memberId);
+    if (!member) return;
+    
+    const currentSchedule = member.schedule[day];
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'schedule-edit-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier horaire - ${member.name}</h3>
+                <button onclick="closeScheduleModal()" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>${getDayLabel(day)}</h4>
+                
+                <div class="schedule-options">
+                    <label>
+                        <input type="radio" name="schedule-type" value="work" ${currentSchedule !== 'off' ? 'checked' : ''} onchange="toggleScheduleInputs(true)">
+                        Jour de travail
+                    </label>
+                    <label>
+                        <input type="radio" name="schedule-type" value="off" ${currentSchedule === 'off' ? 'checked' : ''} onchange="toggleScheduleInputs(false)">
+                        Jour de repos
+                    </label>
+                </div>
+                
+                <div id="time-inputs" ${currentSchedule === 'off' ? 'style="display: none;"' : ''}>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Heure de début</label>
+                            <input type="time" id="start-time" value="${currentSchedule !== 'off' ? currentSchedule.start || '09:00' : '09:00'}">
+                        </div>
+                        <div class="form-group">
+                            <label>Heure de fin</label>
+                            <input type="time" id="end-time" value="${currentSchedule !== 'off' ? currentSchedule.end || '17:00' : '17:00'}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button onclick="closeScheduleModal()" class="btn-secondary">Annuler</button>
+                    <button onclick="saveSchedule('${memberId}', '${day}')" class="btn-primary">
+                        <i class="fas fa-save"></i> Sauvegarder
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Basculer les inputs d'horaires
+function toggleScheduleInputs(show) {
+    const timeInputs = document.getElementById('time-inputs');
+    if (timeInputs) {
+        timeInputs.style.display = show ? 'block' : 'none';
+    }
+}
+
+// Obtenir le libellé du jour
+function getDayLabel(day) {
+    const labels = {
+        'monday': 'Lundi',
+        'tuesday': 'Mardi', 
+        'wednesday': 'Mercredi',
+        'thursday': 'Jeudi',
+        'friday': 'Vendredi',
+        'saturday': 'Samedi',
+        'sunday': 'Dimanche'
+    };
+    return labels[day] || day;
+}
+
+// Sauvegarder les horaires
+function saveSchedule(memberId, day) {
+    const member = teamMembers.find(m => m.id === memberId);
+    if (!member) return;
+    
+    const scheduleType = document.querySelector('input[name="schedule-type"]:checked').value;
+    
+    if (scheduleType === 'off') {
+        member.schedule[day] = 'off';
+    } else {
+        const startTime = document.getElementById('start-time').value;
+        const endTime = document.getElementById('end-time').value;
+        
+        if (!startTime || !endTime) {
+            showNotification('Veuillez renseigner les heures de début et de fin', 'error');
+            return;
+        }
+        
+        if (startTime >= endTime) {
+            showNotification('L\'heure de fin doit être après l\'heure de début', 'error');
+            return;
+        }
+        
+        member.schedule[day] = {
+            start: startTime,
+            end: endTime
+        };
+    }
+    
+    // Sauvegarder en localStorage
+    saveTeamToStorage();
+    
+    // Fermer le modal
+    closeScheduleModal();
+    
+    // Recharger le planning
+    loadTeamSchedule();
+    
+    showNotification('Horaire mis à jour !', 'success');
+}
+
+// Fermer le modal de planning
+function closeScheduleModal() {
+    const modal = document.getElementById('schedule-edit-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Actions du planning
+function addScheduleEntry() {
+    alert('Ajout d\'entrée de planning - Fonctionnalité en développement');
+}
+
+function exportSchedule() {
+    alert('Export du planning - Fonctionnalité en développement');
+}
+
 
         // Sauvegarder l'équipe dans le localStorage
         function saveTeamToStorage() {
