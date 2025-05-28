@@ -1434,13 +1434,33 @@ const firebaseConfig = {
   measurementId: "G-EGJ79SCMWX"
 };
 
-        // Initialisation Firebase
-        let firebaseApp;
-        try {
-            firebaseApp = firebase.app();
-        } catch (e) {
-            firebaseApp = firebase.initializeApp(firebaseConfig);
-        }
+// Initialisation Firebase
+let firebaseApp;
+let auth;
+let db;
+let storage;
+
+try {
+    // Vérifier si Firebase est déjà initialisé
+    if (firebase.apps.length) {
+        firebaseApp = firebase.app();
+    } else {
+        firebaseApp = firebase.initializeApp(firebaseConfig);
+        console.log("Firebase initialisé avec succès");
+    }
+    
+    // Initialiser les services Firebase
+    auth = firebase.auth();
+    db = firebase.firestore();
+    storage = firebase.storage();
+} catch (e) {
+    console.error("Erreur d'initialisation Firebase:", e);
+    // Créer des substituts pour éviter les erreurs
+    auth = { onAuthStateChanged: (callback) => callback(null) };
+    db = { collection: () => ({ doc: () => ({ get: () => Promise.resolve({ exists: false }) }) }) };
+    storage = {};
+}
+
 
         // Services Firebase
         const auth = firebase.auth();
