@@ -631,13 +631,20 @@
 
         .quest-meta {
             display: flex;
-            margin-top: var(--spacing-sm);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xs);
             font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .quest-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .quest-xp {
             color: var(--warning);
-            margin-right: var(--spacing-md);
         }
 
         .quest-deadline {
@@ -689,6 +696,239 @@
 
         .tab-content.active {
             display: block;
+        }
+
+        /* Interface d'administration */
+        .admin-fab {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            animation: pulse-admin 2s infinite;
+            border: none;
+            cursor: pointer;
+        }
+
+        @keyframes pulse-admin {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+
+        .admin-fab:hover {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary) 100%);
+            transform: scale(1.1);
+        }
+
+        .admin-modal {
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
+            max-height: none;
+        }
+
+        .admin-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--light-gray);
+            margin-bottom: var(--spacing-md);
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .admin-tabs .tab {
+            padding: var(--spacing-sm) var(--spacing-md);
+            margin: 0 var(--spacing-xs) -2px 0;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--gray);
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .admin-tabs .tab.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .admin-section {
+            padding: var(--spacing-md) 0;
+        }
+
+        .admin-section h4 {
+            margin-bottom: var(--spacing-md);
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .admin-list {
+            margin-top: var(--spacing-md);
+        }
+
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .admin-item-info h5 {
+            margin: 0 0 var(--spacing-xs) 0;
+            color: var(--dark);
+        }
+
+        .admin-item-info p {
+            margin: 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .admin-actions .icon-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 0.9rem;
+        }
+
+        .edit-btn {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .toggle-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .info-btn {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .success-btn {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .admin-item.inactive {
+            opacity: 0.6;
+            background-color: #f8f8f8;
+        }
+
+        /* Priorités des quêtes */
+        .quest-priority {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            margin-left: var(--spacing-xs);
+        }
+
+        .priority-low { background-color: var(--gray); }
+        .priority-normal { background-color: var(--info); }
+        .priority-high { background-color: var(--warning); }
+        .priority-urgent { background-color: var(--danger); }
+
+        /* Badges de quête */
+        .quest-recurring, .quest-photo {
+            margin-left: var(--spacing-xs);
+            color: var(--primary);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            z-index: 9999;
+            min-width: 300px;
+            border-left: 4px solid var(--info);
+            animation: slideInRight 0.3s ease;
+        }
+
+        .notification-success {
+            border-left-color: var(--success);
+            color: var(--success);
+        }
+
+        .notification-error {
+            border-left-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         /* Utilitaires */
@@ -767,6 +1007,23 @@
         }
 
         /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
+            
+            .admin-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
         @media (min-width: 768px) {
             #app {
                 flex-direction: row;
@@ -774,7 +1031,7 @@
 
             nav {
                 width: 80px;
-                flex-direction: column;
+                 flex-direction: column;
                 height: 100vh;
                 padding: var(--spacing-md) 0;
             }
@@ -939,7 +1196,7 @@
                         </button>
                     </div>
                     <div class="quest-item">
-                         <div class="quest-info">
+                        <div class="quest-info">
                             <h4 class="quest-title">Contrôle équipements</h4>
                             <p class="quest-description">Vérifier le bon fonctionnement des jeux</p>
                             <div class="quest-meta">
@@ -1079,6 +1336,209 @@
         </div>
     </template>
 
+    <!-- Panneau d'administration -->
+    <div id="admin-panel" class="modal hidden">
+        <div class="modal-content admin-modal">
+            <div class="modal-header">
+                <h3>Administration SYNERGIA</h3>
+                <button id="close-admin" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-tabs">
+                    <button class="tab active" data-tab="users">Utilisateurs</button>
+                    <button class="tab" data-tab="quests">Quêtes</button>
+                    <button class="tab" data-tab="badges">Badges</button>
+                    <button class="tab" data-tab="roles">Rôles</button>
+                    <button class="tab" data-tab="settings">Paramètres</button>
+                </div>
+                
+                <!-- Onglet Utilisateurs -->
+                <div class="tab-content active" id="users-tab">
+                    <div class="admin-section">
+                        <h4>Gestion des utilisateurs</h4>
+                        <button class="btn-secondary" onclick="addUser()">
+                            <i class="fas fa-plus"></i> Ajouter un utilisateur
+                        </button>
+                        <div id="users-list" class="admin-list">
+                            <!-- Sera rempli dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Onglet Quêtes -->
+                <div class="tab-content" id="quests-tab">
+                    <div class="admin-section">
+                        <h4>Gestion des quêtes</h4>
+                        <button class="btn-secondary" onclick="addQuest()">
+                            <i class="fas fa-plus"></i> Créer une quête
+                        </button>
+                        <div id="quests-admin-list" class="admin-list">
+                            <!-- Sera rempli dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Onglet Badges -->
+                <div class="tab-content" id="badges-tab">
+                    <div class="admin-section">
+                        <h4>Gestion des badges</h4>
+                        <button class="btn-secondary" onclick="addBadge()">
+                            <i class="fas fa-plus"></i> Créer un badge
+                        </button>
+                        <div id="badges-admin-list" class="admin-list">
+                            <!-- Sera rempli dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Onglet Rôles -->
+                <div class="tab-content" id="roles-tab">
+                    <div class="admin-section">
+                        <h4>Gestion des rôles</h4>
+                        <button class="btn-secondary" onclick="addRole()">
+                            <i class="fas fa-plus"></i> Créer un rôle
+                        </button>
+                        <div id="roles-admin-list" class="admin-list">
+                            <!-- Sera rempli dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Onglet Paramètres -->
+                <div class="tab-content" id="settings-tab">
+                    <div class="admin-section">
+                        <h4>Paramètres de l'application</h4>
+                        <div class="form-group">
+                            <label>Nom de l'application</label>
+                            <input type="text" id="app-name" value="SYNERGIA">
+                        </div>
+                        <div class="form-group">
+                            <label>XP par niveau</label>
+                            <input type="number" id="xp-per-level" value="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Thème</label>
+                            <select id="app-theme">
+                                <option value="default">Par défaut</option>
+                                <option value="dark">Sombre</option>
+                                <option value="light">Clair</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de création de quête -->
+    <div id="quest-creation-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Créer une nouvelle quête</h3>
+                <button onclick="closeQuestModal()" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="quest-creation-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Titre de la quête</label>
+                            <input type="text" id="quest-title" placeholder="Ex: Vérifier l'accueil" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Type de quête</label>
+                            <select id="quest-type" required>
+                                <option value="daily">Quotidienne</option>
+                                <option value="weekly">Hebdomadaire</option>
+                                <option value="monthly">Mensuelle</option>
+                                <option value="special">Spéciale</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="quest-description" placeholder="Décrivez ce qu'il faut faire..." rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>XP à gagner</label>
+                            <input type="number" id="quest-xp" min="1" max="500" value="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Durée estimée (min)</label>
+                            <input type="number" id="quest-duration" min="1" max="480" value="15">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Rôle assigné</label>
+                            <select id="quest-role">
+                                <option value="all">Tous les rôles</option>
+                                <option value="entretien">Entretien & Maintenance</option>
+                                <option value="accueil">Accueil Client</option>
+                                <option value="animation">Animation</option>
+                                <option value="securite">Sécurité</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Priorité</label>
+                            <select id="quest-priority">
+                                <option value="low">Faible</option>
+                                <option value="normal">Normale</option>
+                                <option value="high">Élevée</option>
+                                <option value="urgent">Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="quest-photo-required"> 
+                            Validation par photo requise
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="quest-recurring"> 
+                            Quête récurrente
+                        </label>
+                    </div>
+                    
+                    <div id="recurring-options" class="form-group hidden">
+                        <label>Fréquence de récurrence</label>
+                        <select id="quest-frequency">
+                            <option value="daily">Chaque jour</option>
+                            <option value="weekly">Chaque semaine</option>
+                            <option value="monthly">Chaque mois</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" onclick="closeQuestModal()" class="btn-secondary">Annuler</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-plus"></i> Créer la quête
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bouton d'administration flottant -->
+    <button id="admin-btn" class="admin-fab hidden">
+        <i class="fas fa-cog"></i>
+    </button>
+
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
@@ -1135,6 +1595,7 @@
 
         // Variables globales pour la navigation
         let currentPage = 'dashboard';
+        let questsDatabase = JSON.parse(localStorage.getItem('synergiaQuests')) || [];
 
         // Gestion de l'authentification
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -1164,7 +1625,6 @@
                 currentUser = user;
                 
                 try {
-                    // Vérifier si le profil existe
                     const userDoc = await db.collection('users').doc(user.uid).get();
                     
                     if (!userDoc.exists) {
@@ -1175,15 +1635,11 @@
                         console.log('Profil utilisateur chargé:', userProfile);
                     }
                     
-                    // Cacher les écrans de chargement/connexion
                     loginScreen.classList.add('hidden');
                     loadingScreen.classList.add('hidden');
                     app.classList.remove('hidden');
                     
-                    // Mettre à jour l'interface
                     updateUserInterface();
-                    
-                    // Charger le dashboard
                     loadPage('dashboard');
                     
                     console.log('Connexion réussie pour:', user.email);
@@ -1254,47 +1710,43 @@
             loadPage('dashboard');
         }
 
-// Mettre à jour l'interface utilisateur (VERSION CORRIGÉE)
-function updateUserInterface() {
-    if (!currentUser || !userProfile) return;
-    
-    try {
-        const userAvatar = document.getElementById('user-avatar');
-        const userName = document.getElementById('user-name');
-        const welcomeName = document.getElementById('welcome-name');
-        
-        if (userAvatar) {
-            userAvatar.src = userProfile.photoURL || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
-        }
-        
-        if (userName) {
-            userName.textContent = userProfile.displayName || currentUser.email;
-        }
-        
-        if (welcomeName) {
-            welcomeName.textContent = userProfile.displayName || currentUser.email.split('@')[0];
-        }
-        
-        updateXP(userProfile.xp || 240, userProfile.level || 4);
-        
-        // AJOUTER ICI : Vérifier et afficher le bouton admin
-        if (currentUser.email === 'alan.boehme61@gmail.com') {
-            const adminBtn = document.getElementById('admin-btn');
-            if (adminBtn) {
-                adminBtn.classList.remove('hidden');
-                console.log('Bouton admin activé pour Allan');
+        // Mettre à jour l'interface utilisateur
+        function updateUserInterface() {
+            if (!currentUser || !userProfile) return;
+            
+            try {
+                const userAvatar = document.getElementById('user-avatar');
+                const userName = document.getElementById('user-name');
+                const welcomeName = document.getElementById('welcome-name');
+                
+                if (userAvatar) {
+                    userAvatar.src = userProfile.photoURL || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
+                }
+                
+                if (userName) {
+                    userName.textContent = userProfile.displayName || currentUser.email;
+                }
+                
+                if (welcomeName) {
+                    welcomeName.textContent = userProfile.displayName || currentUser.email.split('@')[0];
+                }
+                
+                updateXP(userProfile.xp || 240, userProfile.level || 4);
+                
+                // Vérifier et afficher le bouton admin
+                if (currentUser.email === 'alan.boehme61@gmail.com') {
+                    const adminBtn = document.getElementById('admin-btn');
+                    if (adminBtn) {
+                        adminBtn.classList.remove('hidden');
+                        console.log('Bouton admin activé pour Allan');
+                    }
+                }
+                
+                console.log('Interface utilisateur mise à jour');
+                 } catch (error) {
+                console.error('Erreur mise à jour interface:', error);
             }
         }
-        
-        console.log('Interface utilisateur mise à jour');
-        
-    } catch (error) {
-        console.error('Erreur mise à jour interface:', error);
-    }
-} // ← Cette accolade ferme la fonction (ne pas la supprimer !)
-
-// Le reste de votre code continue ici...
-
 
         // Mise à jour de l'XP et du niveau
         function updateXP(xp, level) {
@@ -1452,10 +1904,8 @@ function updateUserInterface() {
 
         // Fonction pour compléter une quête
         function completeQuest(questId) {
-            // Animation de succès
             showQuestCompletionModal(questId);
             
-            // Mettre à jour l'XP
             if (userProfile) {
                 const xpGain = questId <= 3 ? 10 : questId <= 6 ? 50 : 100;
                 userProfile.xp = (userProfile.xp || 240) + xpGain;
@@ -1491,12 +1941,9 @@ function updateUserInterface() {
             }, 3000);
         }
 
-        // Déconnexion
-        function logout() {
-            auth.signOut();
-        }
+        // === GESTION DE L'ADMINISTRATION ===
 
-        // Initialisation au chargement de la page
+        // Initialisation de l'administration
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Application SYNERGIA initialisée');
             
@@ -1508,488 +1955,467 @@ function updateUserInterface() {
                     navigateToPage(page);
                 });
             });
+
+            // Gestionnaire pour ouvrir l'admin
+            document.getElementById('admin-btn').addEventListener('click', openAdminPanel);
+            
+            // Gestionnaire pour fermer l'admin
+            document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+            
+            // Gestionnaires pour les onglets admin
+            initAdminTabs();
+
+            // Gestion de la récurrence dans le formulaire de création de quête
+            const recurringCheckbox = document.getElementById('quest-recurring');
+            const recurringOptions = document.getElementById('recurring-options');
+            
+            if (recurringCheckbox) {
+                recurringCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        recurringOptions.classList.remove('hidden');
+                    } else {
+                        recurringOptions.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Gestionnaire pour le formulaire de création de quête
+            const questForm = document.getElementById('quest-creation-form');
+            if (questForm) {
+                questForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    createNewQuest();
+                });
+            }
         });
-      // Gestion de l'administration (VERSION CORRIGÉE)
-document.addEventListener('DOMContentLoaded', function() {
-    // Attendre que l'utilisateur soit chargé
-    setTimeout(() => {
-        if (isUserAdmin()) {
-            console.log('Utilisateur admin détecté, affichage du bouton');
-            document.getElementById('admin-btn').classList.remove('hidden');
-        } else {
-            console.log('Utilisateur non-admin, bouton caché');
+
+        // Ouvrir le panneau d'administration
+        function openAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('hidden');
+            loadAdminData();
         }
-    }, 2000); // Attendre 2 secondes après le chargement
-    
-    // Gestionnaire pour ouvrir l'admin
-    document.getElementById('admin-btn').addEventListener('click', openAdminPanel);
-    
-    // Gestionnaire pour fermer l'admin
-    document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
-    
-    // Gestionnaires pour les onglets admin
-    initAdminTabs();
-});
 
-// Vérifier si l'utilisateur est admin (NOUVELLE VERSION)
-function isUserAdmin() {
-    console.log('Vérification admin pour:', currentUser?.email);
-    
-    // Si pas d'utilisateur connecté
-    if (!currentUser) {
-        console.log('Pas d\'utilisateur connecté');
-        return false;
-    }
-    
-    // Liste des emails admin
-    const adminEmails = [
-        'alan.boehme61@gmail.com',
-        'admin@synergia.com',
-        'direction@brain-caen.fr'
-    ];
-    
-    // Vérifier l'email
-    const isAdmin = adminEmails.includes(currentUser.email.toLowerCase());
-    console.log('Est admin:', isAdmin);
-    
-    return isAdmin;
-}
+        // Fermer le panneau d'administration
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').classList.add('hidden');
+        }
 
-// Alternative : Bouton admin toujours visible (pour débugger)
-function forceShowAdminButton() {
-    const adminBtn = document.getElementById('admin-btn');
-    if (adminBtn) {
-        adminBtn.classList.remove('hidden');
-        console.log('Bouton admin forcé à s\'afficher');
-    }
-}
-
-
-// Ouvrir le panneau d'administration
-function openAdminPanel() {
-    document.getElementById('admin-panel').classList.remove('hidden');
-    loadAdminData();
-}
-
-// Fermer le panneau d'administration
-function closeAdminPanel() {
-    document.getElementById('admin-panel').classList.add('hidden');
-}
-
-// Initialiser les onglets d'administration
-function initAdminTabs() {
-    const adminTabs = document.querySelectorAll('.admin-tabs .tab');
-    adminTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const tabName = this.dataset.tab;
-            
-            // Désactiver tous les onglets admin
-            adminTabs.forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('#admin-panel .tab-content').forEach(content => {
-                content.classList.remove('active');
+        // Initialiser les onglets d'administration
+        function initAdminTabs() {
+            const adminTabs = document.querySelectorAll('.admin-tabs .tab');
+            adminTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    adminTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('#admin-panel .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    const targetContent = document.getElementById(`${tabName}-tab`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    
+                    loadAdminTabData(tabName);
+                });
             });
+        }
+
+        // Charger les données d'administration
+        function loadAdminData() {
+            loadAdminTabData('users');
+        }
+
+        // Charger les données pour un onglet spécifique
+        function loadAdminTabData(tabName) {
+            switch(tabName) {
+                case 'users':
+                    loadAdminUsers();
+                    break;
+                case 'quests':
+                    loadAdminQuests();
+                    break;
+                case 'badges':
+                    loadAdminBadges();
+                    break;
+                case 'roles':
+                    loadAdminRoles();
+                    break;
+                case 'settings':
+                    loadAdminSettings();
+                    break;
+            }
+        }
+
+        // Charger la liste des utilisateurs
+        function loadAdminUsers() {
+            const usersList = document.getElementById('users-list');
             
-            // Activer l'onglet sélectionné
-            this.classList.add('active');
-            const targetContent = document.getElementById(`${tabName}-tab`);
-            if (targetContent) {
-                targetContent.classList.add('active');
+            const users = [
+                {
+                    id: '1',
+                    name: 'Allan Boehme',
+                    email: 'alan.boehme61@gmail.com',
+                    level: 4,
+                    xp: 240,
+                    role: 'Admin',
+                    active: true
+                },
+                {
+                    id: '2',
+                    name: 'Utilisateur Test',
+                    email: 'test@example.com',
+                    level: 2,
+                    xp: 120,
+                    role: 'Entretien',
+                    active: true
+                }
+            ];
+            
+            usersList.innerHTML = users.map(user => `
+                <div class="admin-item">
+                    <div class="admin-item-info">
+                        <h5>${user.name}</h5>
+                        <p>${user.email} • Niveau ${user.level} • ${user.xp} XP • ${user.role}</p>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="icon-btn edit-btn" onclick="editUser('${user.id}')" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn toggle-btn" onclick="toggleUser('${user.id}')" title="${user.active ? 'Désactiver' : 'Activer'}">
+                            <i class="fas fa-${user.active ? 'user-slash' : 'user-check'}"></i>
+                        </button>
+                        <button class="icon-btn delete-btn" onclick="deleteUser('${user.id}')" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Charger la liste des quêtes admin
+        function loadAdminQuests() {
+            const questsList = document.getElementById('quests-admin-list');
+            
+            if (questsDatabase.length === 0) {
+                questsList.innerHTML = '<div class="no-quests">Aucune quête créée. Créez votre première quête !</div>';
+                return;
             }
             
-            // Charger les données pour cet onglet
-            loadAdminTabData(tabName);
-        });
-    });
-}
+            questsList.innerHTML = questsDatabase.map(quest => `
+                <div class="admin-item ${quest.active ? '' : 'inactive'}">
+                    <div class="admin-item-info">
+                        <h5>
+                            ${quest.title}
+                            <span class="quest-priority priority-${quest.priority}">${getPriorityLabel(quest.priority)}</span>
+                            ${quest.recurring ? '<span class="quest-recurring"><i class="fas fa-repeat"></i></span>' : ''}
+                            ${quest.photoRequired ? '<span class="quest-photo"><i class="fas fa-camera"></i></span>' : ''}
+                        </h5>
+                        <p>${quest.description}</p>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-star"></i> ${quest.xp} XP</span>
+                            <span><i class="fas fa-clock"></i> ${quest.duration} min</span>
+                            <span><i class="fas fa-users"></i> ${getRoleLabel(quest.role)}</span>
+                            <span><i class="fas fa-calendar"></i> ${quest.type}</span>
+                        </div>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="icon-btn edit-btn" onclick="editQuest('${quest.id}')" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn ${quest.active ? 'toggle-btn' : 'success-btn'}" onclick="toggleQuest('${quest.id}')" title="${quest.active ? 'Désactiver' : 'Activer'}">
+                            <i class="fas fa-${quest.active ? 'eye-slash' : 'eye'}"></i>
+                        </button>
+                        <button class="icon-btn info-btn" onclick="viewQuestStats('${quest.id}')" title="Statistiques">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
+                        <button class="icon-btn delete-btn" onclick="deleteQuest('${quest.id}')" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-// Charger les données d'administration
-function loadAdminData() {
-    loadAdminTabData('users');
-}
+        // Charger la liste des badges
+        function loadAdminBadges() {
+            const badgesList = document.getElementById('badges-admin-list');
+            
+            const badges = [
+                {
+                    id: '1',
+                    name: 'Premier pas',
+                    description: 'Première connexion',
+                    icon: 'fa-star',
+                    active: true
+                },
+                {
+                    id: '2',
+                    name: 'Travailleur assidu',
+                    description: '10 quêtes complétées',
+                    icon: 'fa-trophy',
+                    active: true
+                }
+            ];
+            
+            badgesList.innerHTML = badges.map(badge => `
+                <div class="admin-item">
+                    <div class="admin-item-info">
+                        <h5><i class="fas ${badge.icon}"></i> ${badge.name}</h5>
+                        <p>${badge.description}</p>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="icon-btn edit-btn" onclick="editBadge('${badge.id}')" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn toggle-btn" onclick="toggleBadge('${badge.id}')" title="${badge.active ? 'Désactiver' : 'Activer'}">
+                            <i class="fas fa-${badge.active ? 'eye-slash' : 'eye'}"></i>
+                        </button>
+                        <button class="icon-btn delete-btn" onclick="deleteBadge('${badge.id}')" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-// Charger les données pour un onglet spécifique
-function loadAdminTabData(tabName) {
-    switch(tabName) {
-        case 'users':
-            loadAdminUsers();
-            break;
-        case 'quests':
+        // Charger la liste des rôles
+        function loadAdminRoles() {
+            const rolesList = document.getElementById('roles-admin-list');
+            
+            const roles = [
+                {
+                    id: 'entretien',
+                    name: 'Entretien & Maintenance',
+                    description: 'Responsable de l\'entretien des équipements',
+                    color: '#2ecc71',
+                    active: true
+                },
+                {
+                    id: 'accueil',
+                    name: 'Accueil Client',
+                    description: 'Gestion de l\'accueil et relation client',
+                    color: '#3498db',
+                    active: true
+                }
+            ];
+            
+            rolesList.innerHTML = roles.map(role => `
+                <div class="admin-item">
+                    <div class="admin-item-info">
+                        <h5><span style="color: ${role.color};">●</span> ${role.name}</h5>
+                        <p>${role.description}</p>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="icon-btn edit-btn" onclick="editRole('${role.id}')" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn toggle-btn" onclick="toggleRole('${role.id}')" title="${role.active ? 'Désactiver' : 'Activer'}">
+                            <i class="fas fa-${role.active ? 'eye-slash' : 'eye'}"></i>
+                        </button>
+                        <button class="icon-btn delete-btn" onclick="deleteRole('${role.id}')" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Charger les paramètres
+        function loadAdminSettings() {
+            document.getElementById('app-name').value = 'SYNERGIA';
+            document.getElementById('xp-per-level').value = '100';
+            document.getElementById('app-theme').value = 'default';
+        }
+
+        // === GESTION DES QUÊTES PERSONNALISÉES ===
+
+        // Ouvrir le modal de création de quête
+        function addQuest() {
+            document.getElementById('quest-creation-modal').classList.remove('hidden');
+        }
+
+        // Fermer le modal
+        function closeQuestModal() {
+            document.getElementById('quest-creation-modal').classList.add('hidden');
+            document.getElementById('quest-creation-form').reset();
+            document.querySelector('#quest-creation-modal h3').textContent = 'Créer une nouvelle quête';
+            document.querySelector('#quest-creation-form button[type="submit"]').innerHTML = '<i class="fas fa-plus"></i> Créer la quête';
+            document.getElementById('quest-creation-form').removeAttribute('data-edit-id');
+        }
+
+        // Créer une nouvelle quête
+        function createNewQuest() {
+            const form = document.getElementById('quest-creation-form');
+            const editId = form.dataset.editId;
+            
+            const questData = {
+                id: editId || generateQuestId(),
+                title: document.getElementById('quest-title').value,
+                description: document.getElementById('quest-description').value,
+                type: document.getElementById('quest-type').value,
+                xp: parseInt(document.getElementById('quest-xp').value),
+                duration: parseInt(document.getElementById('quest-duration').value),
+                role: document.getElementById('quest-role').value,
+                priority: document.getElementById('quest-priority').value,
+                photoRequired: document.getElementById('quest-photo-required').checked,
+                recurring: document.getElementById('quest-recurring').checked,
+                frequency: document.getElementById('quest-frequency').value,
+                active: true,
+                createdAt: editId ? questsDatabase.find(q => q.id === editId)?.createdAt || new Date() : new Date(),
+                createdBy: currentUser.email,
+                completions: editId ? questsDatabase.find(q => q.id === editId)?.completions || [] : []
+            };
+            
+            if (editId) {
+                // Modifier la quête existante
+                const index = questsDatabase.findIndex(q => q.id === editId);
+                if (index !== -1) {
+                    questsDatabase[index] = questData;
+                    showNotification('Quête modifiée avec succès !', 'success');
+                }
+            } else {
+                // Ajouter nouvelle quête
+                questsDatabase.push(questData);
+                showNotification('Quête créée avec succès !', 'success');
+            }
+            
+            saveQuestsToStorage();
+            closeQuestModal();
             loadAdminQuests();
-            break;
-        case 'badges':
-            loadAdminBadges();
-            break;
-        case 'roles':
-            loadAdminRoles();
-            break;
-        case 'settings':
-            loadAdminSettings();
-            break;
-    }
-}
-
-// Charger la liste des utilisateurs
-function loadAdminUsers() {
-    const usersList = document.getElementById('users-list');
-    
-    // Données d'exemple
-    const users = [
-        {
-            id: '1',
-            name: 'Allan Boehme',
-            email: 'allan.boehme61@gmail.com',
-            level: 4,
-            xp: 240,
-            role: 'Admin',
-            active: true
-        },
-        {
-            id: '2',
-            name: 'Utilisateur Test',
-            email: 'test@example.com',
-            level: 2,
-            xp: 120,
-            role: 'Entretien',
-            active: true
+            
+            console.log('Quête sauvegardée:', questData);
         }
-    ];
-    
-    usersList.innerHTML = users.map(user => `
-        <div class="admin-item">
-            <div class="admin-item-info">
-                <h5>${user.name}</h5>
-                <p>${user.email} • Niveau ${user.level} • ${user.xp} XP • ${user.role}</p>
-            </div>
-            <div class="admin-actions">
-                <button class="icon-btn edit-btn" onclick="editUser('${user.id}')" title="Modifier">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="icon-btn toggle-btn" onclick="toggleUser('${user.id}')" title="${user.active ? 'Désactiver' : 'Activer'}">
-                    <i class="fas fa-${user.active ? 'user-slash' : 'user-check'}"></i>
-                </button>
-                <button class="icon-btn delete-btn" onclick="deleteUser('${user.id}')" title="Supprimer">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
 
-<!-- Modal de création de quête -->
-<div id="quest-creation-modal" class="modal hidden">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Créer une nouvelle quête</h3>
-            <button onclick="closeQuestModal()" class="icon-btn">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="quest-creation-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Titre de la quête</label>
-                        <input type="text" id="quest-title" placeholder="Ex: Vérifier l'accueil" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Type de quête</label>
-                        <select id="quest-type" required>
-                            <option value="daily">Quotidienne</option>
-                            <option value="weekly">Hebdomadaire</option>
-                            <option value="monthly">Mensuelle</option>
-                            <option value="special">Spéciale</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="quest-description" placeholder="Décrivez ce qu'il faut faire..." rows="3" required></textarea>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>XP à gagner</label>
-                        <input type="number" id="quest-xp" min="1" max="500" value="10" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Durée estimée (min)</label>
-                        <input type="number" id="quest-duration" min="1" max="480" value="15">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Rôle assigné</label>
-                        <select id="quest-role">
-                            <option value="all">Tous les rôles</option>
-                            <option value="entretien">Entretien & Maintenance</option>
-                            <option value="accueil">Accueil Client</option>
-                            <option value="animation">Animation</option>
-                            <option value="securite">Sécurité</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Priorité</label>
-                        <select id="quest-priority">
-                            <option value="low">Faible</option>
-                            <option value="normal">Normale</option>
-                            <option value="high">Élevée</option>
-                            <option value="urgent">Urgente</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="quest-photo-required"> 
-                        Validation par photo requise
-                    </label>
-                </div>
-                
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="quest-recurring"> 
-                        Quête récurrente
-                    </label>
-                </div>
-                
-                <div id="recurring-options" class="form-group hidden">
-                    <label>Fréquence de récurrence</label>
-                    <select id="quest-frequency">
-                        <option value="daily">Chaque jour</option>
-                        <option value="weekly">Chaque semaine</option>
-                        <option value="monthly">Chaque mois</option>
-                    </select>
-                </div>
-                
-                <div class="modal-actions">
-                    <button type="button" onclick="closeQuestModal()" class="btn-secondary">Annuler</button>
-                    <button type="submit" class="btn-primary">
-                        <i class="fas fa-plus"></i> Créer la quête
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-// Charger la liste des badges
-function loadAdminBadges() {
-    const badgesList = document.getElementById('badges-admin-list');
-    
-    const badges = [
-        {
-            id: '1',
-            name: 'Premier pas',
-            description: 'Première connexion',
-            icon: 'fa-star',
-            active: true
-        },
-        {
-            id: '2',
-            name: 'Travailleur assidu',
-            description: '10 quêtes complétées',
-            icon: 'fa-trophy',
-            active: true
+        // Générer un ID unique pour la quête
+        function generateQuestId() {
+            return 'quest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
-    ];
-    
-    badgesList.innerHTML = badges.map(badge => `
-        <div class="admin-item">
-            <div class="admin-item-info">
-                <h5><i class="fas ${badge.icon}"></i> ${badge.name}</h5>
-                <p>${badge.description}</p>
-            </div>
-            <div class="admin-actions">
-                <button class="icon-btn edit-btn" onclick="editBadge('${badge.id}')" title="Modifier">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="icon-btn toggle-btn" onclick="toggleBadge('${badge.id}')" title="${badge.active ? 'Désactiver' : 'Activer'}">
-                    <i class="fas fa-${badge.active ? 'eye-slash' : 'eye'}"></i>
-                </button>
-                <button class="icon-btn delete-btn" onclick="deleteBadge('${badge.id}')" title="Supprimer">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
 
-// Charger la liste des rôles
-function loadAdminRoles() {
-    const rolesList = document.getElementById('roles-admin-list');
-    
-    const roles = [
-        {
-            id: 'entretien',
-            name: 'Entretien & Maintenance',
-            description: 'Responsable de l\'entretien des équipements',
-            color: '#2ecc71',
-            active: true
-        },
-        {
-            id: 'accueil',
-            name: 'Accueil Client',
-            description: 'Gestion de l\'accueil et relation client',
-            color: '#3498db',
-            active: true
+        // Sauvegarder dans le localStorage
+        function saveQuestsToStorage() {
+            localStorage.setItem('synergiaQuests', JSON.stringify(questsDatabase));
         }
-    ];
-    
-    rolesList.innerHTML = roles.map(role => `
-        <div class="admin-item">
-            <div class="admin-item-info">
-                <h5><span style="color: ${role.color};">●</span> ${role.name}</h5>
-                <p>${role.description}</p>
-            </div>
-            <div class="admin-actions">
-                <button class="icon-btn edit-btn" onclick="editRole('${role.id}')" title="Modifier">
-                    <i class="fas fa-edit"></i>
+
+        // Fonctions utilitaires
+        function getPriorityLabel(priority) {
+            const labels = {
+                'low': 'Faible',
+                'normal': 'Normale',
+                'high': 'Élevée',
+                'urgent': 'Urgente'
+            };
+            return labels[priority] || priority;
+        }
+
+        function getRoleLabel(role) {
+            const labels = {
+                'all': 'Tous',
+                'entretien': 'Entretien',
+                'accueil': 'Accueil',
+                'animation': 'Animation',
+                'securite': 'Sécurité'
+            };
+            return labels[role] || role;
+        }
+
+        // Système de notifications
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="notification-close">
+                    <i class="fas fa-times"></i>
                 </button>
-                <button class="icon-btn toggle-btn" onclick="toggleRole('${role.id}')" title="${role.active ? 'Désactiver' : 'Activer'}">
-                    <i class="fas fa-${role.active ? 'eye-slash' : 'eye'}"></i>
-                </button>
-                <button class="icon-btn delete-btn" onclick="deleteRole('${role.id}')" title="Supprimer">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
 
-// Charger les paramètres
-function loadAdminSettings() {
-    document.getElementById('app-name').value = 'SYNERGIA';
-    document.getElementById('xp-per-level').value = '100';
-    document.getElementById('app-theme').value = 'default';
-}
+        // Actions sur les quêtes
+        function editQuest(questId) {
+            const quest = questsDatabase.find(q => q.id === questId);
+            if (quest) {
+                document.getElementById('quest-title').value = quest.title;
+                document.getElementById('quest-description').value = quest.description;
+                document.getElementById('quest-type').value = quest.type;
+                document.getElementById('quest-xp').value = quest.xp;
+                document.getElementById('quest-duration').value = quest.duration;
+                document.getElementById('quest-role').value = quest.role;
+                document.getElementById('quest-priority').value = quest.priority;
+                document.getElementById('quest-photo-required').checked = quest.photoRequired;
+                document.getElementById('quest-recurring').checked = quest.recurring;
+                document.getElementById('quest-frequency').value = quest.frequency;
+                
+                if (quest.recurring) {
+                    document.getElementById('recurring-options').classList.remove('hidden');
+                }
+                
+                document.getElementById('quest-creation-modal').classList.remove('hidden');
+                document.querySelector('#quest-creation-modal h3').textContent = 'Modifier la quête';
+                document.querySelector('#quest-creation-form button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Sauvegarder';
+                document.getElementById('quest-creation-form').dataset.editId = questId;
+            }
+        }
 
-// Fonctions d'action (placeholders pour l'instant)
-function addUser() { alert('Fonction d\'ajout d\'utilisateur - En développement'); }
-function editUser(id) { alert(`Modification utilisateur ${id} - En développement`); }
-function toggleUser(id) { alert(`Activation/Désactivation utilisateur ${id} - En développement`); }
-function deleteUser(id) { if(confirm('Supprimer cet utilisateur ?')) alert(`Suppression utilisateur ${id} - En développement`); }
+        function toggleQuest(questId) {
+            const quest = questsDatabase.find(q => q.id === questId);
+            if (quest) {
+                quest.active = !quest.active;
+                saveQuestsToStorage();
+                loadAdminQuests();
+                showNotification(`Quête ${quest.active ? 'activée' : 'désactivée'}`, 'success');
+            }
+        }
 
-function addQuest() { alert('Fonction d\'ajout de quête - En développement'); }
-function editQuest(id) { alert(`Modification quête ${id} - En développement`); }
-function toggleQuest(id) { alert(`Activation/Désactivation quête ${id} - En développement`); }
-function deleteQuest(id) { if(confirm('Supprimer cette quête ?')) alert(`Suppression quête ${id} - En développement`); }
+        function deleteQuest(questId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette quête ? Cette action est irréversible.')) {
+                questsDatabase = questsDatabase.filter(q => q.id !== questId);
+                saveQuestsToStorage();
+                loadAdminQuests();
+                showNotification('Quête supprimée', 'success');
+            }
+        }
 
-function addBadge() { alert('Fonction d\'ajout de badge - En développement'); }
-function editBadge(id) { alert(`Modification badge ${id} - En développement`); }
-function toggleBadge(id) { alert(`Activation/Désactivation badge ${id} - En développement`); }
-function deleteBadge(id) { if(confirm('Supprimer ce badge ?')) alert(`Suppression badge ${id} - En développement`); }
+        function viewQuestStats(questId) {
+            const quest = questsDatabase.find(q => q.id === questId);
+            if (quest) {
+                alert(`Statistiques pour "${quest.title}":\n\n- Complétions: ${quest.completions.length}\n- Créée le: ${new Date(quest.createdAt).toLocaleDateString()}\n- Par: ${quest.createdBy}`);
+            }
+        }
 
-function addRole() { alert('Fonction d\'ajout de rôle - En développement'); }
-function editRole(id) { alert(`Modification rôle ${id} - En développement`); }
-function toggleRole(id) { alert(`Activation/Désactivation rôle ${id} - En développement`); }
-function deleteRole(id) { if(confirm('Supprimer ce rôle ?')) alert(`Suppression rôle ${id} - En développement`); }
+        // Actions d'administration (placeholders)
+        function addUser() { alert('Fonction d\'ajout d\'utilisateur - En développement'); }
+        function editUser(id) { alert(`Modification utilisateur ${id} - En développement`); }
+        function toggleUser(id) { alert(`Activation/Désactivation utilisateur ${id} - En développement`); }
+        function deleteUser(id) { if(confirm('Supprimer cet utilisateur ?')) alert(`Suppression utilisateur ${id} - En développement`); }
 
-function saveSettings() { alert('Sauvegarde des paramètres - En développement'); }
+        function addBadge() { alert('Fonction d\'ajout de badge - En développement'); }
+        function editBadge(id) { alert(`Modification badge ${id} - En développement`); }
+        function toggleBadge(id) { alert(`Activation/Désactivation badge ${id} - En développement`); }
+        function deleteBadge(id) { if(confirm('Supprimer ce badge ?')) alert(`Suppression badge ${id} - En développement`); }
+
+        function addRole() { alert('Fonction d\'ajout de rôle - En développement'); }
+        function editRole(id) { alert(`Modification rôle ${id} - En développement`); }
+        function toggleRole(id) { alert(`Activation/Désactivation rôle ${id} - En développement`); }
+        function deleteRole(id) { if(confirm('Supprimer ce rôle ?')) alert(`Suppression rôle ${id} - En développement`); }
+
+        function saveSettings() { alert('Sauvegarde des paramètres - En développement'); }
+
+        // Déconnexion
+        function logout() {
+            auth.signOut();
+        }
     </script>
-    <!-- Panneau d'administration -->
-<div id="admin-panel" class="modal hidden">
-    <div class="modal-content admin-modal">
-        <div class="modal-header">
-            <h3>Administration SYNERGIA</h3>
-            <button id="close-admin" class="icon-btn">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="admin-tabs">
-                <button class="tab active" data-tab="users">Utilisateurs</button>
-                <button class="tab" data-tab="quests">Quêtes</button>
-                <button class="tab" data-tab="badges">Badges</button>
-                <button class="tab" data-tab="roles">Rôles</button>
-                <button class="tab" data-tab="settings">Paramètres</button>
-            </div>
-            
-            <!-- Onglet Utilisateurs -->
-            <div class="tab-content active" id="users-tab">
-                <div class="admin-section">
-                    <h4>Gestion des utilisateurs</h4>
-                    <button class="btn-secondary" onclick="addUser()">
-                        <i class="fas fa-plus"></i> Ajouter un utilisateur
-                    </button>
-                    <div id="users-list" class="admin-list">
-                        <!-- Sera rempli dynamiquement -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Onglet Quêtes -->
-            <div class="tab-content" id="quests-tab">
-                <div class="admin-section">
-                    <h4>Gestion des quêtes</h4>
-                    <button class="btn-secondary" onclick="addQuest()">
-                        <i class="fas fa-plus"></i> Créer une quête
-                    </button>
-                    <div id="quests-admin-list" class="admin-list">
-                        <!-- Sera rempli dynamiquement -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Onglet Badges -->
-            <div class="tab-content" id="badges-tab">
-                <div class="admin-section">
-                    <h4>Gestion des badges</h4>
-                    <button class="btn-secondary" onclick="addBadge()">
-                        <i class="fas fa-plus"></i> Créer un badge
-                    </button>
-                    <div id="badges-admin-list" class="admin-list">
-                        <!-- Sera rempli dynamiquement -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Onglet Rôles -->
-            <div class="tab-content" id="roles-tab">
-                <div class="admin-section">
-                    <h4>Gestion des rôles</h4>
-                    <button class="btn-secondary" onclick="addRole()">
-                        <i class="fas fa-plus"></i> Créer un rôle
-                    </button>
-                    <div id="roles-admin-list" class="admin-list">
-                        <!-- Sera rempli dynamiquement -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Onglet Paramètres -->
-            <div class="tab-content" id="settings-tab">
-                <div class="admin-section">
-                    <h4>Paramètres de l'application</h4>
-                    <div class="form-group">
-                        <label>Nom de l'application</label>
-                        <input type="text" id="app-name" value="SYNERGIA">
-                    </div>
-                    <div class="form-group">
-                        <label>XP par niveau</label>
-                        <input type="number" id="xp-per-level" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Thème</label>
-                        <select id="app-theme">
-                            <option value="default">Par défaut</option>
-                            <option value="dark">Sombre</option>
-                            <option value="light">Clair</option>
-                        </select>
-                    </div>
-                    <button class="btn-primary" onclick="saveSettings()">
-                        <i class="fas fa-save"></i> Sauvegarder
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Bouton d'administration flottant -->
-<button id="admin-btn" class="admin-fab hidden">
-    <i class="fas fa-cog"></i>
-</button>
 </body>
 </html>
