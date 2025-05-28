@@ -163,6 +163,15 @@ header::after {
     z-index: -1;
 }
 
+/* RESPONSIVE POUR L'IMAGE */
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll; /* Meilleure performance sur mobile */
+        background-size: cover;
+    }
+}
+
+
 /* ANIMATIONS NÉON */
 @keyframes neonShape1 {
     0% { transform: rotate(0deg) scale(1) translateX(0); opacity: 0.6; }
