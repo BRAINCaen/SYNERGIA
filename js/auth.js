@@ -26,15 +26,13 @@ loginForm.addEventListener('submit', async (e) => {
 });
 
 // Observer les changements d'état d'authentification
-// Dans la fonction auth.onAuthStateChanged
 auth.onAuthStateChanged(async user => {
     const loadingScreen = document.getElementById('loading-screen');
     const loginScreen = document.getElementById('login-screen');
     const app = document.getElementById('app');
     
     if (user) {
-        loginScreen.classList.add('hidden');
-        app.classList.remove('hidden');
+        currentUser = user;
         
         try {
             // Vérifier si le profil existe
@@ -42,25 +40,44 @@ auth.onAuthStateChanged(async user => {
             
             if (!userDoc.exists) {
                 // CRÉER automatiquement le profil
-                await createUserProfile(user);
-                console.log('Profil utilisateur créé automatiquement');
+                console.log('Création du profil utilisateur...');
+                userProfile = await createUserProfile(user);
+            } else {
+                // Charger le profil existant
+                userProfile = userDoc.data();
+                console.log('Profil utilisateur chargé:', userProfile);
             }
             
-            // Charger les données
-            await loadUserData(user);
-            loadPage('dashboard');
+            // Cacher les écrans de chargement/connexion
+            loginScreen.classList.add('hidden');
+            loadingScreen.classList.add('hidden');
+            app.classList.remove('hidden');
+            
+            // Mettre à jour l'interface
+            updateUserInterface();
+            
+            // Charger le dashboard
+            if (typeof loadPage === 'function') {
+                loadPage('dashboard');
+            }
+            
+            console.log('Connexion réussie pour:', user.email);
             
         } catch (error) {
             console.error('Erreur lors du chargement:', error);
+            // En cas d'erreur, utiliser des données par défaut
+            handleMissingProfile(user);
         }
     } else {
+        // L'utilisateur est déconnecté
+        currentUser = null;
+        userProfile = {};
+        
+        // Afficher l'écran de connexion
         app.classList.add('hidden');
+        loadingScreen.classList.add('hidden');
         loginScreen.classList.remove('hidden');
     }
-    
-    setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-    }, 1000);
 });
 
 // Fonction pour créer un profil utilisateur automatiquement
@@ -88,43 +105,33 @@ async function createUserProfile(user) {
         return defaultProfile;
     } catch (error) {
         console.error('Erreur création profil:', error);
-        throw error;
+        // Retourner le profil par défaut même en cas d'erreur Firebase
+        return defaultProfile;
     }
 }
 
-                
-                // Mettre à jour l'interface utilisateur
-                document.getElementById('loading-screen').classList.add('hidden');
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('app').classList.remove('hidden');
-                
-                // Mettre à jour les informations d'utilisateur dans l'interface
-                updateUserInterface();
-                
-                // Charger la page d'accueil (dashboard)
-                navigateTo('dashboard');
-            } else {
-                // Profil non trouvé, déconnexion
-                console.error("Profil utilisateur non trouvé");
-                await auth.signOut();
-                alert("Profil utilisateur non trouvé. Veuillez contacter l'administrateur.");
-            }
-        } catch (error) {
-            console.error('Erreur lors du chargement du profil:', error);
-            alert(`Erreur lors du chargement du profil: ${error.message}`);
-            document.querySelector('.loading-progress').style.width = '0%';
-        }
-    } else {
-        // L'utilisateur est déconnecté
-        currentUser = null;
-        userProfile = {};
-        
-        // Afficher l'écran de connexion
-        document.getElementById('app').classList.add('hidden');
-        document.getElementById('loading-screen').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('hidden');
-    }
-});
+// Fonction de secours si le profil pose problème
+function handleMissingProfile(user) {
+    console.log('Mode dégradé activé');
+    userProfile = {
+        displayName: user.email.split('@')[0],
+        email: user.email,
+        xp: 0,
+        level: 1,
+        roles: ['entretien']
+    };
+    
+    // Cacher les écrans de chargement/connexion
+    const loginScreen = document.getElementById('login-screen');
+    const loadingScreen = document.getElementById('loading-screen');
+    const app = document.getElementById('app');
+    
+    loginScreen.classList.add('hidden');
+    loadingScreen.classList.add('hidden');
+    app.classList.remove('hidden');
+    
+    updateUserInterface();
+}
 
 // Déconnexion
 function logout() {
@@ -133,32 +140,62 @@ function logout() {
 
 // Mettre à jour l'interface utilisateur avec les informations de l'utilisateur
 function updateUserInterface() {
-    if (!currentUser) return;
+    if (!currentUser || !userProfile) return;
     
-    // Avatar et nom d'utilisateur
-    const userAvatar = document.getElementById('user-avatar');
-    const userName = document.getElementById('user-name');
-    
-    userAvatar.src = userProfile.photoURL || 'images/default-avatar.png';
-    userName.textContent = userProfile.displayName || currentUser.email;
-    
-    // Barre d'XP
-    updateXP(userProfile.xp || 0, userProfile.level || 1);
+    try {
+        // Avatar et nom d'utilisateur
+        const userAvatar = document.getElementById('user-avatar');
+        const userName = document.getElementById('user-name');
+        const welcomeName = document.getElementById('welcome-name');
+        
+        if (userAvatar) {
+            userAvatar.src = userProfile.photoURL || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
+        }
+        
+        if (userName) {
+            userName.textContent = userProfile.displayName || currentUser.email;
+        }
+        
+        if (welcomeName) {
+            welcomeName.textContent = userProfile.displayName || currentUser.email.split('@')[0];
+        }
+        
+        // Barre d'XP
+        updateXP(userProfile.xp || 0, userProfile.level || 1);
+        
+        console.log('Interface utilisateur mise à jour');
+        
+    } catch (error) {
+        console.error('Erreur mise à jour interface:', error);
+    }
 }
 
 // Mise à jour de l'XP et du niveau
 function updateXP(xp, level) {
-    const xpProgress = document.getElementById('xp-progress');
-    const xpText = document.getElementById('xp-text');
-    
-    // Calculer le XP nécessaire pour le niveau actuel
-    const xpForCurrentLevel = 100 * level;
-    
-    // Calculer le pourcentage de progression dans le niveau actuel
-    const xpInCurrentLevel = xp - (100 * (level - 1));
-    const progressPercent = (xpInCurrentLevel / xpForCurrentLevel) * 100;
-    
-    // Mettre à jour l'interface
-    xpProgress.style.width = `${progressPercent}%`;
-    xpText.textContent = `${xp} XP`;
+    try {
+        const xpProgress = document.getElementById('xp-progress');
+        const xpText = document.getElementById('xp-text');
+        const levelBadge = document.getElementById('level-badge');
+        
+        // Calculer le XP nécessaire pour le niveau actuel
+        const xpForCurrentLevel = 100 * level;
+        const xpInCurrentLevel = xp - (100 * (level - 1));
+        const progressPercent = Math.max(0, Math.min(100, (xpInCurrentLevel / 100) * 100));
+        
+        // Mettre à jour l'interface
+        if (xpProgress) {
+            xpProgress.style.width = `${progressPercent}%`;
+        }
+        
+        if (xpText) {
+            xpText.textContent = `${xp} XP`;
+        }
+        
+        if (levelBadge) {
+            levelBadge.textContent = level;
+        }
+        
+    } catch (error) {
+        console.error('Erreur mise à jour XP:', error);
+    }
 }
