@@ -2424,6 +2424,224 @@ function loadTeam() {
             };
             return icons[questType] || 'fa-tasks';
         }
+        
+        // === GESTION DE L'ÉQUIPE ===
+
+        let teamMembers = JSON.parse(localStorage.getItem('synergiaTeam')) || [
+            {
+                id: 'member_1',
+                name: 'Allan Boehme',
+                email: 'alan.boehme61@gmail.com',
+                role: 'Manager',
+                avatar: 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png',
+                level: 4,
+                xp: 240,
+                completedQuests: 28,
+                totalQuests: 35,
+                status: 'online',
+                joinedAt: '2024-01-15',
+                lastActive: new Date(),
+                skills: ['Management', 'Entretien', 'Formation'],
+                schedule: {
+                    monday: { start: '08:00', end: '18:00' },
+                    tuesday: { start: '08:00', end: '18:00' },
+                    wednesday: { start: '08:00', end: '18:00' },
+                    thursday: { start: '08:00', end: '18:00' },
+                    friday: { start: '08:00', end: '17:00' },
+                    saturday: { start: '09:00', end: '16:00' },
+                    sunday: 'off'
+                }
+            },
+            {
+                id: 'member_2',
+                name: 'Emma Martin',
+                email: 'emma.martin@brain-caen.fr',
+                role: 'Accueil',
+                avatar: 'https://img.icons8.com/color/96/000000/user-female-circle--v1.png',
+                level: 3,
+                xp: 180,
+                completedQuests: 22,
+                totalQuests: 28,
+                status: 'online',
+                joinedAt: '2024-02-01',
+                lastActive: new Date(),
+                skills: ['Accueil', 'Communication', 'Vente'],
+                schedule: {
+                    monday: { start: '09:00', end: '17:00' },
+                    tuesday: { start: '09:00', end: '17:00' },
+                    wednesday: { start: '09:00', end: '17:00' },
+                    thursday: { start: '09:00', end: '17:00' },
+                    friday: { start: '09:00', end: '17:00' },
+                    saturday: { start: '10:00', end: '18:00' },
+                    sunday: 'off'
+                }
+            },
+            {
+                id: 'member_3',
+                name: 'Lucas Dubois',
+                email: 'lucas.dubois@brain-caen.fr',
+                role: 'Entretien',
+                avatar: 'https://img.icons8.com/color/96/000000/user-male-circle--v2.png',
+                level: 2,
+                xp: 95,
+                completedQuests: 15,
+                totalQuests: 20,
+                status: 'busy',
+                joinedAt: '2024-03-10',
+                lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000), // Il y a 2h
+                skills: ['Entretien', 'Réparation', 'Nettoyage'],
+                schedule: {
+                    monday: { start: '08:00', end: '16:00' },
+                    tuesday: { start: '08:00', end: '16:00' },
+                    wednesday: { start: '08:00', end: '16:00' },
+                    thursday: { start: '08:00', end: '16:00' },
+                    friday: { start: '08:00', end: '16:00' },
+                    saturday: 'off',
+                    sunday: 'off'
+                }
+            }
+        ];
+
+        // Initialiser les onglets de l'équipe
+        function initTeamTabs() {
+            const teamTabs = document.querySelectorAll('.team-page .tab');
+            teamTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    teamTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.team-page .tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    const targetContent = document.getElementById(`${tabName}-tab`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                    
+                    // Charger les données pour l'onglet
+                    loadTeamTabData(tabName);
+                    
+                    console.log('Onglet équipe activé:', tabName);
+                });
+            });
+        }
+
+        // Charger les données pour un onglet spécifique
+        function loadTeamTabData(tabName) {
+            switch(tabName) {
+                case 'members':
+                    loadTeamMembers();
+                    break;
+                case 'assignments':
+                    loadQuestAssignments();
+                    break;
+                case 'performance':
+                    loadTeamPerformance();
+                    break;
+                case 'schedule':
+                    loadTeamSchedule();
+                    break;
+            }
+        }
+
+        // Charger les membres de l'équipe
+        function loadTeamMembers() {
+            const container = document.getElementById('team-members-list');
+            if (!container) return;
+            
+            container.innerHTML = teamMembers.map(member => {
+                const completionRate = Math.round((member.completedQuests / member.totalQuests) * 100);
+                const statusClass = `status-${member.status}`;
+                const statusText = {
+                    'online': 'En ligne',
+                    'offline': 'Hors ligne',
+                    'busy': 'Occupé'
+                }[member.status];
+                
+                return `
+                    <div class="team-member-card">
+                        <img src="${member.avatar}" alt="${member.name}" class="member-avatar">
+                        <div class="member-info">
+                            <h4>${member.name}</h4>
+                            <div class="member-role">${member.role}</div>
+                            <div class="member-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">${member.level}</span>
+                                    <span class="stat-label">Niveau</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">${member.xp}</span>
+                                    <span class="stat-label">XP</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value">${completionRate}%</span>
+                                    <span class="stat-label">Réussite</span>
+                                </div>
+                            </div>
+                            <div class="member-status ${statusClass}">${statusText}</div>
+                            <div class="member-actions">
+                                <button class="btn-icon btn-message" onclick="messageTeamMember('${member.id}')" title="Envoyer un message">
+                                    <i class="fas fa-comment"></i>
+                                </button>
+                                <button class="btn-icon btn-assign" onclick="assignQuestToMember('${member.id}')" title="Assigner une quête">
+                                    <i class="fas fa-tasks"></i>
+                                </button>
+                                <button class="btn-icon btn-stats" onclick="viewMemberStats('${member.id}')" title="Voir les statistiques">
+                                    <i class="fas fa-chart-bar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Fonctions d'actions sur les membres (placeholders pour l'instant)
+        function addTeamMember() {
+            alert('Fonction d\'ajout de membre - En développement');
+        }
+
+        function messageTeamMember(memberId) {
+            const member = teamMembers.find(m => m.id === memberId);
+            if (member) {
+                alert(`Envoyer un message à ${member.name} - Fonctionnalité en développement`);
+            }
+        }
+
+        function assignQuestToMember(memberId) {
+            const member = teamMembers.find(m => m.id === memberId);
+            if (member) {
+                alert(`Assigner une quête à ${member.name} - Fonctionnalité en développement`);
+            }
+        }
+
+        function viewMemberStats(memberId) {
+            const member = teamMembers.find(m => m.id === memberId);
+            if (member) {
+                alert(`Statistiques de ${member.name}:\n\n- Niveau: ${member.level}\n- XP: ${member.xp}\n- Quêtes réussies: ${member.completedQuests}/${member.totalQuests}\n- Membre depuis: ${member.joinedAt}`);
+            }
+        }
+
+        // Fonctions pour les autres onglets (placeholders)
+        function loadQuestAssignments() {
+            console.log('Chargement des attributions de quêtes');
+        }
+
+        function loadTeamPerformance() {
+            console.log('Chargement des performances d\'équipe');
+        }
+
+        function loadTeamSchedule() {
+            console.log('Chargement du planning d\'équipe');
+        }
+
+        // Sauvegarder l'équipe dans le localStorage
+        function saveTeamToStorage() {
+            localStorage.setItem('synergiaTeam', JSON.stringify(teamMembers));
+        }
+
 
         // === GESTION DE L'ADMINISTRATION ===
 
