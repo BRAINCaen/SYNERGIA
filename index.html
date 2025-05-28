@@ -111,7 +111,7 @@
         }
 
         /* Écran de chargement */
-        #loading-screen {
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -232,7 +232,7 @@ main {
         }
 
         /* Style RPG */
-        #level-badge {
+        .level-badge {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
             border: 2px solid white;
@@ -245,7 +245,7 @@ main {
             overflow: hidden;
         }
 
-        #xp-progress, #level-bar, #mastery-bar {
+        .xp-progress, #level-bar, #mastery-bar {
             background: linear-gradient(90deg, var(--secondary-light) 0%, var(--secondary) 100%);
             box-shadow: 0 0 5px var(--secondary-light);
         }
@@ -261,7 +261,7 @@ main {
         }
 
         /* Écran de connexion */
-        #login-screen {
+        .login-screen {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -350,7 +350,7 @@ main {
         }
 
         /* Layout principal */
-        #app {
+        .app {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -395,14 +395,14 @@ main {
             position: relative;
         }
 
-        #xp-progress {
+        .xp-progress {
             position: absolute;
             height: 100%;
             background-color: var(--primary);
             border-radius: 3px;
         }
 
-        #xp-text {
+        .xp-text {
             position: absolute;
             top: -18px;
             right: 0;
@@ -520,7 +520,7 @@ main {
             margin-top: var(--spacing-md);
         }
 
-        #level-badge {
+        .level-badge {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -554,7 +554,7 @@ main {
             position: relative;
         }
 
-        #level-bar, #mastery-bar {
+        .level-bar, #mastery-bar {
             position: absolute;
             height: 100%;
             background-color: var(--primary);
@@ -562,11 +562,11 @@ main {
             width: 60%;
         }
 
-        #mastery-bar {
+        .mastery-bar {
             background-color: var(--success);
         }
 
-        #level-text, #mastery-text {
+        .level-text, #mastery-text {
             position: absolute;
             top: -18px;
             right: 0;
@@ -574,7 +574,7 @@ main {
             color: var(--gray);
         }
 
-        #main-role {
+        .main-role {
             display: flex;
             align-items: center;
             margin-top: var(--spacing-md);
@@ -1864,7 +1864,7 @@ main {
     width: auto;
 }
 
-#time-inputs {
+.time-inputs {
     margin-top: var(--spacing-md);
     padding: var(--spacing-md);
     background: var(--light);
@@ -2015,7 +2015,7 @@ main {
     margin: 0;
 }
 
-#manual-input {
+.manual-input {
     width: 100%;
     min-height: 150px;
     font-family: monospace;
@@ -2266,7 +2266,7 @@ main {
         }
 
         @media (min-width: 768px) {
-            #app {
+            .app {
                 flex-direction: row;
             }
 
