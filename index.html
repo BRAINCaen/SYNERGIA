@@ -2441,7 +2441,7 @@ main {
             <div class="user-info">
                 <img id="user-avatar" src="https://img.icons8.com/color/96/000000/user-male-circle--v1.png" alt="Avatar">
                 <div>
-                    <h2 id="user-name">Chargement...</h2>
+                    <h2 id="current-user-name">Chargement...</h2>
                     <div class="xp-bar">
                         <div id="xp-progress" style="width: 60%;"></div>
                         <span id="xp-text">0 XP</span>
@@ -3973,11 +3973,11 @@ function saveUser(userId = null) {
     
     const formData = {
         id: userId || Date.now(),
-        name: nameElement ? nameElement.value : '',
-        email: emailElement ? emailElement.value : '',
+        name: document.getElementById('modal-user-name')?.value || '',
+        email: document.getElementById('modal-user-email')?.value || '',
         phone: document.getElementById('user-phone')?.value || '',
         joinedAt: document.getElementById('user-hire-date')?.value || new Date().toISOString().split('T')[0],
-        role: roleElement ? roleElement.value : '',
+        role: document.getElementById('modal-user-role')?.value || '',
         contract: document.getElementById('user-contract')?.value || 'CDI',
         experience: document.getElementById('user-experience')?.value || 'Débutant',
         trainings: parseInt(document.getElementById('user-trainings')?.value) || 0,
