@@ -3953,47 +3953,83 @@ function removeSkill(skillName) {
     });
 }
 
-// Sauvegarder l'utilisateur
+
+// Sauvegarder l'utilisateur - VERSION DEBUG
 function saveUser(userId = null) {
+    console.log('=== DEBUG SAVEUSER ===');
+    
+    // Debug des éléments
+    const nameElement = document.getElementById('user-name');
+    const emailElement = document.getElementById('user-email');
+    const roleElement = document.getElementById('user-role');
+    
+    console.log('Nom element:', nameElement);
+    console.log('Email element:', emailElement);
+    console.log('Rôle element:', roleElement);
+    
+    if (nameElement) console.log('Nom value:', nameElement.value);
+    if (emailElement) console.log('Email value:', emailElement.value);
+    if (roleElement) console.log('Rôle value:', roleElement.value);
+    
     const formData = {
         id: userId || Date.now(),
-        name: document.getElementById('user-name').value,
-        email: document.getElementById('user-email').value,
-        phone: document.getElementById('user-phone').value,
-        joinedAt: document.getElementById('user-hire-date').value,
-        role: document.getElementById('user-role').value,
-        contract: document.getElementById('user-contract').value,
-        experience: document.getElementById('user-experience').value,
-        trainings: parseInt(document.getElementById('user-trainings').value) || 0,
-        level: parseInt(document.getElementById('user-level').value) || 1,
-        xp: parseInt(document.getElementById('user-xp').value) || 0,
-        monthlyGoal: parseInt(document.getElementById('user-monthly-goal').value) || 10,
+        name: nameElement ? nameElement.value : '',
+        email: emailElement ? emailElement.value : '',
+        phone: document.getElementById('user-phone')?.value || '',
+        joinedAt: document.getElementById('user-hire-date')?.value || new Date().toISOString().split('T')[0],
+        role: roleElement ? roleElement.value : '',
+        contract: document.getElementById('user-contract')?.value || 'CDI',
+        experience: document.getElementById('user-experience')?.value || 'Débutant',
+        trainings: parseInt(document.getElementById('user-trainings')?.value) || 0,
+        level: parseInt(document.getElementById('user-level')?.value) || 1,
+        xp: parseInt(document.getElementById('user-xp')?.value) || 0,
+        monthlyGoal: parseInt(document.getElementById('user-monthly-goal')?.value) || 10,
         avatar: userAvatarBase64 || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png',
         permissions: {
-            admin: document.getElementById('perm-admin').checked,
-            manageTeam: document.getElementById('perm-manage-team').checked,
-            createQuests: document.getElementById('perm-create-quests').checked,
-            viewReports: document.getElementById('perm-view-reports').checked
+            admin: document.getElementById('perm-admin')?.checked || false,
+            manageTeam: document.getElementById('perm-manage-team')?.checked || false,
+            createQuests: document.getElementById('perm-create-quests')?.checked || false,
+            viewReports: document.getElementById('perm-view-reports')?.checked || false
         },
         skills: Array.from(document.querySelectorAll('#skills-list .skill-tag')).map(tag => 
             tag.textContent.trim().replace('×', '').trim()
-        )
+        ),
+        // Ajout des champs manquants pour compatibilité
+        status: 'online',
+        completedQuests: 0,
+        activeQuests: Math.floor(Math.random() * 5) + 1,
+        streak: Math.floor(Math.random() * 30),
+        mastery: Math.floor(Math.random() * 100)
     };
     
-// DIAGNOSTIC - AJOUTER TEMPORAIREMENT
-console.log('Nom:', document.getElementById('user-name')?.value);
-console.log('Email:', document.getElementById('user-email')?.value);
-console.log('Rôle:', document.getElementById('user-role')?.value);
-
-// Validation
-if (!formData.name || !formData.email || !formData.role) {
-    showNotification('Veuillez remplir tous les champs obligatoires (*)', 'error');
-    return;
-}
-
+    console.log('FormData créé:', formData);
+    console.log('Nom check:', !!formData.name);
+    console.log('Email check:', !!formData.email);
+    console.log('Rôle check:', !!formData.role);
     
-    // Sauvegarder dans le localStorage (temporaire)
-    let users = JSON.parse(localStorage.getItem('synergia_users')) || [];
+    // Validation avec debug
+    if (!formData.name || !formData.email || !formData.role) {
+        console.log('ERREUR: Champs manquants!');
+        console.log('Nom manquant:', !formData.name);
+        console.log('Email manquant:', !formData.email);
+        console.log('Rôle manquant:', !formData.role);
+        
+        showNotification('DEBUG: Nom=' + !!formData.name + ', Email=' + !!formData.email + ', Rôle=' + !!formData.role, 'error');
+        return;
+    }
+    
+    // Si on arrive ici, tout est OK
+    console.log('Validation OK, sauvegarde...');
+    
+    // CORRECTION : Utiliser la même clé que l'affichage
+    let users = JSON.parse(localStorage.getItem('synergiaTeam')) || [];
+    
+    // Vérifier les doublons d'email
+    const existingUser = users.find(u => u.email === formData.email && u.id !== userId);
+    if (existingUser) {
+        showNotification('Cet email est déjà utilisé !', 'error');
+        return;
+    }
     
     if (userId) {
         // Mode édition
@@ -4006,17 +4042,20 @@ if (!formData.name || !formData.email || !formData.role) {
         users.push(formData);
     }
     
-    localStorage.setItem('synergia_users', JSON.stringify(users));
+    // Sauvegarder
+    localStorage.setItem('synergiaTeam', JSON.stringify(users));
+    teamMembers = users;
     
     // Fermer le modal et rafraîchir l'affichage
     closeUserModal();
-    showSuccess(userId ? 'Utilisateur modifié avec succès !' : 'Utilisateur créé avec succès !');
+    showNotification('Utilisateur ' + (userId ? 'modifié' : 'créé') + ' avec succès !', 'success');
     
-    // Rafraîchir la liste des utilisateurs si on est sur la page équipe
+    // Rafraîchir la liste des utilisateurs
     if (typeof loadTeamMembers === 'function') {
         loadTeamMembers();
     }
 }
+
 
     
 // Fermer le modal
