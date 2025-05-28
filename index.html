@@ -3383,9 +3383,234 @@ function loadTeam() {
         }
 
         // Fonctions d'actions sur les membres (placeholders pour l'instant)
-        function addTeamMember() {
-            alert('Fonction d\'ajout de membre - En développement');
+// Ajouter un nouvel utilisateur
+function addTeamMember() {
+    showUserCreationModal();
+}
+
+// Afficher le modal de création d'utilisateur
+function showUserCreationModal(editUser = null) {
+    const isEdit = editUser !== null;
+    const modalTitle = isEdit ? 'Modifier l\'utilisateur' : 'Ajouter un utilisateur';
+    const buttonText = isEdit ? 'Sauvegarder' : 'Créer l\'utilisateur';
+    const buttonIcon = isEdit ? 'fa-save' : 'fa-plus';
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'user-creation-modal';
+    modal.innerHTML = `
+        <div class="modal-content user-modal">
+            <div class="modal-header">
+                <h3><i class="fas ${isEdit ? 'fa-edit' : 'fa-user-plus'}"></i> ${modalTitle}</h3>
+                <button onclick="closeUserModal()" class="icon-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="user-creation-form">
+                    <div class="user-form-sections">
+                        <!-- Section Informations personnelles -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-user"></i> Informations personnelles</h4>
+                            
+                            <div class="avatar-upload-section">
+                                <div class="avatar-preview" id="user-avatar-preview" onclick="document.getElementById('user-avatar-input').click()">
+                                    <img src="${editUser?.avatar || 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png'}" alt="Avatar" id="preview-avatar">
+                                    <div class="avatar-overlay">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                </div>
+                                <input type="file" id="user-avatar-input" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+                                <button type="button" class="btn-secondary btn-small" onclick="removeUserAvatar()">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nom complet *</label>
+                                    <input type="text" id="user-name" placeholder="Ex: Allan Boehme" value="${editUser?.name || ''}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email *</label>
+                                    <input type="email" id="user-email" placeholder="allan@brain-caen.fr" value="${editUser?.email || ''}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Téléphone</label>
+                                    <input type="tel" id="user-phone" placeholder="06 12 34 56 78" value="${editUser?.phone || ''}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date d'embauche</label>
+                                    <input type="date" id="user-hire-date" value="${editUser?.joinedAt || new Date().toISOString().split('T')[0]}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Section Rôle et permissions -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-user-tag"></i> Rôle et permissions</h4>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Rôle principal *</label>
+                                    <select id="user-role" required>
+                                        <option value="">Sélectionner un rôle</option>
+                                        <option value="Manager" ${editUser?.role === 'Manager' ? 'selected' : ''}>Manager</option>
+                                        <option value="Accueil" ${editUser?.role === 'Accueil' ? 'selected' : ''}>Accueil Client</option>
+                                        <option value="Entretien" ${editUser?.role === 'Entretien' ? 'selected' : ''}>Entretien & Maintenance</option>
+                                        <option value="Animation" ${editUser?.role === 'Animation' ? 'selected' : ''}>Animation</option>
+                                        <option value="Sécurité" ${editUser?.role === 'Sécurité' ? 'selected' : ''}>Sécurité</option>
+                                        <option value="Équipe" ${editUser?.role === 'Équipe' ? 'selected' : ''}>Membre d'équipe</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Type de contrat</label>
+                                    <select id="user-contract">
+                                        <option value="CDI" ${editUser?.contract === 'CDI' ? 'selected' : ''}>CDI</option>
+                                        <option value="CDD" ${editUser?.contract === 'CDD' ? 'selected' : ''}>CDD</option>
+                                        <option value="Stage" ${editUser?.contract === 'Stage' ? 'selected' : ''}>Stage</option>
+                                        <option value="Freelance" ${editUser?.contract === 'Freelance' ? 'selected' : ''}>Freelance</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Permissions</label>
+                                <div class="permissions-grid">
+                                    <label class="permission-item">
+                                        <input type="checkbox" id="perm-admin" ${editUser?.permissions?.admin ? 'checked' : ''}>
+                                        <span>Accès administration</span>
+                                    </label>
+                                    <label class="permission-item">
+                                        <input type="checkbox" id="perm-manage-team" ${editUser?.permissions?.manageTeam ? 'checked' : ''}>
+                                        <span>Gérer l'équipe</span>
+                                    </label>
+                                    <label class="permission-item">
+                                        <input type="checkbox" id="perm-create-quests" ${editUser?.permissions?.createQuests ? 'checked' : ''}>
+                                        <span>Créer des quêtes</span>
+                                    </label>
+                                    <label class="permission-item">
+                                        <input type="checkbox" id="perm-view-reports" ${editUser?.permissions?.viewReports ? 'checked' : ''}>
+                                        <span>Voir les rapports</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Section Compétences et formation -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-graduation-cap"></i> Compétences et formation</h4>
+                            
+                            <div class="form-group">
+                                <label>Compétences</label>
+                                <div class="skills-input">
+                                    <input type="text" id="skills-input" placeholder="Tapez une compétence et appuyez sur Entrée">
+                                    <div class="skills-list" id="skills-list">
+                                        ${editUser?.skills ? editUser.skills.map(skill => `
+                                            <span class="skill-tag">
+                                                ${skill}
+                                                <button type="button" onclick="removeSkill('${skill}')" class="remove-skill">×</button>
+                                            </span>
+                                        `).join('') : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Niveau d'expérience</label>
+                                    <select id="user-experience">
+                                        <option value="Débutant" ${editUser?.experience === 'Débutant' ? 'selected' : ''}>Débutant</option>
+                                        <option value="Intermédiaire" ${editUser?.experience === 'Intermédiaire' ? 'selected' : ''}>Intermédiaire</option>
+                                        <option value="Expérimenté" ${editUser?.experience === 'Expérimenté' ? 'selected' : ''}>Expérimenté</option>
+                                        <option value="Expert" ${editUser?.experience === 'Expert' ? 'selected' : ''}>Expert</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Formations suivies</label>
+                                    <input type="number" id="user-trainings" min="0" value="${editUser?.trainings || 0}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Section Gamification -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-gamepad"></i> Gamification</h4>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Niveau initial</label>
+                                    <input type="number" id="user-level" min="1" max="10" value="${editUser?.level || 1}">
+                                </div>
+                                <div class="form-group">
+                                    <label>XP initial</label>
+                                    <input type="number" id="user-xp" min="0" value="${editUser?.xp || 0}">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Objectif mensuel (quêtes)</label>
+                                <input type="number" id="user-monthly-goal" min="0" value="${editUser?.monthlyGoal || 10}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" onclick="closeUserModal()" class="btn-secondary">Annuler</button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas ${buttonIcon}"></i> ${buttonText}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Initialiser les événements
+    initUserFormEvents(editUser);
+}
+
+// Variables pour l'avatar utilisateur
+let userAvatarBase64 = null;
+
+// Initialiser les événements du formulaire utilisateur
+function initUserFormEvents(editUser) {
+    // Gestion des compétences
+    const skillsInput = document.getElementById('skills-input');
+    skillsInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addSkill(this.value.trim());
+            this.value = '';
         }
+    });
+    
+    // Gestion du formulaire
+    document.getElementById('user-creation-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveUser(editUser?.id);
+    });
+    
+    // Si mode édition, charger l'avatar existant
+    if (editUser && editUser.avatar) {
+        userAvatarBase64 = editUser.avatar;
+    }
+}
+
+// Fermer le modal utilisateur
+function closeUserModal() {
+    const modal = document.getElementById('user-creation-modal');
+    if (modal) {
+        modal.remove();
+    }
+    userAvatarBase64 = null;
+}
+
 
         function messageTeamMember(memberId) {
             const member = teamMembers.find(m => m.id === memberId);
