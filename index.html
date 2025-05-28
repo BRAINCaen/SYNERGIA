@@ -3060,9 +3060,168 @@ function viewAssignmentDetails(assignmentId) {
 }
 
 
-        function loadTeamPerformance() {
-            console.log('Chargement des performances d\'équipe');
-        }
+// Charger les performances de l'équipe
+function loadTeamPerformance() {
+    const container = document.getElementById('team-performance');
+    if (!container) return;
+    
+    // Calculer les statistiques globales
+    const totalMembers = teamMembers.length;
+    const totalXP = teamMembers.reduce((sum, member) => sum + member.xp, 0);
+    const totalQuests = teamMembers.reduce((sum, member) => sum + member.completedQuests, 0);
+    const avgLevel = Math.round(teamMembers.reduce((sum, member) => sum + member.level, 0) / totalMembers);
+    
+    // Calculer les performances individuelles
+    const memberPerformances = teamMembers.map(member => {
+        const completionRate = member.totalQuests > 0 ? Math.round((member.completedQuests / member.totalQuests) * 100) : 0;
+        const xpPerQuest = member.completedQuests > 0 ? Math.round(member.xp / member.completedQuests) : 0;
+        
+        return {
+            ...member,
+            completionRate,
+            xpPerQuest,
+            rank: 0 // Sera calculé après tri
+        };
+    }).sort((a, b) => b.xp - a.xp); // Trier par XP décroissant
+    
+    // Assigner les rangs
+    memberPerformances.forEach((member, index) => {
+        member.rank = index + 1;
+    });
+    
+    // Membre du mois (le plus d'XP ce mois-ci)
+    const topPerformer = memberPerformances[0];
+    
+    container.innerHTML = `
+        <div class="performance-overview">
+            <div class="performance-stats">
+                <div class="perf-stat-card">
+                    <div class="perf-stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="perf-stat-content">
+                        <div class="perf-stat-number">${totalMembers}</div>
+                        <div class="perf-stat-label">Membres actifs</div>
+                    </div>
+                </div>
+                
+                <div class="perf-stat-card">
+                    <div class="perf-stat-icon"><i class="fas fa-star"></i></div>
+                    <div class="perf-stat-content">
+                        <div class="perf-stat-number">${totalXP.toLocaleString()}</div>
+                        <div class="perf-stat-label">XP total équipe</div>
+                    </div>
+                </div>
+                
+                <div class="perf-stat-card">
+                    <div class="perf-stat-icon"><i class="fas fa-tasks"></i></div>
+                    <div class="perf-stat-content">
+                        <div class="perf-stat-number">${totalQuests}</div>
+                        <div class="perf-stat-label">Quêtes réalisées</div>
+                    </div>
+                </div>
+                
+                <div class="perf-stat-card">
+                    <div class="perf-stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="perf-stat-content">
+                        <div class="perf-stat-number">${avgLevel}</div>
+                        <div class="perf-stat-label">Niveau moyen</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="performance-sections">
+            <div class="performance-section">
+                <h3><i class="fas fa-trophy"></i> Membre du mois</h3>
+                <div class="top-performer-card">
+                    <img src="${topPerformer.avatar}" alt="${topPerformer.name}" class="top-performer-avatar">
+                    <div class="top-performer-info">
+                        <h4>${topPerformer.name}</h4>
+                        <div class="top-performer-role">${topPerformer.role}</div>
+                        <div class="top-performer-stats">
+                            <div class="top-stat">
+                                <span class="top-stat-value">${topPerformer.xp}</span>
+                                <span class="top-stat-label">XP</span>
+                            </div>
+                            <div class="top-stat">
+                                <span class="top-stat-value">${topPerformer.completedQuests}</span>
+                                <span class="top-stat-label">Quêtes</span>
+                            </div>
+                            <div class="top-stat">
+                                <span class="top-stat-value">${topPerformer.completionRate}%</span>
+                                <span class="top-stat-label">Réussite</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crown-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="performance-section">
+                <h3><i class="fas fa-chart-bar"></i> Classement de l'équipe</h3>
+                <div class="team-ranking">
+                    ${memberPerformances.map(member => `
+                        <div class="ranking-item">
+                            <div class="rank-number ${member.rank <= 3 ? 'top-rank' : ''}">${member.rank}</div>
+                            <img src="${member.avatar}" alt="${member.name}" class="ranking-avatar">
+                            <div class="ranking-info">
+                                <div class="ranking-name">${member.name}</div>
+                                <div class="ranking-role">${member.role}</div>
+                            </div>
+                            <div class="ranking-stats">
+                                <div class="ranking-stat">
+                                    <span class="ranking-stat-value">${member.xp}</span>
+                                    <span class="ranking-stat-label">XP</span>
+                                </div>
+                                <div class="ranking-stat">
+                                    <span class="ranking-stat-value">${member.completionRate}%</span>
+                                    <span class="ranking-stat-label">Réussite</span>
+                                </div>
+                            </div>
+                            <div class="ranking-badge level-${member.level}">
+                                Niv. ${member.level}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="performance-section">
+                <h3><i class="fas fa-calendar-week"></i> Activité de la semaine</h3>
+                <div class="weekly-activity">
+                    <div class="activity-chart">
+                        <div class="chart-header">
+                            <h4>Quêtes complétées cette semaine</h4>
+                        </div>
+                        <div class="chart-bars">
+                            ${['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((day, index) => {
+                                const height = Math.random() * 80 + 20; // Données fictives pour la démo
+                                return `
+                                    <div class="chart-bar">
+                                        <div class="bar" style="height: ${height}%" data-value="${Math.floor(height/20)}"></div>
+                                        <div class="bar-label">${day}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="performance-actions">
+            <button class="btn-secondary" onclick="exportPerformanceReport()">
+                <i class="fas fa-download"></i> Exporter le rapport
+            </button>
+            <button class="btn-secondary" onclick="sendTeamFeedback()">
+                <i class="fas fa-comments"></i> Envoyer feedback équipe
+            </button>
+        </div>
+    `;
+}
+
+// Actions
 
         function loadTeamSchedule() {
             console.log('Chargement du planning d\'équipe');
