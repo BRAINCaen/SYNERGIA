@@ -1675,47 +1675,104 @@ function loadAdminUsers() {
     `).join('');
 }
 
-// Charger la liste des quêtes
-function loadAdminQuests() {
-    const questsList = document.getElementById('quests-admin-list');
-    
-    const quests = [
-        {
-            id: '1',
-            title: 'Vérifier l\'accueil',
-            type: 'daily',
-            xp: 10,
-            active: true
-        },
-        {
-            id: '2',
-            title: 'Nettoyage complet',
-            type: 'weekly',
-            xp: 50,
-            active: true
-        }
-    ];
-    
-    questsList.innerHTML = quests.map(quest => `
-        <div class="admin-item">
-            <div class="admin-item-info">
-                <h5>${quest.title}</h5>
-                <p>Type: ${quest.type} • ${quest.xp} XP</p>
-            </div>
-            <div class="admin-actions">
-                <button class="icon-btn edit-btn" onclick="editQuest('${quest.id}')" title="Modifier">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="icon-btn toggle-btn" onclick="toggleQuest('${quest.id}')" title="${quest.active ? 'Désactiver' : 'Activer'}">
-                    <i class="fas fa-${quest.active ? 'eye-slash' : 'eye'}"></i>
-                </button>
-                <button class="icon-btn delete-btn" onclick="deleteQuest('${quest.id}')" title="Supprimer">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
+<!-- Modal de création de quête -->
+<div id="quest-creation-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Créer une nouvelle quête</h3>
+            <button onclick="closeQuestModal()" class="icon-btn">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    `).join('');
-}
+        <div class="modal-body">
+            <form id="quest-creation-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Titre de la quête</label>
+                        <input type="text" id="quest-title" placeholder="Ex: Vérifier l'accueil" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type de quête</label>
+                        <select id="quest-type" required>
+                            <option value="daily">Quotidienne</option>
+                            <option value="weekly">Hebdomadaire</option>
+                            <option value="monthly">Mensuelle</option>
+                            <option value="special">Spéciale</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="quest-description" placeholder="Décrivez ce qu'il faut faire..." rows="3" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>XP à gagner</label>
+                        <input type="number" id="quest-xp" min="1" max="500" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Durée estimée (min)</label>
+                        <input type="number" id="quest-duration" min="1" max="480" value="15">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rôle assigné</label>
+                        <select id="quest-role">
+                            <option value="all">Tous les rôles</option>
+                            <option value="entretien">Entretien & Maintenance</option>
+                            <option value="accueil">Accueil Client</option>
+                            <option value="animation">Animation</option>
+                            <option value="securite">Sécurité</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Priorité</label>
+                        <select id="quest-priority">
+                            <option value="low">Faible</option>
+                            <option value="normal">Normale</option>
+                            <option value="high">Élevée</option>
+                            <option value="urgent">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="quest-photo-required"> 
+                        Validation par photo requise
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="quest-recurring"> 
+                        Quête récurrente
+                    </label>
+                </div>
+                
+                <div id="recurring-options" class="form-group hidden">
+                    <label>Fréquence de récurrence</label>
+                    <select id="quest-frequency">
+                        <option value="daily">Chaque jour</option>
+                        <option value="weekly">Chaque semaine</option>
+                        <option value="monthly">Chaque mois</option>
+                    </select>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" onclick="closeQuestModal()" class="btn-secondary">Annuler</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-plus"></i> Créer la quête
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 // Charger la liste des badges
 function loadAdminBadges() {
