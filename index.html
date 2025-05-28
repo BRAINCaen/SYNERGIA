@@ -3317,7 +3317,7 @@ const synergiaAudio = {
 
 
 </script>
-    <script>
+<script>
   // Script de déblocage pour l'écran de chargement
   document.addEventListener('DOMContentLoaded', function() {
     // Forcer la disparition de l'écran de chargement après 3 secondes si bloqué
@@ -3327,15 +3327,9 @@ const synergiaAudio = {
         console.log("Déblocage forcé de l'écran de chargement");
         loadingScreen.classList.add('hidden');
         
-        // Vérifier si l'utilisateur est connecté
-        const app = document.getElementById('app');
+        // Afficher l'écran de connexion par défaut
         const loginScreen = document.getElementById('login-screen');
-        
-        if (firebase.auth().currentUser) {
-          app.classList.remove('hidden');
-        } else {
-          loginScreen.classList.remove('hidden');
-        }
+        loginScreen.classList.remove('hidden');
       }
     }, 3000);
   });
@@ -3347,6 +3341,7 @@ const synergiaAudio = {
     return true;
   });
 </script>
+
 
 
 </body>
