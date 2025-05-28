@@ -1466,7 +1466,22 @@
                         <label>Description</label>
                         <textarea id="quest-description" placeholder="Décrivez ce qu'il faut faire..." rows="3" required></textarea>
                     </div>
-                    
+                    <div class="form-group">
+    <label>Icône de la quête</label>
+    <div class="image-upload-container">
+        <input type="file" id="quest-icon" accept="image/*" style="display: none;">
+        <div class="image-preview" id="image-preview" onclick="document.getElementById('quest-icon').click()">
+            <div class="upload-placeholder">
+                <i class="fas fa-image fa-2x"></i>
+                <p>Cliquez pour ajouter une icône</p>
+                <span class="upload-hint">PNG, JPG, SVG - Max 2MB</span>
+            </div>
+        </div>
+        <button type="button" class="btn-secondary btn-small" onclick="removeQuestIcon()" id="remove-icon-btn" style="display: none;">
+            <i class="fas fa-trash"></i> Supprimer l'icône
+        </button>
+    </div>
+</div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>XP à gagner</label>
