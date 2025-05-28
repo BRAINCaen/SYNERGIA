@@ -1,5 +1,286 @@
 /* Styles pour l'amélioration mobile et ludique de SYNERGIA */
 
+/* PALETTE GAMING RÉVOLUTIONNAIRE */
+:root {
+    /* Couleurs principales gaming */
+    --gaming-primary: #ff6b35;
+    --gaming-secondary: #00d4ff;
+    --gaming-accent: #ffd23f;
+    --gaming-success: #00ff88;
+    --gaming-danger: #ff3366;
+    --gaming-dark: #1a1a2e;
+    --gaming-darker: #16213e;
+    --gaming-light: #e94560;
+    
+    /* Gradients gaming */
+    --gradient-fire: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffd23f 100%);
+    --gradient-ice: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #006699 100%);
+    --gradient-neon: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #ff6b35 100%);
+    --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    
+    /* Ombres gaming */
+    --shadow-gaming: 0 8px 32px rgba(255, 107, 53, 0.3);
+    --shadow-neon: 0 0 20px rgba(0, 212, 255, 0.5);
+    --shadow-fire: 0 0 30px rgba(255, 107, 53, 0.6);
+}
+
+/* ANIMATIONS GAMING */
+@keyframes pulseGaming {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+}
+
+@keyframes neonGlow {
+    0% { box-shadow: 0 0 5px var(--gaming-secondary); }
+    50% { box-shadow: 0 0 20px var(--gaming-secondary), 0 0 30px var(--gaming-secondary); }
+    100% { box-shadow: 0 0 5px var(--gaming-secondary); }
+}
+
+@keyframes slideInGaming {
+    0% { transform: translateX(-100%) rotateY(-90deg); opacity: 0; }
+    100% { transform: translateX(0) rotateY(0deg); opacity: 1; }
+}
+
+@keyframes bounceGaming {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* TRANSFORMATION GAMING DE L'APP */
+body {
+    background: var(--gradient-dark);
+    color: white;
+    font-family: 'Orbitron', 'Poppins', sans-serif;
+}
+
+/* Header gaming */
+header {
+    background: var(--gradient-fire);
+    border-bottom: 3px solid var(--gaming-accent);
+    box-shadow: var(--shadow-gaming);
+}
+
+/* Navigation gaming */
+nav {
+    background: var(--gaming-darker);
+    border-top: 2px solid var(--gaming-secondary);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.nav-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-neon);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.nav-btn:hover:before {
+    left: 0;
+}
+
+.nav-btn.active {
+    background: var(--gradient-ice);
+    animation: pulseGaming 2s infinite;
+    border-radius: 15px;
+    margin: 5px;
+}
+
+/* Cards gaming révolutionnaires */
+.team-member-card, .quest-item, .admin-item {
+    background: var(--gradient-dark);
+    border: 2px solid var(--gaming-secondary);
+    border-radius: 20px;
+    box-shadow: var(--shadow-neon);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: slideInGaming 0.6s ease-out;
+}
+
+.team-member-card:hover, .quest-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow-fire);
+    border-color: var(--gaming-accent);
+}
+
+.team-member-card:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, var(--gaming-secondary), transparent);
+    animation: neonGlow 3s linear infinite;
+    z-index: -1;
+}
+
+/* Boutons gaming explosifs */
+.btn-primary {
+    background: var(--gradient-fire);
+    border: none;
+    border-radius: 25px;
+    box-shadow: var(--shadow-gaming);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
+    animation: bounceGaming 0.6s ease;
+}
+
+.btn-primary:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn-primary:hover:before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Stats gaming avec barres de progression */
+.stat-value {
+    background: var(--gradient-neon);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--gaming-secondary);
+}
+
+/* XP Bar gaming */
+.xp-bar, .level-progress {
+    background: var(--gaming-darker);
+    border: 2px solid var(--gaming-secondary);
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.xp-progress, .level-bar {
+    background: var(--gradient-fire);
+    border-radius: 13px;
+    position: relative;
+    overflow: hidden;
+}
+
+.xp-progress:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: slideInGaming 2s infinite;
+}
+
+/* Notifications gaming */
+.notification {
+    background: var(--gradient-dark);
+    border: 2px solid var(--gaming-success);
+    border-radius: 15px;
+    box-shadow: var(--shadow-neon);
+    color: white;
+}
+
+.notification-success {
+    border-color: var(--gaming-success);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.notification-error {
+    border-color: var(--gaming-danger);
+    box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+}
+
+/* Admin FAB gaming */
+.admin-fab {
+    background: var(--gradient-neon);
+    animation: pulseGaming 2s infinite;
+    border: 3px solid var(--gaming-accent);
+}
+
+/* Badges gaming */
+.level-badge {
+    background: var(--gradient-fire);
+    border: 3px solid var(--gaming-accent);
+    box-shadow: var(--shadow-fire);
+    animation: neonGlow 2s infinite;
+}
+
+/* Modal gaming */
+.modal-content {
+    background: var(--gradient-dark);
+    border: 2px solid var(--gaming-secondary);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.modal-header {
+    background: var(--gradient-fire);
+    border-bottom: 2px solid var(--gaming-accent);
+}
+
+/* Inputs gaming */
+input, select, textarea {
+    background: var(--gaming-darker);
+    border: 2px solid var(--gaming-secondary);
+    border-radius: 10px;
+    color: white;
+    padding: 12px 16px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--gaming-accent);
+    box-shadow: 0 0 15px rgba(255, 210, 63, 0.5);
+}
+
+/* Onglets gaming */
+.tab.active {
+    background: var(--gradient-ice);
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 -5px 15px rgba(0, 212, 255, 0.3);
+}
+
+/* Responsive gaming */
+@media (max-width: 768px) {
+    .team-member-card, .quest-item {
+        margin-bottom: 20px;
+        animation: slideInGaming 0.4s ease-out;
+    }
+}
+
+
 /* Palettes et variables étendues */
 :root {
   --primary: #8e44ad;
