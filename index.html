@@ -1423,7 +1423,7 @@ body {
 
     <!-- Configuration et logique de l'application -->
     <script>
-        // Configuration Firebase (remplace par tes identifiants réels)
+// Configuration Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
   authDomain: "synergia-app-f27e7.firebaseapp.com",
@@ -1434,14 +1434,13 @@ const firebaseConfig = {
   measurementId: "G-EGJ79SCMWX"
 };
 
-// Initialisation Firebase
+// Initialisation Firebase (UNE SEULE FOIS)
 let firebaseApp;
 let auth;
 let db;
 let storage;
 
 try {
-    // Vérifier si Firebase est déjà initialisé
     if (firebase.apps.length) {
         firebaseApp = firebase.app();
     } else {
@@ -1449,17 +1448,18 @@ try {
         console.log("Firebase initialisé avec succès");
     }
     
-    // Initialiser les services Firebase
+    // Assigner les services Firebase (pas redéclarer)
     auth = firebase.auth();
     db = firebase.firestore();
     storage = firebase.storage();
+    
 } catch (e) {
     console.error("Erreur d'initialisation Firebase:", e);
-    // Créer des substituts pour éviter les erreurs
     auth = { onAuthStateChanged: (callback) => callback(null) };
     db = { collection: () => ({ doc: () => ({ get: () => Promise.resolve({ exists: false }) }) }) };
     storage = {};
 }
+
 
 
 
