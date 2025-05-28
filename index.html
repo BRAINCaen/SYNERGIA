@@ -2008,15 +2008,83 @@
             });
         }
 
-        // Charger les autres pages (placeholder)
-        function loadTeam() {
-            document.getElementById('main-content').innerHTML = `
-                <div class="team-page">
-                    <h2>Équipe</h2>
-                    <p>Gestion de l'équipe - En cours de développement</p>
+// Charger la page équipe
+function loadTeam() {
+    const template = document.getElementById('team-template');
+    if (!template) {
+        // Fallback si pas de template
+        document.getElementById('main-content').innerHTML = `
+            <div class="team-page">
+                <div class="tabs">
+                    <button class="tab active" data-tab="members">Membres</button>
+                    <button class="tab" data-tab="assignments">Attributions</button>
+                    <button class="tab" data-tab="performance">Performances</button>
+                    <button class="tab" data-tab="schedule">Planning</button>
                 </div>
-            `;
-        }
+                
+                <div class="tab-content active" id="members-tab">
+                    <div class="team-section">
+                        <div class="section-header">
+                            <h3>Membres de l'équipe</h3>
+                            <button class="btn-secondary" onclick="addTeamMember()">
+                                <i class="fas fa-plus"></i> Ajouter un membre
+                            </button>
+                        </div>
+                        <div id="team-members-list" class="team-grid">
+                            <!-- Sera rempli dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="assignments-tab">
+                    <div class="team-section">
+                        <h3>Attribution des quêtes</h3>
+                        <div id="quest-assignments">
+                            <p class="placeholder">Fonctionnalité en développement</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="performance-tab">
+                    <div class="team-section">
+                        <h3>Performances de l'équipe</h3>
+                        <div id="team-performance">
+                            <p class="placeholder">Statistiques à venir</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="schedule-tab">
+                    <div class="team-section">
+                        <h3>Planning d'équipe</h3>
+                        <div id="team-schedule">
+                            <p class="placeholder">Planning en cours de développement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Initialiser les onglets
+        initTeamTabs();
+        
+        // Charger les membres
+        loadTeamMembers();
+        return;
+    }
+    
+    const content = template.content.cloneNode(true);
+    const mainContent = document.getElementById('main-content');
+    
+    mainContent.innerHTML = '';
+    mainContent.appendChild(content);
+    
+    initTeamTabs();
+    loadTeamMembers();
+    
+    console.log('Page équipe chargée');
+}
+
 
         function loadCalendar() {
             document.getElementById('main-content').innerHTML = `
