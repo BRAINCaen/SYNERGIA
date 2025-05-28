@@ -374,3 +374,12 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   animation: pwa-ready 4s forwards;
 }
+/* Remplacer dans synergia-style.css */
+/* Effets sonores pour SYNERGIA */
+.sound-complete {
+  display: none;
+}
+
+.sound-levelup {
+  display: none;
+}
