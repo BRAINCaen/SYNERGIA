@@ -2842,9 +2842,223 @@ function closeAssignmentModal() {
         }
 
         // Fonctions pour les autres onglets (placeholders)
-        function loadQuestAssignments() {
-            console.log('Chargement des attributions de quêtes');
+// Charger les attributions de quêtes
+function loadQuestAssignments() {
+    const container = document.getElementById('quest-assignments');
+    if (!container) return;
+    
+    const assignments = JSON.parse(localStorage.getItem('synergiaAssignments')) || [];
+    
+    if (assignments.length === 0) {
+        container.innerHTML = `
+            <div class="placeholder">
+                <i class="fas fa-clipboard-list fa-3x" style="color: var(--light-gray); margin-bottom: 16px;"></i>
+                <p>Aucune attribution de quête pour le moment</p>
+                <p style="font-size: 0.9rem; margin-top: 8px;">Assignez des quêtes aux membres depuis l'onglet "Membres"</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Regrouper par statut
+    const assignmentsByStatus = {
+        assigned: assignments.filter(a => a.status === 'assigned'),
+        in_progress: assignments.filter(a => a.status === 'in_progress'),
+        completed: assignments.filter(a => a.status === 'completed'),
+        overdue: assignments.filter(a => a.status === 'overdue')
+    };
+    
+    container.innerHTML = `
+        <div class="assignments-overview">
+            <div class="assignment-stats">
+                <div class="stat-card">
+                    <div class="stat-number">${assignments.length}</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card assigned">
+                    <div class="stat-number">${assignmentsByStatus.assigned.length}</div>
+                    <div class="stat-label">Assignées</div>
+                </div>
+                <div class="stat-card progress">
+                    <div class="stat-number">${assignmentsByStatus.in_progress.length}</div>
+                    <div class="stat-label">En cours</div>
+                </div>
+                <div class="stat-card completed">
+                    <div class="stat-number">${assignmentsByStatus.completed.length}</div>
+                    <div class="stat-label">Terminées</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="assignments-filters" style="margin: 20px 0;">
+            <button class="filter-btn active" onclick="filterAssignments('all')">Toutes</button>
+            <button class="filter-btn" onclick="filterAssignments('assigned')">Assignées</button>
+            <button class="filter-btn" onclick="filterAssignments('in_progress')">En cours</button>
+            <button class="filter-btn" onclick="filterAssignments('completed')">Terminées</button>
+        </div>
+        
+        <div class="assignments-list" id="assignments-list">
+            ${assignments.map(assignment => {
+                const member = teamMembers.find(m => m.id === assignment.memberId);
+                const quest = questsDatabase.find(q => q.id === assignment.questId);
+                
+                if (!member || !quest) return '';
+                
+                const statusColors = {
+                    assigned: 'var(--info)',
+                    in_progress: 'var(--warning)',
+                    completed: 'var(--success)',
+                    overdue: 'var(--danger)'
+                };
+                
+                const statusLabels = {
+                    assigned: 'Assignée',
+                    in_progress: 'En cours',
+                    completed: 'Terminée',
+                    overdue: 'En retard'
+                };
+                
+                const iconHtml = quest.icon 
+                    ? `<img src="${quest.icon}" alt="Icône" class="assignment-quest-icon">`
+                    : `<div class="quest-icon-default" style="width: 40px; height: 40px;"><i class="fas ${getDefaultQuestIcon(quest.type, quest.priority)}"></i></div>`;
+                
+                return `
+                    <div class="assignment-item" data-status="${assignment.status}">
+                        <div class="assignment-content">
+                            <div class="assignment-quest">
+                                ${iconHtml}
+                                <div class="assignment-details">
+                                    <h4>${quest.title}</h4>
+                                    <p>${quest.description}</p>
+                                    <div class="assignment-meta">
+                                        <span><i class="fas fa-star"></i> ${quest.xp} XP</span>
+                                        <span><i class="fas fa-clock"></i> ${quest.duration} min</span>
+                                        ${assignment.deadline ? `<span><i class="fas fa-calendar"></i> ${new Date(assignment.deadline).toLocaleDateString()}</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-member">
+                                <img src="${member.avatar}" alt="${member.name}" class="assignment-avatar">
+                                <div>
+                                    <strong>${member.name}</strong>
+                                    <div>${member.role}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="assignment-status">
+                                <span class="status-badge" style="background-color: ${statusColors[assignment.status]};">${statusLabels[assignment.status]}</span>
+                                <div class="assignment-date">Assigné le ${new Date(assignment.assignedAt).toLocaleDateString()}</div>
+                                ${assignment.note ? `<div class="assignment-note"><i class="fas fa-sticky-note"></i> ${assignment.note}</div>` : ''}
+                            </div>
+                            
+                            <div class="assignment-actions">
+                                ${assignment.status === 'assigned' ? `
+                                    <button class="btn-icon btn-start" onclick="startAssignment('${assignment.id}')" title="Démarrer">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                ` : ''}
+                                ${assignment.status === 'in_progress' ? `
+                                    <button class="btn-icon btn-complete" onclick="completeAssignment('${assignment.id}')" title="Terminer">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                                <button class="btn-icon btn-info" onclick="viewAssignmentDetails('${assignment.id}')" title="Détails">
+                                    <i class="fas fa-info"></i>
+                                </button>
+                                <button class="btn-icon btn-delete" onclick="deleteAssignment('${assignment.id}')" title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+}
+
+// Filtrer les attributions
+function filterAssignments(status) {
+    // Mettre à jour les boutons actifs
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Filtrer les éléments
+    const items = document.querySelectorAll('.assignment-item');
+    items.forEach(item => {
+        if (status === 'all' || item.dataset.status === status) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
         }
+    });
+}
+
+// Actions sur les attributions
+function startAssignment(assignmentId) {
+    const assignments = JSON.parse(localStorage.getItem('synergiaAssignments')) || [];
+    const assignment = assignments.find(a => a.id === assignmentId);
+    
+    if (assignment) {
+        assignment.status = 'in_progress';
+        assignment.startedAt = new Date();
+        localStorage.setItem('synergiaAssignments', JSON.stringify(assignments));
+        
+        showNotification('Quête démarrée !', 'success');
+        loadQuestAssignments();
+    }
+}
+
+function completeAssignment(assignmentId) {
+    const assignments = JSON.parse(localStorage.getItem('synergiaAssignments')) || [];
+    const assignment = assignments.find(a => a.id === assignmentId);
+    
+    if (assignment) {
+        assignment.status = 'completed';
+        assignment.completedAt = new Date();
+        
+        // Donner l'XP au membre
+        const member = teamMembers.find(m => m.id === assignment.memberId);
+        const quest = questsDatabase.find(q => q.id === assignment.questId);
+        
+        if (member && quest) {
+            member.xp += quest.xp;
+            member.completedQuests += 1;
+            saveTeamToStorage();
+        }
+        
+        localStorage.setItem('synergiaAssignments', JSON.stringify(assignments));
+        
+        showNotification('Quête terminée ! XP ajouté au membre.', 'success');
+        loadQuestAssignments();
+        loadTeamMembers(); // Recharger pour mettre à jour les stats
+    }
+}
+
+function deleteAssignment(assignmentId) {
+    if (confirm('Supprimer cette attribution ?')) {
+        let assignments = JSON.parse(localStorage.getItem('synergiaAssignments')) || [];
+        assignments = assignments.filter(a => a.id !== assignmentId);
+        localStorage.setItem('synergiaAssignments', JSON.stringify(assignments));
+        
+        showNotification('Attribution supprimée', 'success');
+        loadQuestAssignments();
+    }
+}
+
+function viewAssignmentDetails(assignmentId) {
+    const assignments = JSON.parse(localStorage.getItem('synergiaAssignments')) || [];
+    const assignment = assignments.find(a => a.id === assignmentId);
+    
+    if (assignment) {
+        const member = teamMembers.find(m => m.id === assignment.memberId);
+        const quest = questsDatabase.find(q => q.id === assignment.questId);
+        
+        alert(`Détails de l'attribution:\n\n- Quête: ${quest?.title}\n- Membre: ${member?.name}\n- Assigné le: ${new Date(assignment.assignedAt).toLocaleString()}\n- Statut: ${assignment.status}\n${assignment.note ? `- Note: ${assignment.note}` : ''}`);
+    }
+}
+
 
         function loadTeamPerformance() {
             console.log('Chargement des performances d\'équipe');
