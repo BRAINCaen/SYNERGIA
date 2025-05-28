@@ -546,3 +546,104 @@ input:focus, select:focus, textarea:focus {
         justify-content: flex-end;
     }
 }
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    z-index: 9999;
+    min-width: 300px;
+    border-left: 4px solid var(--info);
+    animation: slideInRight 0.3s ease;
+}
+
+.notification-success {
+    border-left-color: var(--success);
+    color: var(--success);
+}
+
+.notification-error {
+    border-left-color: var(--danger);
+    color: var(--danger);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--gray);
+    cursor: pointer;
+    margin-left: auto;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Priorités des quêtes */
+.quest-priority {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    margin-left: var(--spacing-xs);
+}
+
+.priority-low { background-color: var(--gray); }
+.priority-normal { background-color: var(--info); }
+.priority-high { background-color: var(--warning); }
+.priority-urgent { background-color: var(--danger); }
+
+/* Badges de quête */
+.quest-recurring, .quest-photo {
+    margin-left: var(--spacing-xs);
+    color: var(--primary);
+}
+
+/* Meta informations des quêtes */
+.quest-meta {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xs);
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.quest-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Formulaire modal amélioré */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--light-gray);
+}
+
+.admin-item.inactive {
+    opacity: 0.6;
+    background-color: #f8f8f8;
+}
+
+.info-btn {
+    background-color: var(--info);
+    color: white;
+}
+
+.success-btn {
+    background-color: var(--success);
+    color: white;
+}
