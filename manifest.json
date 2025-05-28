@@ -1,10 +1,10 @@
 {
-  "name": "SYNERGIA - Gestion d'équipe gamifiée",
+  "name": "SYNERGIA",
   "short_name": "SYNERGIA",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#7e57c2",
-  "theme_color": "#7e57c2",
+  "background_color": "#8e44ad",
+  "theme_color": "#8e44ad",
   "icons": [
     {
       "src": "images/synergia-logo.png",
