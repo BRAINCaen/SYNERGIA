@@ -64,9 +64,10 @@
 }
 
 /* VERSION AVEC IMAGE PLUS VISIBLE - CORRIGÉE */
+/* VERSION AVEC IMAGE PLUS VISIBLE - CORRIGÉE */
 body {
     background: 
-        url('/images/neon-bg.jpg'),
+        url('../images/neon-bg.jpg'),
         radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 40%),
         radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
         linear-gradient(135deg, rgba(10, 10, 15, 0.4) 0%, rgba(26, 10, 46, 0.3) 50%, rgba(22, 33, 62, 0.2) 100%);
@@ -82,11 +83,8 @@ body {
     min-height: 100vh;
     position: relative;
 }
-body {
-    background: url('./images/neon-bg.jpg') !important;
-    background-size: cover !important;
-    background-position: center !important;
-}
+
+
 
 
 
