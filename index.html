@@ -3973,11 +3973,11 @@ function saveUser(userId = null) {
     
     const formData = {
         id: userId || Date.now(),
-        name: document.getElementById('modal-user-name')?.value || '',
-        email: document.getElementById('modal-user-email')?.value || '',
+        name: (nameElement && nameElement.value) ? nameElement.value.trim() : '',
+        email: (emailElement && emailElement.value) ? emailElement.value.trim() : '',
         phone: document.getElementById('user-phone')?.value || '',
         joinedAt: document.getElementById('user-hire-date')?.value || new Date().toISOString().split('T')[0],
-        role: document.getElementById('modal-user-role')?.value || '',
+        role: (roleElement && roleElement.value) ? roleElement.value.trim() : '',
         contract: document.getElementById('user-contract')?.value || 'CDI',
         experience: document.getElementById('user-experience')?.value || 'Débutant',
         trainings: parseInt(document.getElementById('user-trainings')?.value) || 0,
