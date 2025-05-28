@@ -1329,6 +1329,26 @@ body {
             </div>
         </div>
     </div>
+// Gestion des onglets
+document.addEventListener('DOMContentLoaded', function() {
+    // Activer les onglets des quêtes
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.dataset.tab;
+            
+            // Désactiver tous les onglets
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Activer l'onglet sélectionné
+            this.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        });
+    });
+});
 
     <!-- Templates pour les pages -->
     <template id="dashboard-template">
