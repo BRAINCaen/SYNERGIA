@@ -1,49 +1,49 @@
-/* SYNERGIA - PREMIUM GLASSMORPHISM + NÉON */
+/* SYNERGIA - PREMIUM GLASSMORPHISM */
 
-/* COULEURS PREMIUM MAUVE */
+/* COULEURS PREMIUM MAUVE - VERSION FONCÉE */
 :root {
     /* Backgrounds avec transparence */
     --premium-bg-primary: #0a0a0f;
-    --premium-bg-secondary: rgba(15, 15, 25, 0.95);
-    --premium-bg-card: rgba(25, 25, 35, 0.85);
-    --premium-bg-elevated: rgba(35, 35, 50, 0.9);
-    --premium-bg-glass: rgba(45, 45, 65, 0.7);
+    --premium-bg-secondary: rgba(10, 10, 20, 0.98);
+    --premium-bg-card: rgba(15, 15, 25, 0.95);
+    --premium-bg-elevated: rgba(20, 20, 35, 0.95);
+    --premium-bg-glass: rgba(25, 25, 40, 0.9);
     
-    /* Mauves premium */
-    --mauve-primary: #8b5cf6;
-    --mauve-secondary: #a78bfa;
-    --mauve-accent: #c084fc;
-    --mauve-light: #ddd6fe;
-    --mauve-dark: #6d28d9;
+    /* Mauves premium - PLUS FONCÉS */
+    --mauve-primary: #6d28d9;
+    --mauve-secondary: #7c3aed;
+    --mauve-accent: #8b5cf6;
+    --mauve-light: #a78bfa;
+    --mauve-dark: #5b21b6;
     --mauve-darker: #4c1d95;
     
-    /* Gris premium */
-    --gray-100: rgba(255, 255, 255, 0.95);
-    --gray-200: rgba(255, 255, 255, 0.8);
-    --gray-300: rgba(255, 255, 255, 0.6);
-    --gray-400: rgba(255, 255, 255, 0.4);
-    --gray-500: rgba(255, 255, 255, 0.25);
-    --gray-600: rgba(255, 255, 255, 0.15);
-    --gray-700: rgba(255, 255, 255, 0.1);
-    --gray-800: rgba(255, 255, 255, 0.05);
+    /* Gris premium - MEILLEUR CONTRASTE */
+    --gray-100: rgba(255, 255, 255, 1);
+    --gray-200: rgba(255, 255, 255, 0.95);
+    --gray-300: rgba(255, 255, 255, 0.8);
+    --gray-400: rgba(255, 255, 255, 0.6);
+    --gray-500: rgba(255, 255, 255, 0.4);
+    --gray-600: rgba(255, 255, 255, 0.3);
+    --gray-700: rgba(255, 255, 255, 0.2);
+    --gray-800: rgba(255, 255, 255, 0.1);
     
     /* Couleurs d'état */
-    --success-glass: rgba(34, 197, 94, 0.8);
-    --danger-glass: rgba(239, 68, 68, 0.8);
-    --warning-glass: rgba(245, 158, 11, 0.8);
-    --info-glass: rgba(59, 130, 246, 0.8);
+    --success-glass: rgba(34, 197, 94, 0.9);
+    --danger-glass: rgba(239, 68, 68, 0.9);
+    --warning-glass: rgba(245, 158, 11, 0.9);
+    --info-glass: rgba(59, 130, 246, 0.9);
     
-    /* Gradients premium */
-    --gradient-mauve: linear-gradient(135deg, var(--mauve-primary) 0%, var(--mauve-secondary) 50%, var(--mauve-accent) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(167, 139, 250, 0.2) 50%, rgba(192, 132, 252, 0.1) 100%);
-    --gradient-card: linear-gradient(135deg, rgba(25, 25, 35, 0.9) 0%, rgba(35, 35, 50, 0.8) 100%);
-    --gradient-premium: linear-gradient(135deg, var(--mauve-darker) 0%, var(--mauve-primary) 50%, var(--mauve-accent) 100%);
+    /* Gradients premium - PLUS FONCÉS */
+    --gradient-mauve: linear-gradient(135deg, var(--mauve-darker) 0%, var(--mauve-primary) 50%, var(--mauve-secondary) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(109, 40, 217, 0.4) 0%, rgba(124, 58, 237, 0.3) 50%, rgba(139, 92, 246, 0.2) 100%);
+    --gradient-card: linear-gradient(135deg, rgba(15, 15, 25, 0.98) 0%, rgba(20, 20, 35, 0.95) 100%);
+    --gradient-premium: linear-gradient(135deg, var(--mauve-darker) 0%, var(--mauve-dark) 50%, var(--mauve-primary) 100%);
     
     /* Ombres premium */
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-mauve: 0 8px 32px rgba(139, 92, 246, 0.3);
-    --shadow-premium: 0 20px 60px rgba(139, 92, 246, 0.2);
-    --shadow-glow: 0 0 30px rgba(167, 139, 250, 0.4);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-mauve: 0 8px 32px rgba(109, 40, 217, 0.4);
+    --shadow-premium: 0 20px 60px rgba(109, 40, 217, 0.3);
+    --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.5);
     
     /* Blur effects */
     --blur-light: blur(10px);
@@ -62,6 +62,7 @@
     --border-radius-sm: 12px;
     --border-radius-lg: 24px;
 }
+
 
 /* SUPPRIME LES FORMES NÉON ET GARDE JUSTE L'IMAGE */
 body {
@@ -202,6 +203,52 @@ nav::before {
     backdrop-filter: var(--blur-light);
 }
 
+/* TEXTES PLUS LISIBLES SUR CARDS */
+.stats-card h3, .role-card h3, .welcome-card h2 {
+    color: var(--gray-100) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.quest-title {
+    color: var(--gray-100) !important;
+    font-weight: 700 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.quest-description {
+    color: var(--gray-200) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.member-info h4 {
+    color: var(--gray-100) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.member-role {
+    color: var(--mauve-accent) !important;
+    font-weight: 700 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Améliorer tous les textes sur fond sombre */
+p, span, div, label {
+    color: var(--gray-200) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--gray-100) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Stat values plus visibles */
+.stat-value {
+    color: var(--mauve-accent) !important;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.6) !important;
+    font-weight: 800 !important;
+}
+
+
 /* CARDS PREMIUM GLASSMORPHISM */
 .welcome-card {
     background: var(--gradient-premium);
@@ -237,16 +284,19 @@ nav::before {
     overflow: hidden;
 }
 
-.stats-card::before, .role-card::before, .team-member-card::before, .quest-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--gradient-mauve);
-    opacity: 0.3;
+/* CARDS ENCORE PLUS SOMBRES */
+.stats-card, .role-card, .team-member-card, .quest-item, .admin-item {
+    background: var(--gradient-card) !important;
+    backdrop-filter: var(--blur-medium) !important;
+    border: 1px solid rgba(109, 40, 217, 0.5) !important;
+    border-radius: var(--border-radius-lg) !important;
+    box-shadow: var(--shadow-glass) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    animation: slideInGlass 0.6s ease-out !important;
+    position: relative !important;
+    overflow: hidden !important;
 }
+
 
 .team-member-card:hover, .quest-item:hover, .admin-item:hover {
     background: var(--premium-bg-elevated);
