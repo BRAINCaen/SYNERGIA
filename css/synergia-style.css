@@ -63,16 +63,18 @@
     --border-radius-lg: 24px;
 }
 
-/* VERSION AVEC IMAGE PLUS VISIBLE */
+/* VERSION AVEC IMAGE PLUS VISIBLE - CORRIGÉE */
 body {
     background: 
         url('./images/neon-bg.jpg'),
-        radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%);
-    background-size: cover, 100% 100%, 100% 100%;
-    background-position: center, center, center;
+        radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+        linear-gradient(135deg, rgba(10, 10, 15, 0.4) 0%, rgba(26, 10, 46, 0.3) 50%, rgba(22, 33, 62, 0.2) 100%);
+    background-size: cover, 100% 100%, 100% 100%, 100% 100%;
+    background-position: center, center, center, center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-blend-mode: normal;
     
     color: var(--gray-100);
     font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
@@ -80,6 +82,7 @@ body {
     min-height: 100vh;
     position: relative;
 }
+
 
 /* Amélioration de la lisibilité des cards */
 .stats-card, .role-card, .team-member-card, .quest-item, .admin-item {
@@ -123,14 +126,7 @@ body::before {
     z-index: -1;
 }
 
-/* Formes néon SUPPLÉMENTAIRES */
-body {
-    background-image: 
-        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.4) 0%, transparent 25%),
-        radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.4) 0%, transparent 25%),
-        radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.2) 0%, transparent 35%),
-        linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #16213e 100%);
-}
+
 
 /* Extra formes pour l'effet WOW */
 nav::after {
