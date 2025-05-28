@@ -2063,6 +2063,118 @@
                 }
             }, 3000);
         }
+        // === GESTION DES IMAGES POUR LES QUÊTES ===
+
+        let questIconBase64 = null;
+
+        // Gérer l'upload de l'icône de quête
+        function handleQuestIconUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Vérifier le type de fichier
+            if (!file.type.startsWith('image/')) {
+                showNotification('Veuillez sélectionner un fichier image', 'error');
+                return;
+            }
+            
+            // Vérifier la taille (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                showNotification('L\'image ne doit pas dépasser 2MB', 'error');
+                return;
+            }
+            
+            // Redimensionner et compresser l'image
+            resizeAndCompressImage(file, 64, 64, 0.8).then(compressedBase64 => {
+                questIconBase64 = compressedBase64;
+                displayImagePreview(compressedBase64);
+                showNotification('Icône ajoutée avec succès !', 'success');
+            }).catch(error => {
+                console.error('Erreur compression image:', error);
+                showNotification('Erreur lors du traitement de l\'image', 'error');
+            });
+        }
+
+        // Redimensionner et compresser une image
+        function resizeAndCompressImage(file, maxWidth, maxHeight, quality) {
+            return new Promise((resolve, reject) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calculer les nouvelles dimensions en gardant le ratio
+                    let { width, height } = img;
+                    
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    // Redimensionner le canvas
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Dessiner l'image redimensionnée
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convertir en base64 avec compression
+                    const base64 = canvas.toDataURL('image/jpeg', quality);
+                    resolve(base64);
+                };
+                
+                img.onerror = reject;
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // Afficher l'aperçu de l'image
+        function displayImagePreview(base64) {
+            const preview = document.getElementById('image-preview');
+            const removeBtn = document.getElementById('remove-icon-btn');
+            
+            preview.innerHTML = `<img src="${base64}" alt="Aperçu icône" class="preview-image">`;
+            preview.classList.add('has-image');
+            removeBtn.style.display = 'inline-block';
+        }
+
+        // Supprimer l'icône de la quête
+        function removeQuestIcon() {
+            questIconBase64 = null;
+            const preview = document.getElementById('image-preview');
+            const removeBtn = document.getElementById('remove-icon-btn');
+            
+            preview.innerHTML = `
+                <div class="upload-placeholder">
+                    <i class="fas fa-image fa-2x"></i>
+                    <p>Cliquez pour ajouter une icône</p>
+                    <span class="upload-hint">PNG, JPG, SVG - Max 2MB</span>
+                </div>
+            `;
+            preview.classList.remove('has-image');
+            removeBtn.style.display = 'none';
+            
+            // Réinitialiser l'input file
+            document.getElementById('quest-icon').value = '';
+        }
+
+        // Obtenir une icône par défaut selon le type de quête
+        function getDefaultQuestIcon(questType, priority) {
+            const icons = {
+                daily: priority === 'urgent' ? 'fa-exclamation-triangle' : 'fa-calendar-day',
+                weekly: 'fa-calendar-week',
+                monthly: 'fa-calendar-alt',
+                special: 'fa-star'
+            };
+            return icons[questType] || 'fa-tasks';
+        }
 
         // === GESTION DE L'ADMINISTRATION ===
 
