@@ -2608,6 +2608,15 @@ function loadAdminQuests() {
                 document.getElementById('quest-photo-required').checked = quest.photoRequired;
                 document.getElementById('quest-recurring').checked = quest.recurring;
                 document.getElementById('quest-frequency').value = quest.frequency;
+                        
+        // Charger l'icône existante
+        if (quest.icon) {
+            questIconBase64 = quest.icon;
+            displayImagePreview(quest.icon);
+        } else {
+            removeQuestIcon();
+        }
+
                 
                 if (quest.recurring) {
                     document.getElementById('recurring-options').classList.remove('hidden');
