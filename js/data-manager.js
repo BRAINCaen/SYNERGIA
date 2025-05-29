@@ -934,3 +934,159 @@ class ChatManager {
 // Instance globale
 const chatManager = new ChatManager();
 
+/* ===== INTÉGRATION COMPLÈTE DES FEATURES ===== */
+
+// Étendre le SynergiaDataManager avec les nouvelles features
+synergiaData.initAdvancedFeatures = function() {
+    // Initialiser les statuts par défaut
+    if (!this.userData.status) {
+        this.userData.status = 'online';
+        this.userData.statusMessage = '';
+        this.userData.lastActivity = new Date().toISOString();
+    }
+
+    // Initialiser les avatars par défaut pour l'équipe
+    this.teamData.forEach((member, index) => {
+        if (!member.avatar) {
+            member.avatar = `./images/avatars/avatar-${index + 1}.jpg`;
+        }
+        if (!member.status) {
+            member.status = Math.random() > 0.5 ? 'online' : 'away';
+            member.lastActivity = new Date().toISOString();
+        }
+    });
+
+    this.saveData();
+    this.updateUI();
+};
+
+// Ajouter des boutons d'action aux cartes membres
+synergiaData.addMemberActionButtons = function() {
+    document.querySelectorAll('.team-member-card').forEach((card, index) => {
+        const member = this.teamData[index];
+        if (!member) return;
+
+        // Vérifier si les boutons existent déjà
+        if (card.querySelector('.member-actions-extended')) return;
+
+        const actionsHTML = `
+            <div class="member-actions-extended">
+                <button class="btn-avatar" onclick="avatarManager.showAvatarSelector('${member.id}')">
+                    <i class="fas fa-user-circle"></i> Avatar
+                </button>
+                <button class="btn-avatar" onclick="statusManager.setStatus('${member.id}', 'busy')">
+                    <i class="fas fa-circle"></i> Statut
+                </button>
+                <button class="btn-avatar" onclick="chatManager.sendMessage('📞 ${member.name} a été contacté', 'system')">
+                    <i class="fas fa-comment"></i> Chat
+                </button>
+            </div>
+        `;
+
+        card.insertAdjacentHTML('beforeend', actionsHTML);
+    });
+};
+
+// Ajouter bouton de changement d'avatar et statut pour l'utilisateur principal
+synergiaData.addUserProfileActions = function() {
+    const userInfo = document.querySelector('.user-info');
+    if (!userInfo || userInfo.querySelector('.user-profile-actions')) return;
+
+    const actionsHTML = `
+        <div class="user-profile-actions" style="margin-top: 8px;">
+            <button class="btn-avatar" onclick="avatarManager.showAvatarSelector('current')" title="Changer avatar">
+                <i class="fas fa-user-circle"></i>
+            </button>
+            <button class="btn-avatar" onclick="statusManager.showStatusSelector()" title="Changer statut">
+                <i class="fas fa-circle"></i>
+            </button>
+        </div>
+    `;
+
+    userInfo.insertAdjacentHTML('beforeend', actionsHTML);
+};
+
+// Fonction utilitaire pour les notifications
+window.showNotification = function(message, type = 'info') {
+    // Supprimer les anciennes notifications
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+        <button class="notification-close">&times;</button>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Auto-supprimer après 5 secondes
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+
+    // Bouton fermeture manuelle
+    notification.querySelector('.notification-close').addEventListener('click', () => {
+        notification.remove();
+    });
+};
+
+// Initialisation complète au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    // Attendre que tout soit chargé
+    setTimeout(() => {
+        // Initialiser les features avancées
+        synergiaData.initAdvancedFeatures();
+        
+        // Ajouter les boutons d'action
+        synergiaData.addMemberActionButtons();
+        synergiaData.addUserProfileActions();
+        
+        // Initialiser les managers
+        statusManager.updateStatusUI();
+        chatManager.updateOnlineCount();
+        
+        console.log('🚀 Features avancées initialisées:');
+        console.log('📸 Avatars personnalisés');
+        console.log('🟢 Statuts temps réel'); 
+        console.log('💬 Chat équipe');
+        
+        // Message de bienvenue
+        showNotification('✨ Nouvelles fonctionnalités disponibles ! Avatars, statuts et chat activés.', 'success');
+        
+    }, 1000);
+});
+
+// API globales pour les nouvelles features
+window.SynergiaAdvanced = {
+    // Avatars
+    changeAvatar: (userId = 'current') => avatarManager.showAvatarSelector(userId),
+    
+    // Statuts
+    setStatus: (userId, status, message = '') => statusManager.setStatus(userId, status, message),
+    showStatusSelector: () => statusManager.showStatusSelector(),
+    
+    // Chat
+    sendMessage: (content, type = 'text') => chatManager.sendMessage(content, type),
+    toggleChat: () => {
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer) {
+            chatContainer.classList.toggle('minimized');
+        }
+    },
+    
+    // Données
+    getOnlineMembers: () => synergiaData.teamData.filter(m => ['online', 'busy'].includes(m.status)),
+    getTotalMessages: () => chatManager.messages.length,
+    
+    // Debug
+    simulateActivity: () => {
+        // Simuler de l'activité pour tester
+        setTimeout(() => chatManager.sendMessage('🤖 Message automatique de test'), 2000);
+        setTimeout(() => statusManager.setStatus('current', 'busy', 'En test'), 4000);
+        setTimeout(() => showNotification('🧪 Simulation terminée', 'info'), 6000);
+    }
+};
