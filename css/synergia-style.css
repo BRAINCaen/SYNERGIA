@@ -2203,3 +2203,102 @@ d 100%);
 .status-message-section input::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
+/* ===== IMAGES CHAT AMÉLIORÉES ===== */
+
+.message-attachment {
+    margin-top: var(--spacing-xs);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.message-image {
+    max-width: 200px;
+    max-height: 150px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.message-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.message-image.enlarged {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    z-index: 99999;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    border-radius: var(--border-radius);
+    cursor: zoom-out;
+}
+
+/* Overlay pour image agrandie */
+.message-image.enlarged::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: -1;
+}
+
+/* Indicateur de chargement */
+.message-attachment::before {
+    content: '📤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.message-attachment:has(.message-image) ::before {
+    display: none;
+}
+
+/* Bouton attach amélioré */
+#attach-file {
+    position: relative;
+}
+
+#attach-file.uploading {
+    animation: uploadPulse 1s infinite;
+}
+
+@keyframes uploadPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Error state pour images cassées */
+.message-image[src*="broken-image"] {
+    background: rgba(239, 68, 68, 0.2);
+    border: 2px dashed #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+}
+
+.message-image[src*="broken-image"]::after {
+    content: '🖼️ Image non disponible';
+    color: #ef4444;
+    font-size: 0.8rem;
+}
