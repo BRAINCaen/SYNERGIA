@@ -1496,4 +1496,154 @@ body {
         grid-template-columns: 1fr !important;
     }
 }
+/* ===== FIX TRANSPARENCE BLOC ADMINISTRATION ===== */
+
+/* Modal admin - fond opaque */
+.admin-modal,
+.admin-modal .modal-content {
+    background: rgba(15, 15, 25, 0.98) !important; /* Quasi opaque au lieu de transparent */
+    backdrop-filter: none !important; /* Supprimer le blur */
+    border: 2px solid rgba(139, 92, 246, 0.8) !important;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(109, 40, 217, 0.4) !important;
+    color: #ffffff !important;
+}
+
+/* Header admin opaque */
+.admin-modal .modal-header {
+    background: rgba(10, 10, 20, 0.95) !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.6) !important;
+    color: #ffffff !important;
+}
+
+.admin-modal .modal-header h3 {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Corps admin opaque */
+.admin-modal .modal-body {
+    background: rgba(15, 15, 25, 0.95) !important;
+    color: #ffffff !important;
+}
+
+/* Onglets admin lisibles */
+.admin-tabs {
+    background: rgba(20, 20, 35, 0.95) !important;
+    border-bottom: 2px solid rgba(139, 92, 246, 0.6) !important;
+}
+
+.admin-tabs .tab {
+    color: #e5e7eb !important;
+    background: none !important;
+}
+
+.admin-tabs .tab.active {
+    color: #ffffff !important;
+    background: rgba(139, 92, 246, 0.3) !important;
+    border-bottom-color: #a78bfa !important;
+}
+
+/* Sections admin lisibles */
+.admin-section {
+    background: rgba(15, 15, 25, 0.9) !important;
+    padding: var(--spacing-md) !important;
+    border-radius: var(--border-radius) !important;
+    margin-bottom: var(--spacing-md) !important;
+}
+
+.admin-section h4 {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.4) !important;
+    padding-bottom: var(--spacing-sm) !important;
+}
+
+/* Items admin lisibles */
+.admin-item {
+    background: rgba(20, 20, 35, 0.95) !important;
+    border: 1px solid rgba(139, 92, 246, 0.5) !important;
+    color: #ffffff !important;
+    border-left: 4px solid #a78bfa !important;
+}
+
+.admin-item-info h5 {
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.admin-item-info p {
+    color: #d1d5db !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Formulaires admin lisibles */
+.admin-modal input,
+.admin-modal select,
+.admin-modal textarea {
+    background: rgba(25, 25, 40, 0.95) !important;
+    border: 2px solid rgba(139, 92, 246, 0.6) !important;
+    color: #ffffff !important;
+}
+
+.admin-modal input::placeholder,
+.admin-modal textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+.admin-modal label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Boutons admin lisibles */
+.admin-modal .btn-primary {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+.admin-modal .btn-secondary {
+    background: rgba(75, 85, 99, 0.9) !important;
+    border: 1px solid rgba(139, 92, 246, 0.4) !important;
+    color: #ffffff !important;
+}
+
+/* Actions admin */
+.modal-actions {
+    background: rgba(10, 10, 20, 0.9) !important;
+    border-top: 1px solid rgba(139, 92, 246, 0.6) !important;
+    padding: var(--spacing-md) !important;
+}
+
+/* FAB admin visible */
+.admin-fab {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%) !important;
+    box-shadow: 
+        0 8px 25px rgba(109, 40, 217, 0.6),
+        0 0 20px rgba(124, 58, 237, 0.4) !important;
+    border: 2px solid rgba(167, 139, 250, 0.6) !important;
+}
+
+/* Overlay modal plus sombre */
+.modal {
+    background: rgba(0, 0, 0, 0.8) !important; /* Plus sombre */
+}
+
+/* Scrollbar admin */
+.admin-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-modal::-webkit-scrollbar-track {
+    background: rgba(15, 15, 25, 0.9);
+}
+
+.admin-modal::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+    border-radius: 4px;
+}
 
