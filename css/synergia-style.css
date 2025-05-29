@@ -1116,3 +1116,32 @@ p, span, div {
         height: 40px;
     }
 }
+/* ===== FIX NAVIGATION BOTTOM - ÉVITER QUE LE CONTENU SOIT CACHÉ ===== */
+
+/* Container principal avec padding pour éviter l'overlap */
+.page-container, main, .main-content {
+    padding-bottom: 85px !important; /* Hauteur estimée du menu nav + marge */
+    box-sizing: border-box !important;
+}
+
+/* Spécifiquement pour les sections qui peuvent être coupées */
+.team-section, .activity-section, .quest-section, .performance-section {
+    margin-bottom: var(--spacing-lg) !important;
+    padding-bottom: var(--spacing-md) !important;
+}
+
+/* S'assurer que le body a assez d'espace en bas */
+body {
+    padding-bottom: 85px !important;
+}
+
+/* Alternative avec calc() pour être ultra-précis */
+.viewport-container {
+    min-height: calc(100vh - 85px) !important;
+    padding-bottom: 85px !important;
+}
+
+/* Si tu as des containers spécifiques, force le padding */
+.container, .app-container {
+    padding-bottom: 85px !important;
+}
