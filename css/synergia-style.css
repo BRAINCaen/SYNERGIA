@@ -619,6 +619,84 @@ input:focus, select:focus, textarea:focus {
     margin-left: auto;
 }
 
+/* ===== BOUTON ADMIN DANS LE HEADER ===== */
+
+/* Supprimer l'ancien FAB */
+.admin-fab {
+    display: none !important;
+}
+
+/* Container pour les actions header */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Nouveau bouton admin dans le header */
+.admin-btn-header {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+    color: white;
+    border: 2px solid rgba(167, 139, 250, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+    position: relative;
+}
+
+.admin-btn-header:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(109, 40, 217, 0.6);
+    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+}
+
+.admin-btn-header:active {
+    transform: translateY(0) scale(1);
+}
+
+/* Badge pour indiquer admin */
+.admin-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    background: #ef4444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    border: 2px solid white;
+    animation: adminPulse 2s infinite;
+}
+
+@keyframes adminPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Responsive header */
+@media (max-width: 768px) {
+    .admin-btn-header {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .header-actions {
+        gap: var(--spacing-xs);
+    }
+}
+
+
 /* ADMIN FAB PREMIUM */
 .admin-fab {
     background: var(--gradient-premium);
