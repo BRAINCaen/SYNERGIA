@@ -1496,154 +1496,252 @@ body {
         grid-template-columns: 1fr !important;
     }
 }
-/* ===== FIX TRANSPARENCE BLOC ADMINISTRATION ===== */
+/* ===== ADMINISTRATION ULTRA-LISIBLE - VERSION FORCE BRUTE ===== */
 
-/* Modal admin - fond opaque */
-.admin-modal,
-.admin-modal .modal-content {
-    background: rgba(15, 15, 25, 0.98) !important; /* Quasi opaque au lieu de transparent */
-    backdrop-filter: none !important; /* Supprimer le blur */
-    border: 2px solid rgba(139, 92, 246, 0.8) !important;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(109, 40, 217, 0.4) !important;
-    color: #ffffff !important;
+/* Modal admin - FOND NOIR OPAQUE */
+.modal {
+    background: rgba(0, 0, 0, 0.95) !important; /* Overlay ultra-sombre */
 }
 
-/* Header admin opaque */
-.admin-modal .modal-header {
-    background: rgba(10, 10, 20, 0.95) !important;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.6) !important;
+.admin-modal,
+.admin-modal .modal-content {
+    background: #0a0a0f !important; /* NOIR COMPLET */
+    backdrop-filter: none !important;
+    border: 3px solid #8b5cf6 !important; /* Bordure violette forte */
+    box-shadow: 
+        0 0 30px rgba(139, 92, 246, 0.8),
+        0 8px 32px rgba(0, 0, 0, 0.9) !important;
     color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* Header admin - NOIR AVEC BORDURE */
+.admin-modal .modal-header {
+    background: #1a1a2e !important; /* Bleu très foncé */
+    border-bottom: 2px solid #8b5cf6 !important;
+    color: #ffffff !important;
+    padding: var(--spacing-lg) !important;
 }
 
 .admin-modal .modal-header h3 {
     color: #ffffff !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 800 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    font-size: 1.5rem !important;
 }
 
-/* Corps admin opaque */
-.admin-modal .modal-body {
-    background: rgba(15, 15, 25, 0.95) !important;
+.admin-modal .modal-header .close {
     color: #ffffff !important;
+    font-size: 2rem !important;
+    opacity: 1 !important;
 }
 
-/* Onglets admin lisibles */
+/* Corps admin - FOND TRÈS SOMBRE */
+.admin-modal .modal-body {
+    background: #0f0f19 !important; /* Violet très très foncé */
+    color: #ffffff !important;
+    padding: var(--spacing-xl) !important;
+}
+
+/* Onglets admin - CONTRASTÉS */
 .admin-tabs {
-    background: rgba(20, 20, 35, 0.95) !important;
-    border-bottom: 2px solid rgba(139, 92, 246, 0.6) !important;
+    background: #1a1a2e !important;
+    border-bottom: 3px solid #8b5cf6 !important;
+    padding: 0 !important;
+    margin-bottom: var(--spacing-lg) !important;
 }
 
 .admin-tabs .tab {
-    color: #e5e7eb !important;
-    background: none !important;
+    color: #d1d5db !important;
+    background: #0f0f19 !important;
+    border: 2px solid #374151 !important;
+    margin-right: var(--spacing-xs) !important;
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    font-weight: 600 !important;
+    border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0 !important;
 }
 
 .admin-tabs .tab.active {
     color: #ffffff !important;
-    background: rgba(139, 92, 246, 0.3) !important;
-    border-bottom-color: #a78bfa !important;
+    background: #8b5cf6 !important; /* Violet plein */
+    border-color: #8b5cf6 !important;
+    font-weight: 800 !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Sections admin lisibles */
+.admin-tabs .tab:hover {
+    background: #374151 !important;
+    color: #ffffff !important;
+}
+
+/* Sections admin - FOND NOIR AVEC BORDURES */
 .admin-section {
-    background: rgba(15, 15, 25, 0.9) !important;
-    padding: var(--spacing-md) !important;
+    background: #1a1a2e !important;
+    border: 2px solid #374151 !important;
     border-radius: var(--border-radius) !important;
-    margin-bottom: var(--spacing-md) !important;
+    padding: var(--spacing-lg) !important;
+    margin-bottom: var(--spacing-lg) !important;
 }
 
 .admin-section h4 {
     color: #ffffff !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.4) !important;
+    font-weight: 800 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    border-bottom: 2px solid #8b5cf6 !important;
     padding-bottom: var(--spacing-sm) !important;
+    margin-bottom: var(--spacing-md) !important;
+    font-size: 1.3rem !important;
 }
 
-/* Items admin lisibles */
+/* Items admin - TRÈS CONTRASTÉS */
 .admin-item {
-    background: rgba(20, 20, 35, 0.95) !important;
-    border: 1px solid rgba(139, 92, 246, 0.5) !important;
+    background: #0f0f19 !important;
+    border: 2px solid #4b5563 !important;
+    border-left: 6px solid #8b5cf6 !important; /* Bordure gauche épaisse */
     color: #ffffff !important;
-    border-left: 4px solid #a78bfa !important;
+    padding: var(--spacing-lg) !important;
+    margin-bottom: var(--spacing-md) !important;
+    border-radius: var(--border-radius) !important;
+}
+
+.admin-item:hover {
+    background: #1a1a2e !important;
+    border-color: #8b5cf6 !important;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.5) !important;
 }
 
 .admin-item-info h5 {
     color: #ffffff !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 800 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    font-size: 1.1rem !important;
+    margin-bottom: var(--spacing-xs) !important;
 }
 
 .admin-item-info p {
-    color: #d1d5db !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+    color: #e5e7eb !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6) !important;
+    font-weight: 500 !important;
 }
 
-/* Formulaires admin lisibles */
+/* Formulaires admin - ULTRA-VISIBLES */
 .admin-modal input,
 .admin-modal select,
 .admin-modal textarea {
-    background: rgba(25, 25, 40, 0.95) !important;
-    border: 2px solid rgba(139, 92, 246, 0.6) !important;
+    background: #1a1a2e !important;
+    border: 3px solid #4b5563 !important;
     color: #ffffff !important;
+    padding: var(--spacing-md) !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    border-radius: var(--border-radius-sm) !important;
+}
+
+.admin-modal input:focus,
+.admin-modal select:focus,
+.admin-modal textarea:focus {
+    border-color: #8b5cf6 !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3) !important;
+    background: #0f0f19 !important;
 }
 
 .admin-modal input::placeholder,
 .admin-modal textarea::placeholder {
     color: #9ca3af !important;
+    font-weight: 500 !important;
 }
 
 .admin-modal label {
     color: #ffffff !important;
-    font-weight: 600 !important;
+    font-weight: 800 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+    display: block !important;
+    margin-bottom: var(--spacing-xs) !important;
+    font-size: 0.95rem !important;
+}
+
+/* Boutons admin - ULTRA-CONTRASTÉS */
+.admin-modal .btn-primary {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+    border: 2px solid #8b5cf6 !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    border-radius: var(--border-radius) !important;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Boutons admin lisibles */
-.admin-modal .btn-primary {
-    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%) !important;
-    border: none !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
+.admin-modal .btn-primary:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5) !important;
 }
 
 .admin-modal .btn-secondary {
-    background: rgba(75, 85, 99, 0.9) !important;
-    border: 1px solid rgba(139, 92, 246, 0.4) !important;
+    background: #374151 !important;
+    border: 2px solid #4b5563 !important;
     color: #ffffff !important;
+    font-weight: 700 !important;
+    padding: var(--spacing-md) var(--spacing-lg) !important;
 }
 
-/* Actions admin */
+.admin-modal .btn-secondary:hover {
+    background: #4b5563 !important;
+    border-color: #6b7280 !important;
+}
+
+/* Actions admin - FOND SOMBRE */
 .modal-actions {
-    background: rgba(10, 10, 20, 0.9) !important;
-    border-top: 1px solid rgba(139, 92, 246, 0.6) !important;
-    padding: var(--spacing-md) !important;
+    background: #0a0a0f !important;
+    border-top: 2px solid #8b5cf6 !important;
+    padding: var(--spacing-lg) !important;
 }
 
-/* FAB admin visible */
-.admin-fab {
-    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%) !important;
-    box-shadow: 
-        0 8px 25px rgba(109, 40, 217, 0.6),
-        0 0 20px rgba(124, 58, 237, 0.4) !important;
-    border: 2px solid rgba(167, 139, 250, 0.6) !important;
+/* Boutons d'action colorés */
+.edit-btn {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    border: none !important;
 }
 
-/* Overlay modal plus sombre */
-.modal {
-    background: rgba(0, 0, 0, 0.8) !important; /* Plus sombre */
+.delete-btn {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    border: none !important;
 }
 
-/* Scrollbar admin */
-.admin-modal::-webkit-scrollbar {
-    width: 8px;
+.toggle-btn {
+    background: #f59e0b !important;
+    color: #ffffff !important;
+    border: none !important;
 }
 
-.admin-modal::-webkit-scrollbar-track {
-    background: rgba(15, 15, 25, 0.9);
+/* Textes d'aide */
+.admin-modal p,
+.admin-modal span,
+.admin-modal div {
+    color: #e5e7eb !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 
-.admin-modal::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+/* Scrollbar noire */
+.admin-modal *::-webkit-scrollbar {
+    width: 10px;
+}
+
+.admin-modal *::-webkit-scrollbar-track {
+    background: #0f0f19;
+}
+
+.admin-modal *::-webkit-scrollbar-thumb {
+    background: #8b5cf6;
+    border-radius: 5px;
+}
+
+.admin-modal *::-webkit-scrollbar-thumb:hover {
+    background: #7c3aed;
+}
+d 100%);
     border-radius: 4px;
 }
 
