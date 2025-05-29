@@ -189,33 +189,41 @@ class SynergiaDataManager {
         });
     }
 
-    // Restructurer le header
-    restructureHeader() {
-        const header = document.querySelector('header');
-        if (!header) return;
+   // Restructurer le header - VERSION SANS NOTIFICATIONS
+restructureHeader() {
+    const header = document.querySelector('header');
+    if (!header) return;
 
-        const existingActions = header.querySelector('.header-actions');
-        if (existingActions) {
-            existingActions.remove();
+    const existingActions = header.querySelector('.header-actions');
+    if (existingActions) {
+        existingActions.remove();
+    }
+
+    const userInfo = header.querySelector('.user-info');
+    if (!userInfo) return;
+
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'header-actions';
+    
+    // SEULEMENT le bouton admin
+    const adminBtn = document.createElement('button');
+    adminBtn.className = 'admin-btn-header';
+    adminBtn.innerHTML = '<i class="fas fa-cog"></i><span class="admin-badge">!</span>';
+    adminBtn.title = 'Administration';
+    adminBtn.onclick = function() {
+        if (typeof openAdminModal === 'function') {
+            openAdminModal();
+        } else {
+            showNotification('⚙️ Panel admin', 'info');
         }
+    };
 
-        const userInfo = header.querySelector('.user-info');
-        if (!userInfo) return;
-
-        const actionsContainer = document.createElement('div');
-        actionsContainer.className = 'header-actions';
-        
-        const adminBtn = document.createElement('button');
-        adminBtn.className = 'admin-btn-header';
-        adminBtn.innerHTML = '<i class="fas fa-cog"></i><span class="admin-badge">!</span>';
-        adminBtn.title = 'Administration';
-        adminBtn.onclick = function() {
-            if (typeof openAdminModal === 'function') {
-                openAdminModal();
-            } else {
-                showNotification('⚙️ Panel admin', 'info');
-            }
-        };
+    // Ajouter SEULEMENT le bouton admin
+    actionsContainer.appendChild(adminBtn);
+    userInfo.parentNode.insertBefore(actionsContainer, userInfo.nextSibling);
+    
+    console.log('✅ Header restructuré (admin uniquement)');
+}
 
     // NOTIFICATIONS
 const notifBtn = document.createElement('button');
