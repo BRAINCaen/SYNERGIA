@@ -806,73 +806,148 @@ class ChatManager {
     // Gérer les pièces jointes
     /* ===== FIX PIÈCES JOINTES CHAT ===== */
 
-// Dans la classe ChatManager, remplacer handleFileAttachment
+/* ===== VERSION ULTRA-PERMISSIVE ===== */
+
 handleFileAttachment(file) {
     console.log('📎 Fichier sélectionné:', file.name, file.type, file.size);
     
-    // Vérifications améliorées
     if (!file) {
         showNotification('❌ Aucun fichier sélectionné', 'error');
         return;
     }
     
     if (!file.type.startsWith('image/')) {
-        showNotification('❌ Seules les images sont supportées (JPG, PNG, GIF)', 'error');
+        showNotification('❌ Seules les images sont supportées', 'error');
         return;
     }
     
-    if (file.size > 5 * 1024 * 1024) { // 5MB max
-        showNotification('❌ Fichier trop volumineux (max 5MB)', 'error');
+    // Limite énorme de 100MB
+    if (file.size > 100 * 1024 * 1024) {
+        showNotification('❌ Fichier vraiment trop volumineux (max 100MB)', 'error');
         return;
     }
     
-    // Afficher un indicateur de chargement
+    // Gestion progressive selon la taille
+    const sizeInMB = file.size / 1024 / 1024;
+    
+    if (sizeInMB < 5) {
+        // < 5MB : envoi direct
+        this.sendImageDirect(file);
+    } else if (sizeInMB < 20) {
+        // 5-20MB : compression légère
+        this.compressAndSendImage(file, 0.9); // Qualité 90%
+    } else if (sizeInMB < 50) {
+        // 20-50MB : compression moyenne
+        this.compressAndSendImage(file, 0.7); // Qualité 70%
+    } else {
+        // 50-100MB : compression forte
+        this.compressAndSendImage(file, 0.5); // Qualité 50%
+    }
+}
+
+// Version avec qualité personnalisable
+compressAndSendImage(file, quality = 0.8) {
     const chatInput = document.getElementById('chat-input');
     const originalPlaceholder = chatInput.placeholder;
-    chatInput.placeholder = '📤 Upload en cours...';
+    const sizeInMB = (file.size / 1024 / 1024).toFixed(2);
+    
+    chatInput.placeholder = `🗜️ Compression ${file.name} (${sizeInMB}MB)...`;
     chatInput.disabled = true;
     
-    const reader = new FileReader();
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
     
-    reader.onload = (e) => {
-        try {
-            const imageData = e.target.result;
-            console.log('✅ Image convertie, taille:', imageData.length);
-            
-            // Envoyer le message avec l'image
-            this.sendMessage(`📷 ${file.name}`, 'image', [imageData]);
-            
-            // Restaurer l'input
-            chatInput.placeholder = originalPlaceholder;
-            chatInput.disabled = false;
-            
-            // Reset le file input
-            document.getElementById('file-attachment').value = '';
-            
-            showNotification('✅ Image envoyée !', 'success');
-            
-        } catch (error) {
-            console.error('❌ Erreur traitement image:', error);
-            showNotification('❌ Erreur lors de l\'envoi de l\'image', 'error');
-            
-            // Restaurer l'input
-            chatInput.placeholder = originalPlaceholder;
-            chatInput.disabled = false;
-        }
-    };
-    
-    reader.onerror = (error) => {
-        console.error('❌ Erreur lecture fichier:', error);
-        showNotification('❌ Impossible de lire le fichier', 'error');
+    img.onload = () => {
+        let { width, height } = img;
         
-        // Restaurer l'input
-        chatInput.placeholder = originalPlaceholder;
-        chatInput.disabled = false;
+        // Redimensionnement intelligent selon la taille
+        let maxWidth, maxHeight;
+        
+        if (file.size < 20 * 1024 * 1024) {
+            // < 20MB : garde haute résolution
+            maxWidth = 2560;
+            maxHeight = 1440;
+        } else if (file.size < 50 * 1024 * 1024) {
+            // 20-50MB : résolution moyenne
+            maxWidth = 1920;
+            maxHeight = 1080;
+        } else {
+            // > 50MB : résolution réduite
+            maxWidth = 1280;
+            maxHeight = 720;
+        }
+        
+        if (width > maxWidth || height > maxHeight) {
+            const ratio = Math.min(maxWidth / width, maxHeight / height);
+            width *= ratio;
+            height *= ratio;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob((blob) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const compressedData = e.target.result;
+                const newSize = (blob.size / 1024 / 1024).toFixed(2);
+                
+                this.sendMessage(`📷 ${file.name} (${sizeInMB}MB → ${newSize}MB)`, 'image', [compressedData]);
+                
+                chatInput.placeholder = originalPlaceholder;
+                chatInput.disabled = false;
+                document.getElementById('file-attachment').value = '';
+                
+                showNotification(`✅ Image envoyée ! Compression ${sizeInMB}MB → ${newSize}MB`, 'success');
+            };
+            reader.readAsDataURL(blob);
+        }, 'image/jpeg', quality);
     };
     
-    // Lancer la lecture
+    const reader = new FileReader();
+    reader.onload = (e) => img.src = e.target.result;
     reader.readAsDataURL(file);
 }
+/* ===== INDICATEUR PROGRESSION UPLOAD ===== */
+
+showUploadProgress(fileName, progress) {
+    let progressBar = document.querySelector('.upload-progress');
+    
+    if (!progressBar && progress > 0) {
+        // Créer la barre de progression
+        const chatContainer = document.getElementById('chat-container');
+        const progressHTML = `
+            <div class="upload-progress">
+                <div class="upload-info">
+                    <span class="upload-filename">📤 ${fileName}</span>
+                    <span class="upload-percent">0%</span>
+                </div>
+                <div class="upload-bar">
+                    <div class="upload-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        `;
+        chatContainer.insertAdjacentHTML('beforeend', progressHTML);
+        progressBar = document.querySelector('.upload-progress');
+    }
+    
+    if (progressBar) {
+        const fill = progressBar.querySelector('.upload-fill');
+        const percent = progressBar.querySelector('.upload-percent');
+        
+        fill.style.width = `${progress}%`;
+        percent.textContent = `${Math.round(progress)}%`;
+        
+        if (progress >= 100) {
+            setTimeout(() => {
+                progressBar.remove();
+            }, 1000);
+        }
+    }
+}
+
 
 
     // Afficher un message
