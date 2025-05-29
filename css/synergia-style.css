@@ -1145,3 +1145,90 @@ body {
 .container, .app-container {
     padding-bottom: 85px !important;
 }
+/* ===== BOÎTE BIENVENUE VIOLET FONCÉ PREMIUM ===== */
+
+.welcome-card {
+    background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%) !important;
+    border: 2px solid rgba(167, 139, 250, 0.6) !important;
+    box-shadow: 
+        0 8px 32px rgba(76, 29, 149, 0.4),
+        0 0 20px rgba(109, 40, 217, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Effet glassmorphism subtle sur la welcome card */
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(167, 139, 250, 0.05) 50%, 
+        rgba(255, 255, 255, 0.02) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+/* Assurer que le texte soit bien visible */
+.welcome-card h2 {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 800 !important;
+    position: relative;
+    z-index: 2;
+}
+
+.welcome-card p {
+    color: #f3f4f6 !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4) !important;
+    position: relative;
+    z-index: 2;
+}
+
+.welcome-card .stat-highlight {
+    color: #c084fc !important;
+    text-shadow: 0 0 10px rgba(192, 132, 252, 0.6) !important;
+    font-weight: 900 !important;
+}
+
+/* Effet de survol premium */
+.welcome-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 12px 40px rgba(76, 29, 149, 0.5),
+        0 0 30px rgba(109, 40, 217, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Animation d'entrée */
+.welcome-card {
+    animation: slideInPremium 0.8s ease-out !important;
+}
+
+@keyframes slideInPremium {
+    0% { 
+        transform: translateY(30px); 
+        opacity: 0; 
+    }
+    100% { 
+        transform: translateY(0); 
+        opacity: 1; 
+    }
+}
+
+/* Améliorer le contraste du texte "Bienvenue [nom] !" */
+.welcome-card h2,
+.welcome-card .user-greeting {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.6),
+        0 0 15px rgba(167, 139, 250, 0.3) !important;
+}
