@@ -434,7 +434,7 @@ class AvatarManager {
         `;
 
         // Event listeners
-        const fileInput = modal.querySelector(`#avatar-file-${userId}`);
+        const fileInput = modal.querySelector('.avatar-file-${userId}`);
         fileInput.addEventListener('change', (e) => {
             if (e.target.files[0]) {
                 this.uploadAvatar(e.target.files[0], userId).then(() => {
