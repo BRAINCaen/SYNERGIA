@@ -2302,3 +2302,36 @@ d 100%);
     color: #ef4444;
     font-size: 0.8rem;
 }
+/* ===== BARRE PROGRESSION UPLOAD ===== */
+
+.upload-progress {
+    position: absolute;
+    bottom: 80px;
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm);
+    z-index: 1000;
+}
+
+.upload-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+    color: white;
+    font-size: 0.8rem;
+}
+
+.upload-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.upload-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+    transition: width 0.3s ease;
+}
