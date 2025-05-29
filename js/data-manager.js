@@ -804,59 +804,139 @@ class ChatManager {
     }
 
     // Gérer les pièces jointes
-    handleFileAttachment(file) {
-        if (!file.type.startsWith('image/')) {
-            showNotification('❌ Seules les images sont supportées', 'error');
-            return;
-        }
+    /* ===== FIX PIÈCES JOINTES CHAT ===== */
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const imageData = e.target.result;
-            this.sendMessage('📷 Image partagée', 'image', [imageData]);
-        };
-        reader.readAsDataURL(file);
+// Dans la classe ChatManager, remplacer handleFileAttachment
+handleFileAttachment(file) {
+    console.log('📎 Fichier sélectionné:', file.name, file.type, file.size);
+    
+    // Vérifications améliorées
+    if (!file) {
+        showNotification('❌ Aucun fichier sélectionné', 'error');
+        return;
     }
+    
+    if (!file.type.startsWith('image/')) {
+        showNotification('❌ Seules les images sont supportées (JPG, PNG, GIF)', 'error');
+        return;
+    }
+    
+    if (file.size > 5 * 1024 * 1024) { // 5MB max
+        showNotification('❌ Fichier trop volumineux (max 5MB)', 'error');
+        return;
+    }
+    
+    // Afficher un indicateur de chargement
+    const chatInput = document.getElementById('chat-input');
+    const originalPlaceholder = chatInput.placeholder;
+    chatInput.placeholder = '📤 Upload en cours...';
+    chatInput.disabled = true;
+    
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+        try {
+            const imageData = e.target.result;
+            console.log('✅ Image convertie, taille:', imageData.length);
+            
+            // Envoyer le message avec l'image
+            this.sendMessage(`📷 ${file.name}`, 'image', [imageData]);
+            
+            // Restaurer l'input
+            chatInput.placeholder = originalPlaceholder;
+            chatInput.disabled = false;
+            
+            // Reset le file input
+            document.getElementById('file-attachment').value = '';
+            
+            showNotification('✅ Image envoyée !', 'success');
+            
+        } catch (error) {
+            console.error('❌ Erreur traitement image:', error);
+            showNotification('❌ Erreur lors de l\'envoi de l\'image', 'error');
+            
+            // Restaurer l'input
+            chatInput.placeholder = originalPlaceholder;
+            chatInput.disabled = false;
+        }
+    };
+    
+    reader.onerror = (error) => {
+        console.error('❌ Erreur lecture fichier:', error);
+        showNotification('❌ Impossible de lire le fichier', 'error');
+        
+        // Restaurer l'input
+        chatInput.placeholder = originalPlaceholder;
+        chatInput.disabled = false;
+    };
+    
+    // Lancer la lecture
+    reader.readAsDataURL(file);
+}
+
 
     // Afficher un message
-    displayMessage(message) {
-        const messagesContainer = document.getElementById('chat-messages');
-        const isCurrentUser = message.senderId === 'current' || message.senderId === synergiaData.userData.id;
-        
-        const messageElement = document.createElement('div');
-        messageElement.className = `chat-message ${isCurrentUser ? 'own-message' : 'other-message'} ${message.type}`;
-        
-        const timeString = new Date(message.timestamp).toLocaleTimeString('fr-FR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        let attachmentsHTML = '';
-        if (message.attachments && message.attachments.length > 0) {
-            attachmentsHTML = message.attachments.map(attachment => 
-                `<img src="${attachment}" class="message-image" onclick="this.classList.toggle('enlarged')">`
-            ).join('');
-        }
-
-        messageElement.innerHTML = `
-            <div class="message-bubble">
-                ${!isCurrentUser ? `
-                    <div class="message-sender">
-                        <img src="${message.senderAvatar}" class="sender-avatar">
-                        <span class="sender-name">${message.senderName}</span>
-                    </div>
-                ` : ''}
-                <div class="message-content">
-                    ${message.content}
-                    ${attachmentsHTML}
-                </div>
-                <div class="message-time">${timeString}</div>
-            </div>
-        `;
-
-        messagesContainer.appendChild(messageElement);
-        message.read = true;
+    // Fonction displayMessage améliorée
+displayMessage(message) {
+    const messagesContainer = document.getElementById('chat-messages');
+    if (!messagesContainer) {
+        console.error('❌ Container de messages introuvable');
+        return;
     }
+    
+    const isCurrentUser = message.senderId === 'current' || message.senderId === synergiaData.userData.id;
+    
+    const messageElement = document.createElement('div');
+    messageElement.className = `chat-message ${isCurrentUser ? 'own-message' : 'other-message'} ${message.type}`;
+    
+    const timeString = new Date(message.timestamp).toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    let attachmentsHTML = '';
+    if (message.attachments && message.attachments.length > 0) {
+        attachmentsHTML = message.attachments.map((attachment, index) => {
+            console.log('🖼️ Affichage image:', attachment.substring(0, 50) + '...');
+            return `
+                <div class="message-attachment">
+                    <img src="${attachment}" 
+                         class="message-image" 
+                         onclick="this.classList.toggle('enlarged')"
+                         onload="console.log('✅ Image chargée')"
+                         onerror="console.error('❌ Erreur chargement image'); this.src='./images/broken-image.png'"
+                         loading="lazy"
+                         alt="Image partagée">
+                </div>
+            `;
+        }).join('');
+    }
+
+    messageElement.innerHTML = `
+        <div class="message-bubble">
+            ${!isCurrentUser ? `
+                <div class="message-sender">
+                    <img src="${message.senderAvatar}" class="sender-avatar" alt="${message.senderName}">
+                    <span class="sender-name">${message.senderName}</span>
+                </div>
+            ` : ''}
+            <div class="message-content">
+                ${message.content}
+                ${attachmentsHTML}
+            </div>
+            <div class="message-time">${timeString}</div>
+        </div>
+    `;
+
+    messagesContainer.appendChild(messageElement);
+    message.read = true;
+    
+    // Auto-scroll
+    setTimeout(() => {
+        this.scrollToBottom();
+    }, 100);
+}
+
 
     // Charger les messages
     loadMessages() {
