@@ -246,31 +246,36 @@ class SynergiaDataManager {
         });
     }
 
-    // Initialisation complète
-    init() {
-        console.log('🚀 Synergia Data Manager initialisé');
-        this.updateUI();
-        
-        // Auto-save toutes les 30 secondes
-        setInterval(() => {
-            this.saveData();
-        }, 30000);
-    }
-}
-
-// Instance globale
-const synergiaData = new SynergiaDataManager();
-
-// Initialisation au chargement de la page
+    // Modifier l'initialisation complète
 document.addEventListener('DOMContentLoaded', () => {
-    synergiaData.init();
-    
-    // Debug dans la console
-    console.log('📊 Données utilisateur:', synergiaData.getUser());
-    console.log('👥 Données équipe:', synergiaData.getTeam());
-    console.log('🎯 Données quêtes:', synergiaData.getQuests());
+    // Attendre que tout soit chargé
+    setTimeout(() => {
+        // Initialiser les features avancées
+        synergiaData.initAdvancedFeatures();
+        
+        // NOUVELLES FONCTIONS DE NETTOYAGE
+        synergiaData.restructureHeader();
+        synergiaData.cleanHomePage();
+        synergiaData.removeOldAdminFab();
+        
+        // Ajouter les boutons d'action (après nettoyage)
+        synergiaData.addMemberActionButtons();
+        // synergiaData.addUserProfileActions(); // Commenté car maintenant dans header
+        
+        // Initialiser les managers
+        statusManager.updateStatusUI();
+        chatManager.updateOnlineCount();
+        
+        console.log('🚀 Interface restructurée:');
+        console.log('⚙️ Admin déplacé dans header');
+        console.log('🧹 Doublons supprimés');
+        console.log('✨ Interface optimisée');
+        
+        // Message de bienvenue discret
+        showNotification('✨ Interface optimisée !', 'success');
+        
+    }, 1000);
 });
-
 // Fonctions utilitaires globales
 window.SynergiaAPI = {
     // Mettre à jour XP
@@ -1243,5 +1248,122 @@ window.SynergiaAdvanced = {
         setTimeout(() => chatManager.sendMessage('🤖 Message automatique de test'), 2000);
         setTimeout(() => statusManager.setStatus('current', 'busy', 'En test'), 4000);
         setTimeout(() => showNotification('🧪 Simulation terminée', 'info'), 6000);
+    }
+};
+/* ===== MODIFICATION HEADER AVEC ADMIN ===== */
+
+// Fonction pour restructurer le header
+synergiaData.restructureHeader = function() {
+    const header = document.querySelector('header');
+    if (!header) {
+        console.warn('Header non trouvé');
+        return;
+    }
+
+    // Supprimer l'ancien contenu s'il existe
+    const existingActions = header.querySelector('.header-actions');
+    if (existingActions) {
+        existingActions.remove();
+    }
+
+    const userInfo = header.querySelector('.user-info');
+    if (!userInfo) {
+        console.warn('User info non trouvé dans le header');
+        return;
+    }
+
+    // Créer le container d'actions
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'header-actions';
+    
+    // Bouton admin
+    const adminBtn = document.createElement('button');
+    adminBtn.className = 'admin-btn-header';
+    adminBtn.innerHTML = `
+        <i class="fas fa-cog"></i>
+        <span class="admin-badge">!</span>
+    `;
+    adminBtn.title = 'Administration';
+    adminBtn.onclick = () => {
+        // Réutiliser la fonction d'ouverture du modal admin existante
+        if (typeof openAdminModal === 'function') {
+            openAdminModal();
+        } else {
+            // Fallback si la fonction n'existe pas
+            console.log('🔧 Ouverture admin...');
+            showNotification('⚙️ Panel admin en développement', 'info');
+        }
+    };
+
+    // Bouton notifications (optionnel)
+    const notifBtn = document.createElement('button');
+    notifBtn.className = 'icon-btn';
+    notifBtn.innerHTML = `
+        <i class="fas fa-bell"></i>
+        <span class="badge">3</span>
+    `;
+    notifBtn.title = 'Notifications';
+    notifBtn.onclick = () => {
+        showNotification('🔔 3 nouvelles notifications', 'info');
+    };
+
+    // Ajouter les boutons
+    actionsContainer.appendChild(notifBtn);
+    actionsContainer.appendChild(adminBtn);
+    
+    // Insérer après userInfo
+    userInfo.parentNode.insertBefore(actionsContainer, userInfo.nextSibling);
+    
+    console.log('✅ Header restructuré avec bouton admin');
+};
+
+// Fonction pour nettoyer la page d'accueil
+synergiaData.cleanHomePage = function() {
+    // Supprimer "Bienvenue Boss" si présent en double
+    const welcomeCards = document.querySelectorAll('.welcome-card');
+    if (welcomeCards.length > 1) {
+        // Garder seulement la première
+        for (let i = 1; i < welcomeCards.length; i++) {
+            welcomeCards[i].remove();
+        }
+        console.log('🧹 Cards de bienvenue dupliquées supprimées');
+    }
+
+    // Supprimer les barres de progression dupliquées
+    const levelProgressContainers = document.querySelectorAll('.level-display, .stats-card');
+    const seenProgressBars = new Set();
+    
+    levelProgressContainers.forEach(container => {
+        const progressBar = container.querySelector('.level-progress, .xp-progress');
+        if (progressBar) {
+            const progressId = container.querySelector('h3, h4')?.textContent?.trim();
+            if (progressId && seenProgressBars.has(progressId)) {
+                container.remove();
+                console.log('🧹 Barre de progression dupliquée supprimée:', progressId);
+            } else if (progressId) {
+                seenProgressBars.add(progressId);
+            }
+        }
+    });
+
+    // Supprimer le texte "Bienvenue Boss" des éléments de navigation
+    document.querySelectorAll('h1, h2, .page-title').forEach(element => {
+        if (element.textContent.includes('Bienvenue Boss')) {
+            element.textContent = element.textContent.replace('Bienvenue Boss', '').trim();
+            if (element.textContent === '' || element.textContent === '!') {
+                element.remove();
+            }
+        }
+    });
+
+    console.log('✅ Page d\'accueil nettoyée');
+};
+
+// Fonction pour supprimer l'ancien FAB admin
+synergiaData.removeOldAdminFab = function() {
+    const oldFab = document.querySelector('.admin-fab');
+    if (oldFab) {
+        oldFab.remove();
+        console.log('🗑️ Ancien bouton FAB admin supprimé');
     }
 };
