@@ -217,16 +217,9 @@ class SynergiaDataManager {
             }
         };
 
-        const notifBtn = document.createElement('button');
-        notifBtn.className = 'icon-btn';
-        notifBtn.innerHTML = '<i class="fas fa-bell"></i><span class="badge">3</span>';
-        notifBtn.title = 'Notifications';
-        notifBtn.onclick = function() {
-            showNotification('🔔 3 nouvelles notifications', 'info');
-        };
+    // Seulement le bouton admin
+actionsContainer.appendChild(adminBtn);
 
-        actionsContainer.appendChild(notifBtn);
-        actionsContainer.appendChild(adminBtn);
         userInfo.parentNode.insertBefore(actionsContainer, userInfo.nextSibling);
         
         console.log('✅ Header restructuré');
