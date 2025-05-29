@@ -1024,7 +1024,7 @@ main {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: white;
+            background: white; opacity: 0.2; /* 20% opaque */
             padding: var(--spacing-md);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-lg);
@@ -1084,7 +1084,7 @@ main {
         }
 
         .modal-content {
-            background-color: white;
+            background-color: white; opacity: 0.5; /* 50% opaque */
             border-radius: var(--border-radius);
             width: 100%;
             max-width: 500px;
@@ -1497,7 +1497,7 @@ main {
 }
 
 .perf-stat-card {
-    background: white;
+    background: white; opacity: 0.5; /* 50% opaque */
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
@@ -1511,7 +1511,7 @@ main {
     height: 60px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: white;
+    color: var(--mauve-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1537,7 +1537,7 @@ main {
 }
 
 .performance-section {
-    background: white;
+    background: white; opacity: 0.5; /* 50% opaque */
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
@@ -1555,7 +1555,7 @@ main {
     display: flex;
     align-items: center;
     padding: var(--spacing-lg);
-    background: linear-gradient(135deg, var(--warning) 0%, #f39c12 100%);
+    background: linear-gradient(135deg, var(--warning) 0%, #f39c12 60%);
     border-radius: var(--border-radius);
     color: white;
     position: relative;
@@ -1632,7 +1632,7 @@ main {
     height: 40px;
     border-radius: 50%;
     background: var(--light-gray);
-    color: var(--dark);
+    color: var(--dark); opacity: 0.6; /* 60% opaque */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1641,7 +1641,7 @@ main {
 }
 
 .rank-number.top-rank {
-    background: linear-gradient(135deg, var(--warning) 0%, #f39c12 100%);
+    background: linear-gradient(135deg, var(--warning) 0%, #f39c12 60%);
     color: white;
 }
 
@@ -1802,7 +1802,7 @@ main {
 .schedule-header-row {
     display: grid;
     grid-template-columns: 200px repeat(7, 1fr);
-    background: var(--primary);
+    background: var(--primary); opacity: 0.8; /* 80% opaque */
     color: white;
     font-weight: 600;
 }
@@ -1893,7 +1893,7 @@ main {
 
 /* Résumé du planning */
 .schedule-summary {
-    background: white;
+    background: white; opacity: 0.8; /* 80% opaque */
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
@@ -2264,7 +2264,7 @@ main {
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
-    background: white;
+    background: white; opacity: 0.8; /* 80% opaque */
     border-radius: var(--border-radius-sm);
     cursor: pointer;
     transition: all 0.3s ease;
