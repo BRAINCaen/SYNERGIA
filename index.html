@@ -5657,6 +5657,44 @@ function loadAdminQuests() {
         function logout() {
             auth.signOut();
         }
+        // Fonction pour mettre à jour les barres de progression
+function updateProgressBars(userData) {
+    // Barre de niveau (Expert)
+    const levelProgress = document.querySelector('.level-progress .xp-progress');
+    const currentXP = userData.currentXP || 0;
+    const requiredXP = userData.requiredXP || 100;
+    const percentage = Math.min((currentXP / requiredXP) * 100, 100);
+    
+    if (levelProgress) {
+        levelProgress.style.width = `${percentage}%`;
+        levelProgress.setAttribute('data-progress', `${currentXP}/${requiredXP} XP`);
+    }
+}
+// Barre de progression du rôle
+function updateRoleProgress(roleData) {
+    const roleProgress = document.querySelector('.role-card .xp-progress');
+    const roleMastery = roleData.mastery || 0; // Pourcentage de 0 à 100
+    
+    if (roleProgress) {
+        roleProgress.style.width = `${roleMastery}%`;
+    }
+}
+// Vérifier si tu as bien cette fonction qui charge le profil
+async function loadUserProfile() {
+    try {
+        const response = await fetch('/api/user/profile');
+        const userData = await response.json();
+        
+        // Remplacer "Chargement..." par le vrai nom
+        document.querySelector('.user-name').textContent = userData.name;
+        document.querySelector('.user-level').textContent = userData.level;
+    } catch (error) {
+        console.error('Erreur chargement profil:', error);
+        // Fallback si ça échoue
+        document.querySelector('.user-name').textContent = 'Utilisateur';
+    }
+}
+
     </script>
 </body>
 </html>
