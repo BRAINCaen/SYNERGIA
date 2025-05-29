@@ -1215,3 +1215,104 @@ body {
     color: #ffffff !important;
 
 }
+/* ===== BLOC PLACEHOLDER VIOLET FONCÉ PREMIUM ===== */
+
+.placeholder {
+    background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%) !important;
+    border: 2px solid rgba(167, 139, 250, 0.6) !important;
+    box-shadow: 
+        0 8px 32px rgba(76, 29, 149, 0.4),
+        0 0 20px rgba(109, 40, 217, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 20px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    padding: var(--spacing-xl) !important;
+    text-align: center !important;
+}
+
+/* Effet glassmorphism sur le placeholder */
+.placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(167, 139, 250, 0.05) 50%, 
+        rgba(255, 255, 255, 0.02) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Contenu au-dessus de l'overlay */
+.placeholder > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Icône clipboard premium */
+.placeholder .fa-clipboard-list {
+    color: #c084fc !important;
+    text-shadow: 0 0 20px rgba(192, 132, 252, 0.8) !important;
+    filter: drop-shadow(0 0 10px rgba(192, 132, 252, 0.6)) !important;
+    animation: pulseGlow 3s ease-in-out infinite !important;
+}
+
+/* Textes du placeholder */
+.placeholder p {
+    color: #f3f4f6 !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 600 !important;
+    margin: var(--spacing-md) 0 !important;
+}
+
+/* Texte secondaire plus subtil */
+.placeholder p[style*="font-size: 0.9rem"] {
+    color: #e5e7eb !important;
+    font-weight: 400 !important;
+    opacity: 0.9 !important;
+}
+
+/* Animation de l'icône */
+@keyframes pulseGlow {
+    0%, 100% { 
+        transform: scale(1);
+        text-shadow: 0 0 20px rgba(192, 132, 252, 0.8);
+    }
+    50% { 
+        transform: scale(1.05);
+        text-shadow: 0 0 30px rgba(192, 132, 252, 1);
+    }
+}
+
+/* Animation d'entrée du bloc */
+.placeholder {
+    animation: slideInPremium 0.8s ease-out !important;
+}
+
+/* Effet hover premium */
+.placeholder:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 12px 40px rgba(76, 29, 149, 0.5),
+        0 0 30px rgba(109, 40, 217, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .placeholder {
+        padding: var(--spacing-lg) var(--spacing-md) !important;
+    }
+    
+    .placeholder .fa-clipboard-list {
+        font-size: 2.5rem !important;
+    }
+}
+
