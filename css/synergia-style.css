@@ -1148,7 +1148,7 @@ body {
 /* ===== BOÎTE BIENVENUE VIOLET FONCÉ PREMIUM ===== */
 
 .welcome-card {
-    background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%) !important;
+    background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 80%, #7c3aed 100%) !important;
     border: 2px solid rgba(167, 139, 250, 0.6) !important;
     box-shadow: 
         0 8px 32px rgba(76, 29, 149, 0.4),
@@ -1159,21 +1159,7 @@ body {
     overflow: hidden !important;
 }
 
-/* Effet glassmorphism subtle sur la welcome card */
-.welcome-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        rgba(167, 139, 250, 0.05) 50%, 
-        rgba(255, 255, 255, 0.02) 100%);
-    border-radius: inherit;
-    pointer-events: none;
-}
+
 
 /* Assurer que le texte soit bien visible */
 .welcome-card h2 {
