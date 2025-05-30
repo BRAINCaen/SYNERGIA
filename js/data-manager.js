@@ -189,7 +189,7 @@ class SynergiaDataManager {
         });
     }
 
-   // Restructurer le header - VERSION SANS NOTIFICATIONS
+// Restructurer le header - VERSION PROPRE
 restructureHeader() {
     const header = document.querySelector('header');
     if (!header) return;
@@ -205,7 +205,6 @@ restructureHeader() {
     const actionsContainer = document.createElement('div');
     actionsContainer.className = 'header-actions';
     
-    // SEULEMENT le bouton admin
     const adminBtn = document.createElement('button');
     adminBtn.className = 'admin-btn-header';
     adminBtn.innerHTML = '<i class="fas fa-cog"></i><span class="admin-badge">!</span>';
@@ -218,45 +217,12 @@ restructureHeader() {
         }
     };
 
-    // Ajouter SEULEMENT le bouton admin
     actionsContainer.appendChild(adminBtn);
     userInfo.parentNode.insertBefore(actionsContainer, userInfo.nextSibling);
     
-    console.log('✅ Header restructuré (admin uniquement)');
+    console.log('✅ Header restructuré');
 }
 
-// SEULEMENT LE BOUTON ADMIN
-actionsContainer.appendChild(adminBtn);
-
-    // Nettoyer la page d'accueil
-    cleanHomePage() {
-        const welcomeCards = document.querySelectorAll('.welcome-card');
-        if (welcomeCards.length > 1) {
-            for (let i = 1; i < welcomeCards.length; i++) {
-                welcomeCards[i].remove();
-            }
-        }
-
-        document.querySelectorAll('h1, h2, .page-title').forEach(element => {
-            if (element.textContent.includes('Bienvenue Boss')) {
-                element.textContent = element.textContent.replace('Bienvenue Boss', '').trim();
-                if (element.textContent === '' || element.textContent === '!') {
-                    element.remove();
-                }
-            }
-        });
-
-        console.log('✅ Page nettoyée');
-    }
-
-    // Supprimer l'ancien FAB admin
-    removeOldAdminFab() {
-        const oldFab = document.querySelector('.admin-fab');
-        if (oldFab) {
-            oldFab.remove();
-            console.log('✅ Ancien FAB admin supprimé');
-        }
-    }
 
     // Initialiser les features avancées
     initAdvancedFeatures() {
