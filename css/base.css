@@ -227,3 +227,21 @@ button, .btn, .nav-btn {
         padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
     }
 }
+/* GARDE ton design, ajoute responsive fixes */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    z-index: 1000; /* FIX: z-index cohérent */
+}
+
+/* FIX mobile responsive */
+@media (max-width: 768px) {
+    .main-content {
+        padding-bottom: 80px; /* Espace pour ton menu */
+    }
+}
