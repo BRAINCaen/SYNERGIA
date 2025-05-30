@@ -41,11 +41,15 @@ class SynergiaApp {
             console.log('✅ Synergia initialisé avec succès');
             
             // Notification de succès
-            showNotification('✨ Application initialisée !', 'success');
+            if (typeof showNotification === 'function') {
+                showNotification('✨ Application initialisée !', 'success');
+            }
             
         } catch (error) {
             console.error('❌ Erreur initialisation:', error);
-            showNotification('❌ Erreur lors de l\'initialisation', 'error');
+            if (typeof showNotification === 'function') {
+                showNotification('❌ Erreur lors de l\'initialisation', 'error');
+            }
         }
     }
 
@@ -54,53 +58,60 @@ class SynergiaApp {
         // Data Manager
         if (window.SynergiaDataManager) {
             this.registerModule('dataManager', new SynergiaDataManager());
-            await this.modules.dataManager.init();
+            if (this.modules.dataManager.init) {
+                await this.modules.dataManager.init();
+            }
         }
 
         // UI Manager
         if (window.SynergiaUIManager) {
             this.registerModule('uiManager', new SynergiaUIManager());
-            this.modules.uiManager.init();
+            if (this.modules.uiManager.init) {
+                this.modules.uiManager.init();
+            }
         }
     }
 
     // Initialiser les modules features
     async initFeatureModules() {
-// Initialiser les modules features
-async initFeatureModules() {
-    // Quests - NOUVEAU
-    if (window.SynergiaQuests) {
-        this.registerModule('quests', new SynergiaQuests());
-    }
+        // Quests
+        if (window.SynergiaQuests) {
+            this.registerModule('quests', new SynergiaQuests());
+        }
 
-    // Quest UI - NOUVEAU  
-    if (window.SynergiaQuestUI) {
-        this.registerModule('questUI', new SynergiaQuestUI());
-    }
+        // Quest UI
+        if (window.SynergiaQuestUI) {
+            this.registerModule('questUI', new SynergiaQuestUI());
+        }
 
-    // Auth
-    if (window.SynergiaAuth) {
-        this.registerModule('auth', new SynergiaAuth());
-    }
+        // Auth
+        if (window.SynergiaAuth) {
+            this.registerModule('auth', new SynergiaAuth());
+        }
 
-    // Team
-    if (window.SynergiaTeam) {
-        this.registerModule('team', new SynergiaTeam());
-    }
+        // Team
+        if (window.SynergiaTeam) {
+            this.registerModule('team', new SynergiaTeam());
+        }
 
-    // Admin
-    if (window.SynergiaAdmin) {
-        this.registerModule('admin', new SynergiaAdmin());
+        // Admin
+        if (window.SynergiaAdmin) {
+            this.registerModule('admin', new SynergiaAdmin());
+        }
     }
-}
-
 
     // Initialiser l'UI
     async initUI() {
         if (this.modules.uiManager) {
-            this.modules.uiManager.setupHeader();
-            this.modules.uiManager.setupNavigation();
-            this.modules.uiManager.cleanupInterface();
+            if (this.modules.uiManager.setupHeader) {
+                this.modules.uiManager.setupHeader();
+            }
+            if (this.modules.uiManager.setupNavigation) {
+                this.modules.uiManager.setupNavigation();
+            }
+            if (this.modules.uiManager.cleanupInterface) {
+                this.modules.uiManager.cleanupInterface();
+            }
         }
     }
 
@@ -114,9 +125,10 @@ async initFeatureModules() {
 window.synergiaApp = new SynergiaApp();
 
 // Auto-initialisation
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        window.synergiaApp.init();
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        if (window.synergiaApp && window.synergiaApp.init) {
+            window.synergiaApp.init();
+        }
     }, 1000);
 });
-
