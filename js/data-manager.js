@@ -225,22 +225,8 @@ restructureHeader() {
     console.log('✅ Header restructuré (admin uniquement)');
 }
 
-    // NOTIFICATIONS
-const notifBtn = document.createElement('button');
-notifBtn.className = 'icon-btn';
-notifBtn.innerHTML = '<i class="fas fa-bell"></i><span class="badge">3</span>';
-notifBtn.title = 'Notifications';
-notifBtn.onclick = function() {
-    showNotification('🔔 3 nouvelles notifications', 'info');
-};
-
-actionsContainer.appendChild(notifBtn);
+// SEULEMENT LE BOUTON ADMIN
 actionsContainer.appendChild(adminBtn);
-
-        userInfo.parentNode.insertBefore(actionsContainer, userInfo.nextSibling);
-        
-        console.log('✅ Header restructuré');
-    }
 
     // Nettoyer la page d'accueil
     cleanHomePage() {
