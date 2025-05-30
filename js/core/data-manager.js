@@ -1,34 +1,6 @@
 /* ===== SYNERGIA DATA MANAGER - VERSION CORRIGÉE COMPLÈTE ===== */
 
-// Gestionnaire de données utilisateur
-class SynergiaDataManager {
-    constructor() {
-        this.initDefaultData();
-        this.loadUserData();
-    }
-// Version corrigée (garde ta logique, fix les erreurs)
-class SynergiaDataManager {
-    constructor() {
-        // TON CODE EXISTANT
-        this.userData = this.loadUserData();
-        this.initializeData();
-    }
-    
-    // FIX: Supprimer duplication bouton notif
-    restructureHeader() {
-        const actionsContainer = document.createElement('div');
-        actionsContainer.className = 'header-actions';
-        
-        // GARDE TON BOUTON ADMIN
-        const adminBtn = document.createElement('button');
-        adminBtn.className = 'admin-btn-header';
-        adminBtn.innerHTML = '⚙️';
-        adminBtn.onclick = () => openAdminModal();
-        
-        actionsContainer.appendChild(adminBtn);
-        // TON CODE SUITE...
-    }
-}
+
 
     // Données par défaut
     initDefaultData() {
