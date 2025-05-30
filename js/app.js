@@ -66,26 +66,34 @@ class SynergiaApp {
 
     // Initialiser les modules features
     async initFeatureModules() {
-        // Auth
-        if (window.SynergiaAuth) {
-            this.registerModule('auth', new SynergiaAuth());
-        }
-
-        // Quests
-        if (window.SynergiaQuests) {
-            this.registerModule('quests', new SynergiaQuests());
-        }
-
-        // Team
-        if (window.SynergiaTeam) {
-            this.registerModule('team', new SynergiaTeam());
-        }
-
-        // Admin
-        if (window.SynergiaAdmin) {
-            this.registerModule('admin', new SynergiaAdmin());
-        }
+// Initialiser les modules features
+async initFeatureModules() {
+    // Quests - NOUVEAU
+    if (window.SynergiaQuests) {
+        this.registerModule('quests', new SynergiaQuests());
     }
+
+    // Quest UI - NOUVEAU  
+    if (window.SynergiaQuestUI) {
+        this.registerModule('questUI', new SynergiaQuestUI());
+    }
+
+    // Auth
+    if (window.SynergiaAuth) {
+        this.registerModule('auth', new SynergiaAuth());
+    }
+
+    // Team
+    if (window.SynergiaTeam) {
+        this.registerModule('team', new SynergiaTeam());
+    }
+
+    // Admin
+    if (window.SynergiaAdmin) {
+        this.registerModule('admin', new SynergiaAdmin());
+    }
+}
+
 
     // Initialiser l'UI
     async initUI() {
