@@ -132,7 +132,7 @@
         const userNameElements = document.querySelectorAll('.user-name, .user-info h2');
         userNameElements.forEach(element => {
             if (element && element.textContent.includes('Chargement')) {
-                element.textContent = this.userData.name;
+               element.textContent = this.userData.name.replace(/[<>]/g, '');
             }
         });
 
@@ -140,7 +140,7 @@
         avatarElements.forEach(element => {
             if (element) {
                 element.src = this.userData.avatar;
-                element.alt = this.userData.name;
+                element.alt = this.userData.name.replace(/[<>]/g, '');
             }
         });
     }
@@ -230,7 +230,10 @@ window.showNotification = function(message, type) {
 
     const notification = document.createElement('div');
     notification.className = 'notification notification-' + type;
-    notification.innerHTML = '<i class="fas fa-info-circle"></i><span>' + message + '</span><button class="notification-close">&times;</button>';
+    function sanitizeInput(input) {
+    return String(input).replace(/[<>]/g, '');
+}
+notification.innerHTML = '<i class="fas fa-info-circle"></i><span>' + sanitizeInput(message) + '</span><button class="notification-close">&times;</button>';
 
     document.body.appendChild(notification);
 
