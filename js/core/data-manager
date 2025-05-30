@@ -189,70 +189,6 @@ class SynergiaDataManager {
         });
     }
 
-// Restructurer le header - VERSION PROPRE
-restructureHeader() {
-    const header = document.querySelector('header');
-    if (!header) return;
-
-    const existingActions = header.querySelector('.header-actions');
-    if (existingActions) {
-        existingActions.remove();
-    }
-
-    const userInfo = header.querySelector('.user-info');
-    if (!userInfo) return;
-
-    const actionsContainer = document.createElement('div');
-    actionsContainer.className = 'header-actions';
-    
-    const adminBtn = document.createElement('button');
-    adminBtn.className = 'admin-btn-header';
-    adminBtn.innerHTML = '<i class="fas fa-cog"></i><span class="admin-badge">!</span>';
-    adminBtn.title = 'Administration';
-    adminBtn.onclick = function() {
-        if (typeof openAdminModal === 'function') {
-            openAdminModal();
-        } else {
-            showNotification('⚙️ Panel admin', 'info');
-        }
-    };
-
-    actionsContainer.appendChild(adminBtn);
-    userInfo.parentNode.insertBefore(actionsContainer, userInfo.nextSibling);
-    
-    console.log('✅ Header restructuré');
-}
-
-// Nettoyer la page d'accueil
-cleanHomePage() {
-    const welcomeCards = document.querySelectorAll('.welcome-card');
-    if (welcomeCards.length > 1) {
-        for (let i = 1; i < welcomeCards.length; i++) {
-            welcomeCards[i].remove();
-        }
-    }
-
-    document.querySelectorAll('h1, h2, .page-title').forEach(element => {
-        if (element.textContent.includes('Bienvenue Boss')) {
-            element.textContent = element.textContent.replace('Bienvenue Boss', '').trim();
-            if (element.textContent === '' || element.textContent === '!') {
-                element.remove();
-            }
-        }
-    });
-
-    console.log('✅ Page nettoyée');
-}
-
-// Supprimer l'ancien FAB admin
-removeOldAdminFab() {
-    const oldFab = document.querySelector('.admin-fab');
-    if (oldFab) {
-        oldFab.remove();
-        console.log('✅ Ancien FAB admin supprimé');
-    }
-}
-
     // Initialiser les features avancées
     initAdvancedFeatures() {
         if (!this.userData.status) {
@@ -336,20 +272,21 @@ window.SynergiaAPI = {
     getQuestsData: function() { return synergiaData.getQuests(); }
 };
 
-// Initialisation au chargement
+// À la fin du fichier data-manager.js
+// SUPPRIMER cette partie :
+/*
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
-        // Initialiser
         synergiaData.init();
         synergiaData.initAdvancedFeatures();
-        
-        // Modifications interface
         synergiaData.restructureHeader();
         synergiaData.cleanHomePage();
         synergiaData.removeOldAdminFab();
-        
         console.log('🚀 Interface optimisée');
         showNotification('✨ Interface optimisée !', 'success');
-        
     }, 1500);
 });
+*/
+
+// Export global
+window.SynergiaDataManager = SynergiaDataManager;
