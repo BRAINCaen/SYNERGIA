@@ -213,3 +213,271 @@ input:focus, select:focus, textarea:focus {
         padding: var(--spacing-xs);
     }
 }
+/* ===== QUESTS AVANCÉES ===== */
+
+.quest-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.quest-item.overdue {
+    border-left-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+.quest-item.overdue .quest-title::after {
+    content: " ⚠️";
+    color: #ef4444;
+}
+
+.quest-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.quest-meta {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-xs);
+}
+
+.quest-meta span {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.quest-priority {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.priority-low { background: rgba(107, 114, 128, 0.8) !important; }
+.priority-normal { background: rgba(59, 130, 246, 0.8) !important; }
+.priority-high { background: rgba(245, 158, 11, 0.8) !important; }
+.priority-urgent { 
+    background: rgba(239, 68, 68, 0.8) !important;
+    animation: urgentPulse 2s infinite;
+}
+
+@keyframes urgentPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Photo upload modal */
+.photo-upload-zone {
+    border: 2px dashed var(--mauve-accent);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    text-align: center;
+    margin: var(--spacing-md) 0;
+    transition: all 0.3s ease;
+}
+
+.photo-upload-zone:hover {
+    border-color: var(--mauve-light);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.upload-label {
+    cursor: pointer;
+    color: var(--gray-300);
+}
+
+.photo-preview {
+    margin-top: var(--spacing-md);
+}
+
+.photo-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+/* Célébration de quête */
+.quest-celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.celebration-content {
+    background: linear-gradient(135deg, var(--mauve-primary) 0%, var(--mauve-secondary) 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+    animation: celebrationBounce 0.6s ease;
+}
+
+.celebration-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    animation: bounce 1s infinite;
+}
+
+.xp-reward {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    margin: var(--spacing-md) 0;
+}
+
+@keyframes celebrationBounce {
+    0% { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+    50% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* No quests state */
+.no-quests {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--gray-400);
+    font-style: italic;
+}
+
+.no-quests i {
+    margin-bottom: var(--spacing-md);
+    color: var(--mauve-accent);
+}
+
+/* Quest counters */
+.quest-counter {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+/* Quest filters */
+.quest-filters {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--gray-600);
+    background: transparent;
+    color: var(--gray-300);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: var(--mauve-accent);
+    color: white;
+    border-color: var(--mauve-accent);
+}
+
+/* Quest creation form enhancements */
+.quest-creation-form .form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.quest-tags-input {
+    background: var(--premium-bg-glass);
+    border: 1px solid var(--gray-600);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    color: var(--gray-100);
+}
+
+.quest-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+}
+
+.quest-tag {
+    background: var(--mauve-accent);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.quest-tag .remove-tag {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.quest-tag .remove-tag:hover {
+    opacity: 1;
+}
+
+/* Responsive quests */
+@media (max-width: 768px) {
+    .quest-item {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .quest-actions {
+        justify-content: flex-end;
+        margin-top: var(--spacing-sm);
+    }
+    
+    .quest-meta {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .celebration-content {
+        margin: var(--spacing-md);
+        padding: var(--spacing-lg);
+    }
+    
+    .xp-reward {
+        font-size: 1.5rem;
+    }
+}
