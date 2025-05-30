@@ -223,6 +223,35 @@ restructureHeader() {
     console.log('✅ Header restructuré');
 }
 
+// Nettoyer la page d'accueil
+cleanHomePage() {
+    const welcomeCards = document.querySelectorAll('.welcome-card');
+    if (welcomeCards.length > 1) {
+        for (let i = 1; i < welcomeCards.length; i++) {
+            welcomeCards[i].remove();
+        }
+    }
+
+    document.querySelectorAll('h1, h2, .page-title').forEach(element => {
+        if (element.textContent.includes('Bienvenue Boss')) {
+            element.textContent = element.textContent.replace('Bienvenue Boss', '').trim();
+            if (element.textContent === '' || element.textContent === '!') {
+                element.remove();
+            }
+        }
+    });
+
+    console.log('✅ Page nettoyée');
+}
+
+// Supprimer l'ancien FAB admin
+removeOldAdminFab() {
+    const oldFab = document.querySelector('.admin-fab');
+    if (oldFab) {
+        oldFab.remove();
+        console.log('✅ Ancien FAB admin supprimé');
+    }
+}
 
     // Initialiser les features avancées
     initAdvancedFeatures() {
