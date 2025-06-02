@@ -1,8 +1,18 @@
-/* ===== SYNERGIA DATA MANAGER - VERSION CORRIGÉE COMPLÈTE ===== */
+/* ===== SYNERGIA DATA MANAGER - VERSION CORRIGÃ‰E COMPLÃˆTE ===== */
 
+// Gestionnaire de donnÃ©es utilisateur
+class SynergiaDataManager {
+    constructor() {
+        this.initDefaultData();
+        this.loadUserData();
+    }
 
+    // Fonction utilitaire de sÃ©curisation
+    sanitizeInput(input) {
+        return String(input).replace(/[<>]/g, '');
+    }
 
-    // Données par défaut
+    // DonnÃ©es par dÃ©faut
     initDefaultData() {
         this.defaultUser = {
             name: "Boss",
@@ -44,7 +54,7 @@
         this.defaultQuests = [
             {
                 id: 1,
-                title: "Vérifier l'accueil",
+                title: "VÃ©rifier l'accueil",
                 description: "S'assurer que l'espace d'accueil est propre et accueillant",
                 xp: 10,
                 priority: "normal",
@@ -55,8 +65,8 @@
             },
             {
                 id: 2,
-                title: "Contrôle équipements",
-                description: "Vérifier le bon fonctionnement des jeux",
+                title: "ContrÃ´le Ã©quipements",
+                description: "VÃ©rifier le bon fonctionnement des jeux",
                 xp: 15,
                 priority: "normal",
                 assignedTo: null,
@@ -67,21 +77,21 @@
         ];
     }
 
-    // Charger les données
+    // Charger les donnÃ©es
     loadUserData() {
         try {
             this.userData = JSON.parse(localStorage.getItem('synergia_user')) || this.defaultUser;
             this.teamData = JSON.parse(localStorage.getItem('synergia_team')) || this.defaultTeam;
             this.questsData = JSON.parse(localStorage.getItem('synergia_quests')) || this.defaultQuests;
         } catch (error) {
-            console.warn('Erreur chargement données:', error);
+            console.warn('Erreur chargement donnÃ©es:', error);
             this.userData = this.defaultUser;
             this.teamData = this.defaultTeam;
             this.questsData = this.defaultQuests;
         }
     }
 
-    // Sauvegarder les données
+    // Sauvegarder les donnÃ©es
     saveData() {
         try {
             localStorage.setItem('synergia_user', JSON.stringify(this.userData));
@@ -104,7 +114,7 @@
     getTeam() { return this.teamData; }
     getQuests() { return this.questsData; }
 
-    // Mise à jour utilisateur
+    // Mise Ã  jour utilisateur
     updateUser(newData) {
         this.userData = Object.assign(this.userData, newData);
         this.saveData();
@@ -120,19 +130,19 @@
         return this.userData.role.mastery;
     }
 
-    // Mise à jour de l'interface
+    // Mise Ã  jour de l'interface
     updateUI() {
         this.updateUserProfile();
         this.updateProgressBars();
         this.updateStats();
     }
 
-    // Mettre à jour le profil utilisateur
+    // Mettre Ã  jour le profil utilisateur
     updateUserProfile() {
         const userNameElements = document.querySelectorAll('.user-name, .user-info h2');
         userNameElements.forEach(element => {
             if (element && element.textContent.includes('Chargement')) {
-               element.textContent = this.userData.name.replace(/[<>]/g, '');
+               element.textContent = this.sanitizeInput(this.userData.name);
             }
         });
 
@@ -140,12 +150,12 @@
         avatarElements.forEach(element => {
             if (element) {
                 element.src = this.userData.avatar;
-                element.alt = this.userData.name.replace(/[<>]/g, '');
+                element.alt = this.sanitizeInput(this.userData.name);
             }
         });
     }
 
-    // Mettre à jour les barres de progression
+    // Mettre Ã  jour les barres de progression
     updateProgressBars() {
         const levelProgressBars = document.querySelectorAll('.level-progress .xp-progress, .xp-progress, #level-bar');
         levelProgressBars.forEach(bar => {
@@ -167,7 +177,7 @@
         });
     }
 
-    // Mettre à jour les statistiques
+    // Mettre Ã  jour les statistiques
     updateStats() {
         const statElements = document.querySelectorAll('.perf-stat-number');
         const statsData = [
@@ -184,7 +194,7 @@
         });
     }
 
-    // Initialiser les features avancées
+    // Initialiser les features avancÃ©es
     initAdvancedFeatures() {
         if (!this.userData.status) {
             this.userData.status = 'online';
@@ -192,7 +202,7 @@
             this.userData.lastActivity = new Date().toISOString();
         }
 
-        this.teamData.forEach(function(member, index) {
+        this.teamData.forEach((member, index) => {
             if (!member.avatar) {
                 member.avatar = './images/avatars/avatar-' + (index + 1) + '.jpg';
             }
@@ -206,9 +216,34 @@
         this.updateUI();
     }
 
-    // Initialisation complète
+    // Notification sÃ©curisÃ©e
+    showNotification(message, type = 'info') {
+        // Supprimer anciennes notifications
+        document.querySelectorAll('.notification').forEach(n => n.remove());
+
+        const notification = document.createElement('div');
+        notification.className = 'notification notification-' + type;
+        
+        // SÃ©curiser le message
+        const safeMessage = this.sanitizeInput(message);
+        notification.innerHTML = '<i class="fas fa-info-circle"></i><span>' + safeMessage + '</span><button class="notification-close">&times;</button>';
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.remove();
+        });
+    }
+
+    // Initialisation complÃ¨te
     init() {
-        console.log('🚀 Synergia Data Manager initialisé');
+        console.log('ðŸš€ Synergia Data Manager initialisÃ©');
         this.updateUI();
         
         setInterval(() => {
@@ -220,32 +255,9 @@
 // Instance globale
 const synergiaData = new SynergiaDataManager();
 
-// Fonction pour les notifications
+// Fonction globale pour les notifications (rÃ©trocompatibilitÃ©)
 window.showNotification = function(message, type) {
-    type = type || 'info';
-    
-    document.querySelectorAll('.notification').forEach(function(n) {
-        n.remove();
-    });
-
-    const notification = document.createElement('div');
-    notification.className = 'notification notification-' + type;
-    function sanitizeInput(input) {
-    return String(input).replace(/[<>]/g, '');
-}
-notification.innerHTML = '<i class="fas fa-info-circle"></i><span>' + sanitizeInput(message) + '</span><button class="notification-close">&times;</button>';
-
-    document.body.appendChild(notification);
-
-    setTimeout(function() {
-        if (notification.parentElement) {
-            notification.remove();
-        }
-    }, 5000);
-
-    notification.querySelector('.notification-close').addEventListener('click', function() {
-        notification.remove();
-    });
+    synergiaData.showNotification(message, type);
 };
 
 // API globale
@@ -259,7 +271,7 @@ window.SynergiaAPI = {
             user.level++;
             user.currentXP = user.currentXP - user.requiredXP;
             user.requiredXP = Math.floor(user.requiredXP * 1.2);
-            showNotification('🎉 Level Up ! Niveau ' + user.level + ' atteint !', 'success');
+            synergiaData.showNotification('ðŸŽ‰ Level Up ! Niveau ' + user.level + ' atteint !', 'success');
         }
         
         synergiaData.updateUser(user);
@@ -270,21 +282,15 @@ window.SynergiaAPI = {
     getQuestsData: function() { return synergiaData.getQuests(); }
 };
 
-// À la fin du fichier data-manager.js
-// SUPPRIMER cette partie :
-/*
+// Export global
+window.SynergiaDataManager = SynergiaDataManager;
+
+// Initialisation automatique
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         synergiaData.init();
         synergiaData.initAdvancedFeatures();
-        synergiaData.restructureHeader();
-        synergiaData.cleanHomePage();
-        synergiaData.removeOldAdminFab();
-        console.log('🚀 Interface optimisée');
-        showNotification('✨ Interface optimisée !', 'success');
-    }, 1500);
+        console.log('ðŸš€ Synergia Data Manager dÃ©marrÃ©');
+        synergiaData.showNotification('âœ¨ Application initialisÃ©e !', 'success');
+    }, 500);
 });
-*/
-
-// Export global
-window.SynergiaDataManager = SynergiaDataManager;
