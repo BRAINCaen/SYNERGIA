@@ -625,3 +625,9 @@
         font-size: 18px;
     }
 }
+/* Ajoute dans mobile-fixes.css */
+.form-group input,
+.form-group select {
+    background: rgba(255, 255, 255, 0.15); /* Plus visible */
+    border: 2px solid rgba(139, 92, 246, 0.5); /* Plus marqué */
+}
