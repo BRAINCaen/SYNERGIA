@@ -787,6 +787,8 @@
         // Charger une page spécifique
         function loadPage(page) {
             const mainContent = document.getElementById('main-content');
+
+            mainContent.innerHTML = ''; // ← VIDER D'ABORD
             
             switch(page) {
                 case 'dashboard':
