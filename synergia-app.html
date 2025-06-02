@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNERGIA - Gestion d'équipe gamifiée</title>
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#6d28d9">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary-color: #6d28d9;
+            --primary-light: #8b5cf6;
+            --primary-dark: #5b21b6;
+            --secondary-color: #7c3aed;
+            --accent-color: #a78bfa;
+            
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --info-color: #3b82f6;
+            
+            --bg-primary: #0a0a0f;
+            --bg-secondary: rgba(10, 10, 20, 0.98);
+            --bg-card: rgba(15, 15, 25, 0.95);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            
+            --border-color: rgba(139, 92, 246, 0.2);
+            --shadow-color: rgba(109, 40, 217, 0.3);
+            
+            --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            --transition: all 0.3s ease;
+            
+            --nav-height: 60px;
+            --header-height: 80px;
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Utilities */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .btn-secondary {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--primary-light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-icon:hover {
+            color: var(--text-primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            padding-bottom: var(--nav-height);
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
+        /* Header */
+        .app-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-light);
+            object-fit: cover;
+        }
+
+        .user-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .user-info .role {
+            font-size: 0.875rem;
+            color: var(--primary-light);
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .value {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-light);
+        }
+
+        .stat-item .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .xp-bar {
+            width: 200px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            transition: width 0.5s ease;
+        }
+
+        /* Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: var(--nav-height);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+        }
+
+        .nav-item span {
+            font-size: 0.75rem;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-item.active {
+            position: relative;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: var(--primary-light);
+        }
+
+        /* Pages */
+        .page-content {
+            display: none;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Quests */
+        .quest-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .quest-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .quest-tab.active {
+            color: var(--primary-light);
+        }
+
+        .quest-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-light);
+        }
+
+        .quest-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .quest-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .quest-card.completed {
+            opacity: 0.6;
+        }
+
+        .quest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .quest-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .quest-xp {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .quest-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .quest-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quest-meta span {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .quest-type.daily {
+            color: var(--info-color);
+            border: 1px solid var(--info-color);
+        }
+
+        .quest-type.weekly {
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .quest-type.special {
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .quest-priority.urgent {
+            color: var(--error-color);
+        }
+
+        .quest-priority.high {
+            color: var(--warning-color);
+        }
+
+        .quest-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), #34d399);
+            transition: width 0.5s ease;
+        }
+
+        .quest-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .quest-completed-badge {
+            color: var(--success-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Team */
+        .team-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .team-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .team-tab.active {
+            color: var(--primary-light);
+        }
+
+        .team-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-light);
+        }
+
+        .team-members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .member-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .member-card:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .member-avatar {
+            position: relative;
+            display: inline-block;
+        }
+
+        .member-avatar img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .member-status {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--bg-card);
+        }
+
+        .member-status.active {
+            background: var(--success-color);
+        }
+
+        .member-status.inactive {
+            background: var(--error-color);
+        }
+
+        .member-info h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-role {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .member-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .member-stats .stat {
+            text-align: center;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow: auto;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 250px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-color: var(--success-color);
+        }
+
+        .toast-success i {
+            color: var(--success-color);
+        }
+
+        .toast-error {
+            border-color: var(--error-color);
+        }
+
+        .toast-error i {
+            color: var(--error-color);
+        }
+
+        .toast-warning {
+            border-color: var(--warning-color);
+        }
+
+        .toast-warning i {
+            color: var(--warning-color);
+        }
+
+        .toast-info {
+            border-color: var(--info-color);
+        }
+
+        .toast-info i {
+            color: var(--info-color);
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Coming Soon */
+        .coming-soon {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .coming-soon i {
+            font-size: 4rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            .user-stats {
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .team-members-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quest-meta {
+                font-size: 0.7rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .loading::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-light);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>SYNERGIA</h1>
+                <p>Gestion d'équipe gamifiée</p>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app-container" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content container">
+                <div class="user-profile">
+                    <img id="user-avatar" class="user-avatar" src="/assets/images/default-avatar.jpg" alt="Avatar">
+                    <div class="user-info">
+                        <h3 id="user-name">Chargement...</h3>
+                        <span id="user-role" class="role">...</span>
+                    </div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span id="user-level" class="value">1</span>
+                        <span class="label">Niveau</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="user-xp" class="value">0 XP</span>
+                        <span class="label">Expérience</span>
+                        <div class="xp-bar">
+                            <div id="user-xp-bar" class="xp-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <button id="logout-btn" class="btn btn-icon" title="Déconnexion">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page-content active">
+            <div class="page-header">
+                <h1>Tableau de bord</h1>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-tasks"></i>
+                        <span class="stat-value" data-stat="questsCompleted">0</span>
+                        <span class="stat-label">Quêtes terminées</span>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <span class="stat-value" data-stat="totalXP">0</span>
+                        <span class="stat-label">XP Total</span>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-fire"></i>
+                        <span class="stat-value" data-stat="streak">0</span>
+                        <span class="stat-label">Série en cours</span>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-medal"></i>
+                        <span class="stat-value" data-stat="badges">0</span>
+                        <span class="stat-label">Badges obtenus</span>
+                    </div>
+                </div>
+
+                <!-- Daily Quests -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quêtes du jour</h2>
+                        <a href="#" class="btn btn-sm" data-page="quests">Voir tout</a>
+                    </div>
+                    <div id="daily-quests-container" class="loading"></div>
+                </div>
+
+                <!-- Team Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Activité de l'équipe</h2>
+                        <a href="#" class="btn btn-sm" data-page="team">Voir l'équipe</a>
+                    </div>
+                    <div id="team-activity-container" class="loading"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quests Page -->
+        <div id="quests-page" class="page-content">
+            <div class="page-header">
+                <h1>Quêtes</h1>
+                <button id="create-quest-btn" class="btn">
+                    <i class="fas fa-plus"></i> Nouvelle quête
+                </button>
+            </div>
+
+            <div class="quest-tabs">
+                <button class="quest-tab active" data-tab="daily">Quotidiennes</button>
+                <button class="quest-tab" data-tab="weekly">Hebdomadaires</button>
+                <button class="quest-tab" data-tab="special">Spéciales</button>
+            </div>
+
+            <div id="quests-container" class="loading"></div>
+        </div>
+
+        <!-- Team Page -->
+        <div id="team-page" class="page-content">
+            <div class="page-header">
+                <h1>Équipe</h1>
+                <button id="add-member-btn" class="btn">
+                    <i class="fas fa-plus"></i> Ajouter un membre
+                </button>
+            </div>
+
+            <div class="team-tabs">
+                <button class="team-tab active" data-tab="members">Membres</button>
+                <button class="team-tab" data-tab="roles">Rôles</button>
+                <button class="team-tab" data-tab="stats">Statistiques</button>
+            </div>
+
+            <div id="team-members-container" style="display: block;">
+                <div id="team-members-grid" class="team-members-grid loading"></div>
+            </div>
+
+            <div id="team-roles-container" style="display: none;"></div>
+            <div id="team-stats-container" style="display: none;"></div>
+        </div>
+
+        <!-- Planning Page -->
+        <div id="planning-page" class="page-content">
+            <div class="coming-soon">
+                <i class="fas fa-calendar-alt"></i>
+                <h2>Planning & Calendrier</h2>
+                <p>Cette fonctionnalité sera bientôt disponible.</p>
+            </div>
+        </div>
+
+        <!-- Chat Page -->
+        <div id="chat-page" class="page-content">
+            <div class="coming-soon">
+                <i class="fas fa-comments"></i>
+                <h2>Chat d'Équipe</h2>
+                <p>Cette fonctionnalité sera bientôt disponible.</p>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-container">
+                <a class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a class="nav-item" data-page="quests">
+                    <i class="fas fa-scroll"></i>
+                    <span>Quêtes</span>
+                </a>
+                <a class="nav-item" data-page="team">
+                    <i class="fas fa-users"></i>
+                    <span>Équipe</span>
+                </a>
+                <a class="nav-item" data-page="planning">
+                    <i class="fas fa-calendar"></i>
+                    <span>Planning</span>
+                </a>
+                <a class="nav-item" data-page="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-analytics-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script>
+        // Firebase Manager (from artifact firebase-manager)
+        class FirebaseManager {
+            constructor() {
+                this.isReady = false;
+                this.auth = null;
+                this.db = null;
+                this.storage = null;
+                this.analytics = null;
+                this.currentUser = null;
+                this.initPromise = this.init();
+                this.listeners = new Map();
+            }
+
+            async init() {
+                try {
+                    // Attendre que Firebase soit chargé
+                    await this.waitForFirebase();
+                    
+                    // Configuration Firebase
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyD7uBuAQaOhZ02owkZEuMKC5Vji6PrB2f8",
+                        authDomain: "synergia-app-f27e7.firebaseapp.com",
+                        projectId: "synergia-app-f27e7",
+                        storageBucket: "synergia-app-f27e7.firebasestorage.app",
+                        messagingSenderId: "201912738922",
+                        appId: "1:201912738922:web:2fcc1e49293bb632899613",
+                        measurementId: "G-EGJ79SCMWX"
+                    };
+
+                    // Initialiser Firebase
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(firebaseConfig);
+                    }
+
+                    // Initialiser les services
+                    this.auth = firebase.auth();
+                    this.db = firebase.firestore();
+                    this.storage = firebase.storage();
+                    this.analytics = firebase.analytics();
+
+                    // Exposer globalement pour compatibilité
+                    window.auth = this.auth;
+                    window.db = this.db;
+                    window.storage = this.storage;
+
+                    // Écouter les changements d'authentification
+                    this.auth.onAuthStateChanged((user) => {
+                        this.currentUser = user;
+                        this.notifyListeners('authStateChanged', user);
+                        
+                        if (user) {
+                            console.log('✅ Utilisateur connecté:', user.email);
+                            this.updateUserLastSeen(user.uid);
+                        } else {
+                            console.log('❌ Utilisateur déconnecté');
+                        }
+                    });
+
+                    // Activer la persistence offline
+                    await this.db.enablePersistence().catch(err => {
+                        if (err.code === 'unimplemented') {
+                            console.warn('Persistence offline non supportée sur ce navigateur');
+                        }
+                    });
+
+                    this.isReady = true;
+                    document.dispatchEvent(new CustomEvent('firebase:ready', { detail: { manager: this } }));
+                    console.log('✅ Firebase Manager initialisé avec succès');
+                    
+                    return true;
+                } catch (error) {
+                    console.error('❌ Erreur initialisation Firebase:', error);
+                    throw error;
+                }
+            }
+
+            async waitForFirebase() {
+                let attempts = 0;
+                const maxAttempts = 50; // 5 secondes max
+                
+                while (!window.firebase && attempts < maxAttempts) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    attempts++;
+                }
+                
+                if (!window.firebase) {
+                    throw new Error('Firebase SDK non chargé après 5 secondes');
+                }
+            }
+
+            async waitForReady() {
+                await this.initPromise;
+                return this.isReady;
+            }
+
+            // Méthodes d'authentification
+            async signIn(email, password) {
+                await this.waitForReady();
+                return this.auth.signInWithEmailAndPassword(email, password);
+            }
+
+            async signUp(email, password, displayName) {
+                await this.waitForReady();
+                const credential = await this.auth.createUserWithEmailAndPassword(email, password);
+                
+                if (credential.user) {
+                    await credential.user.updateProfile({ displayName });
+                    await this.createUserDocument(credential.user);
+                }
+                
+                return credential;
+            }
+
+            async signOut() {
+                await this.waitForReady();
+                return this.auth.signOut();
+            }
+
+            // Gestion des utilisateurs
+            async createUserDocument(user) {
+                const userRef = this.db.collection('users').doc(user.uid);
+                const userData = {
+                    displayName: user.displayName || 'Nouveau membre',
+                    email: user.email,
+                    photoURL: user.photoURL || '',
+                    role: user.email === 'alan.boehme61@gmail.com' ? 'admin' : 'member',
+                    level: 1,
+                    xp: 0,
+                    joinedAt: firebase.firestore.Timestamp.now(),
+                    lastSeen: firebase.firestore.Timestamp.now(),
+                    preferences: {
+                        notifications: true,
+                        theme: 'dark'
+                    },
+                    stats: {
+                        questsCompleted: 0,
+                        totalXP: 0,
+                        streak: 0
+                    }
+                };
+
+                await userRef.set(userData, { merge: true });
+                return userData;
+            }
+
+            async updateUserLastSeen(userId) {
+                if (!userId) return;
+                
+                try {
+                    await this.db.collection('users').doc(userId).update({
+                        lastSeen: firebase.firestore.Timestamp.now()
+                    });
+                } catch (error) {
+                    console.error('Erreur mise à jour lastSeen:', error);
+                }
+            }
+
+            async getCurrentUserData() {
+                if (!this.currentUser) return null;
+                
+                const doc = await this.db.collection('users').doc(this.currentUser.uid).get();
+                return doc.exists ? { id: doc.id, ...doc.data() } : null;
+            }
+
+            // Système de listeners
+            on(event, callback) {
+                if (!this.listeners.has(event)) {
+                    this.listeners.set(event, new Set());
+                }
+                this.listeners.get(event).add(callback);
+            }
+
+            off(event, callback) {
+                if (this.listeners.has(event)) {
+                    this.listeners.get(event).delete(callback);
+                }
+            }
+
+            notifyListeners(event, data) {
+                if (this.listeners.has(event)) {
+                    this.listeners.get(event).forEach(callback => {
+                        try {
+                            callback(data);
+                        } catch (error) {
+                            console.error(`Erreur dans listener ${event}:`, error);
+                        }
+                    });
+                }
+            }
+
+            // Méthodes utilitaires
+            isAdmin() {
+                return this.currentUser?.email === 'alan.boehme61@gmail.com';
+            }
+
+            async checkConnection() {
+                try {
+                    await this.db.collection('_ping').doc('test').set({
+                        timestamp: firebase.firestore.Timestamp.now()
+                    });
+                    return true;
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            // Collections helpers
+            collection(name) {
+                return this.db.collection(name);
+            }
+
+            doc(path) {
+                return this.db.doc(path);
+            }
+
+            timestamp() {
+                return firebase.firestore.Timestamp.now();
+            }
+
+            serverTimestamp() {
+                return firebase.firestore.FieldValue.serverTimestamp();
+            }
+
+            arrayUnion(...elements) {
+                return firebase.firestore.FieldValue.arrayUnion(...elements);
+            }
+
+            arrayRemove(...elements) {
+                return firebase.firestore.FieldValue.arrayRemove(...elements);
+            }
+
+            increment(value) {
+                return firebase.firestore.FieldValue.increment(value);
+            }
+        }
+
+        // Instance globale
+        window.firebaseManager = new FirebaseManager();
+
+        // Login handler
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = e.target.email.value;
+            const password = e.target.password.value;
+            
+            try {
+                await window.firebaseManager.signIn(email, password);
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').classList.add('active');
+            } catch (error) {
+                alert('Erreur de connexion: ' + error.message);
+            }
+        });
+
+        // Auth state listener
+        window.firebaseManager.on('authStateChanged', async (user) => {
+            if (user) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').classList.add('active');
+                
+                // Charger les données utilisateur
+                const userData = await window.firebaseManager.getCurrentUserData();
+                if (userData) {
+                    window.uiManager?.updateUserHeader(userData);
+                }
+            } else {
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('app-container').classList.remove('active');
+            }
+        });
+
+        // Initialiser les autres managers après Firebase
+        document.addEventListener('firebase:ready', () => {
+            // Les managers seront chargés ici
+            console.log('Firebase prêt, chargement des managers...');
+        });
+    </script>
+</body>
+</html>
