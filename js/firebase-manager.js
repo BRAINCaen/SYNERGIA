@@ -119,10 +119,14 @@ class FirebaseManager {
     }
 
     // Gestion des utilisateurs
-    async createUserDocument(user) {
-        const userRef = this.db.collection('users').doc(user.uid);
+   async createUserDocument(user) {
+    const userRef = this.db.collection('users').doc(user.uid);
+    
+    // Vérifier si le document existe déjà
+    const doc = await userRef.get();
+    if (!doc.exists) {
         const userData = {
-            displayName: user.displayName || 'Nouveau membre',
+            displayName: user.displayName || user.email.split('@')[0],
             email: user.email,
             photoURL: user.photoURL || '',
             role: user.email === 'alan.boehme61@gmail.com' ? 'admin' : 'member',
@@ -141,10 +145,12 @@ class FirebaseManager {
             }
         };
 
-        await userRef.set(userData, { merge: true });
-        return userData;
+        await userRef.set(userData);
+        console.log('✅ Document utilisateur créé');
     }
-
+    
+    return (await userRef.get()).data();
+}
     async updateUserLastSeen(userId) {
         if (!userId) return;
         
