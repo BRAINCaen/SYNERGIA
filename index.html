@@ -15,7 +15,33 @@
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+
+    
+    <!-- Image error handlers -->
+    <script>
+        // Handle missing images
+        function handleMissingImage(event) {
+            const img = event.target;
+            if (img.src.includes('default-avatar.jpg')) {
+                img.src = 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
+            } else if (img.src.includes('avatar-')) {
+                img.src = 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
+            } else if (img.src.includes('synergia-logo')) {
+                img.src = 'https://img.icons8.com/color/96/000000/s-key.png';
+            }
+        }
+
+        // Add event listener once DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fix for all images
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', handleMissingImage);
+            });
+        });
+    </script>
+
+    <link rel="icon" href="https://img.icons8.com/color/32/000000/s-key.png" type="image/png">
+    <link rel="stylesheet" href="css/responsive.css"></head>
 
 <body>
     <!-- Écran de chargement -->
