@@ -245,3 +245,16 @@ button, .btn, .nav-btn {
         padding-bottom: 80px; /* Espace pour ton menu */
     }
 }
+#main-content {
+    padding-bottom: 80px; /* Espace pour le menu bottom */
+    overflow-x: hidden;   /* Évite le scroll horizontal */
+    max-width: 100vw;     /* Limite à la largeur écran */
+}
+
+/* Fix mobile */
+@media (max-width: 768px) {
+    #main-content {
+        padding: 16px;
+        padding-bottom: 90px;
+    }
+}
