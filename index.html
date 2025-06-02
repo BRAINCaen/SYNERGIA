@@ -1137,29 +1137,53 @@
     <!-- Toast Container -->
     <div id="toast-container"></div>
 
-<script>
-    // Attendre que tous les scripts externes soient chargés
-    window.addEventListener('load', () => {
-        console.log('📱 Application SYNERGIA chargée');
-        
-        // Gestionnaire de connexion
-        const loginForm = document.getElementById('login-form');
-        if (loginForm) {
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = e.target.email.value;
-                const password = e.target.password.value;
-                
-                try {
-                    await window.firebaseManager.signIn(email, password);
-                } catch (error) {
-                    alert('Erreur de connexion: ' + error.message);
-                }
-            });
-        }
-        
-        // Écouter les changements d'authentification
-        if (window.firebaseManager) {
+<!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-analytics-compat.js"></script>
+
+    <!-- App Scripts - CHARGER EN PREMIER -->
+    <script src="/js/firebase-manager.js"></script>
+    <script src="/js/team-manager.js"></script>
+    <script src="/js/quest-manager.js"></script>
+    <script src="/js/ui-manager.js"></script>
+
+    <!-- Script d'initialisation - APRÈS le chargement des managers -->
+    <script>
+        // Attendre que tous les scripts soient chargés
+        window.addEventListener('load', () => {
+            console.log('📱 Application SYNERGIA chargée');
+            
+            // Vérifier que les managers sont chargés
+            if (!window.firebaseManager) {
+                console.error('❌ FirebaseManager non chargé !');
+                return;
+            }
+            
+            // Gestionnaire de connexion
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = e.target.email.value;
+                    const password = e.target.password.value;
+                    
+                    try {
+                        await window.firebaseManager.signIn(email, password);
+                        console.log('✅ Connexion réussie');
+                    } catch (error) {
+                        console.error('❌ Erreur de connexion:', error.message);
+                        alert('Erreur de connexion: ' + error.message);
+                    }
+                });
+            }
+            
+            // Écouter les changements d'authentification
             window.firebaseManager.on('authStateChanged', async (user) => {
                 if (user) {
                     console.log('✅ Utilisateur connecté:', user.email);
@@ -1167,9 +1191,20 @@
                     document.getElementById('app-container').classList.add('active');
                     
                     // Charger les données utilisateur
-                    const userData = await window.firebaseManager.getCurrentUserData();
-                    if (userData) {
-                        document.dispatchEvent(new CustomEvent('user:updated', { detail: userData }));
+                    try {
+                        const userData = await window.firebaseManager.getCurrentUserData();
+                        if (userData) {
+                            document.dispatchEvent(new CustomEvent('user:updated', { detail: userData }));
+                        }
+                    } catch (error) {
+                        console.error('❌ Erreur chargement données utilisateur:', error);
+                        
+                        // Si pas de document utilisateur, le créer
+                        if (error.code === 'not-found' || !userData) {
+                            console.log('📝 Création du profil utilisateur...');
+                            await window.firebaseManager.createUserDocument(user);
+                            location.reload(); // Recharger pour récupérer les données
+                        }
                     }
                 } else {
                     console.log('❌ Utilisateur non connecté');
@@ -1177,15 +1212,14 @@
                     document.getElementById('app-container').classList.remove('active');
                 }
             });
-        }
-        
-        // Service Worker pour PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('✅ Service Worker enregistré'))
-                .catch(err => console.error('❌ Erreur Service Worker:', err));
-        }
-    });
-</script>
+            
+            // Service Worker pour PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker enregistré'))
+                    .catch(err => console.error('❌ Erreur Service Worker:', err));
+            }
+        });
+    </script>
 </body>
 </html>
