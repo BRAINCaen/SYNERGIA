@@ -1,0 +1,627 @@
+/* ===== SYNERGIA MOBILE FIXES - CORRECTIFS SPÉCIFIQUES ===== */
+
+/* VIEWPORT ET BASE MOBILE */
+@viewport {
+    width: device-width;
+    zoom: 1.0;
+}
+
+/* Variables spécifiques mobile */
+:root {
+    --mobile-font-base: 16px;
+    --mobile-font-large: 18px;
+    --mobile-touch-target: 48px;
+    --mobile-padding: 20px;
+    --mobile-header-height: 70px;
+    --mobile-nav-height: 80px;
+    --mobile-modal-padding: 24px;
+}
+
+/* RESET MOBILE FIRST */
+@media (max-width: 768px) {
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    html {
+        font-size: var(--mobile-font-base);
+        line-height: 1.6;
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        font-size: var(--mobile-font-base);
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+        width: 100vw;
+        min-height: 100vh;
+    }
+
+    /* HEADER MOBILE OPTIMISÉ */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-header-height);
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        z-index: 1000;
+        padding: 0 var(--mobile-padding);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* USER INFO MOBILE */
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .user-info img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid var(--primary-color);
+    }
+
+    .user-info h2 {
+        font-size: var(--mobile-font-large);
+        margin: 0;
+        color: white;
+        font-weight: 600;
+    }
+
+    .xp-bar {
+        background: rgba(255, 255, 255, 0.1);
+        height: 8px;
+        border-radius: 4px;
+        width: 100px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .xp-bar #xp-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .xp-bar #xp-text {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 4px;
+        display: block;
+    }
+
+    /* CONTENU PRINCIPAL MOBILE */
+    #main-content {
+        margin-top: var(--mobile-header-height);
+        margin-bottom: var(--mobile-nav-height);
+        padding: var(--mobile-padding);
+        min-height: calc(100vh - var(--mobile-header-height) - var(--mobile-nav-height));
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* NAVIGATION BOTTOM MOBILE OPTIMISÉE */
+    nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-nav-height);
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(139, 92, 246, 0.3);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+        padding: 8px 4px;
+    }
+
+    .nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        min-height: var(--mobile-touch-target);
+        min-width: 60px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .nav-btn i {
+        font-size: 20px;
+        margin-bottom: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-btn.active {
+        color: white;
+        background: rgba(139, 92, 246, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .nav-btn.active i {
+        color: #8b5cf6;
+        transform: scale(1.1);
+    }
+
+    /* CARTES ET SECTIONS MOBILE */
+    .welcome-card,
+    .stats-card,
+    .role-card,
+    .quests-preview,
+    .team-activity {
+        background: rgba(15, 15, 25, 0.95);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 16px;
+        padding: var(--mobile-padding);
+        margin-bottom: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .welcome-card h2 {
+        font-size: 24px;
+        color: white;
+        margin: 0 0 8px 0;
+    }
+
+    .stat-highlight {
+        font-size: var(--mobile-font-large);
+        color: #8b5cf6;
+        font-weight: 600;
+    }
+
+    /* BOUTONS MOBILE TACTILES */
+    .btn-primary,
+    .btn-secondary,
+    .btn-complete,
+    .btn-text {
+        min-height: var(--mobile-touch-target);
+        padding: 12px 20px;
+        font-size: var(--mobile-font-base);
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        color: white;
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 10px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-complete {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        padding: 0;
+    }
+
+    /* MODALS MOBILE FIXES */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 9999;
+        padding: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: rgba(15, 15, 25, 0.98);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 20px 20px 0 0;
+        width: 100%;
+        max-width: 100vw;
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: var(--mobile-modal-padding);
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+
+    .modal.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .modal-header h3 {
+        font-size: 20px;
+        color: white;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .icon-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .icon-btn:active {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(0.95);
+    }
+
+    /* FORMULAIRES MOBILE */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        color: white;
+        font-size: var(--mobile-font-base);
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        min-height: var(--mobile-touch-target);
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 12px;
+        color: white;
+        font-size: var(--mobile-font-base);
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #8b5cf6;
+        background: rgba(139, 92, 246, 0.1);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+    }
+
+    /* ONGLETS MOBILE */
+    .tabs {
+        display: flex;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 4px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        gap: 4px;
+    }
+
+    .tab {
+        flex: 1;
+        padding: 12px 16px;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        min-height: var(--mobile-touch-target);
+    }
+
+    .tab.active {
+        background: rgba(139, 92, 246, 0.3);
+        color: white;
+    }
+
+    /* QUÊTES MOBILE */
+    .quest-item {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .quest-icon-default {
+        width: 48px;
+        height: 48px;
+        background: rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8b5cf6;
+        font-size: 20px;
+    }
+
+    .quest-info {
+        flex: 1;
+    }
+
+    .quest-title {
+        font-size: var(--mobile-font-base);
+        color: white;
+        margin: 0 0 4px 0;
+        font-weight: 600;
+    }
+
+    .quest-description {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+    }
+
+    .quest-meta {
+        display: flex;
+        gap: 16px;
+        font-size: 12px;
+    }
+
+    .quest-xp {
+        color: #f59e0b;
+    }
+
+    .quest-deadline {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* ÉQUIPE MOBILE */
+    .team-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .team-member {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .member-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 2px solid var(--primary-color);
+    }
+
+    .member-info h4 {
+        font-size: var(--mobile-font-base);
+        color: white;
+        margin: 0 0 4px 0;
+        font-weight: 600;
+    }
+
+    .member-role {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+    }
+
+    /* NOTIFICATIONS MOBILE */
+    .notification {
+        position: fixed;
+        top: calc(var(--mobile-header-height) + 16px);
+        left: 16px;
+        right: 16px;
+        background: rgba(15, 15, 25, 0.95);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 12px;
+        padding: 16px;
+        color: white;
+        font-size: var(--mobile-font-base);
+        z-index: 10000;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .notification.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    /* UTILITAIRES MOBILE */
+    .mobile-only {
+        display: block !important;
+    }
+
+    .desktop-only {
+        display: none !important;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mb-mobile {
+        margin-bottom: 20px;
+    }
+
+    /* SCROLL SMOOTH */
+    .tab-content,
+    .modal-content {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* LOADING MOBILE */
+    .loading-container {
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .loading-container img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    .loading-bar {
+        width: 100%;
+        max-width: 200px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        margin: 20px auto;
+        overflow: hidden;
+    }
+
+    .loading-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+        border-radius: 3px;
+        animation: loading 2s linear infinite;
+    }
+
+    @keyframes loading {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+    }
+
+    /* ADMIN BUTTON MOBILE */
+    .admin-fab {
+        position: fixed;
+        bottom: calc(var(--mobile-nav-height) + 16px);
+        right: 16px;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        font-size: 20px;
+        box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+        cursor: pointer;
+        z-index: 999;
+        transition: all 0.3s ease;
+    }
+
+    .admin-fab:active {
+        transform: scale(0.95);
+    }
+
+    /* FIXES OVERFLOW ET DÉBORDEMENT */
+    .dashboard,
+    .quests-page,
+    .team-page {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
+    /* MODAL ANIMATION AMÉLIORÉE */
+    @keyframes slideUpModal {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal.show .modal-content {
+        animation: slideUpModal 0.3s ease-out;
+    }
+}
+
+/* LANDSCAPE MOBILE */
+@media (max-width: 768px) and (orientation: landscape) {
+    :root {
+        --mobile-header-height: 60px;
+        --mobile-nav-height: 70px;
+        --mobile-padding: 16px;
+    }
+
+    .nav-btn {
+        min-width: 50px;
+        font-size: 11px;
+    }
+
+    .nav-btn i {
+        font-size: 18px;
+    }
+}
