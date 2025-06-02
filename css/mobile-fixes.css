@@ -631,3 +631,10 @@
     background: rgba(255, 255, 255, 0.15); /* Plus visible */
     border: 2px solid rgba(139, 92, 246, 0.5); /* Plus marqué */
 }
+.btn-primary, .btn-secondary {
+    min-height: 52px; /* Au lieu de 48px */
+    font-size: 17px; /* Au lieu de 16px */
+}
+.form-group {
+    margin-bottom: 24px; /* Au lieu de 20px */
+}
