@@ -1014,7 +1014,40 @@ getDefaultAvatar(name) {
         };
         return labels[priority] || priority;
     }
+// Ajouter ces fonctions utilitaires à la fin de la classe UIManager
 
+formatDeadline(deadline) {
+    if (!deadline) return '';
+    
+    const date = deadline.toDate ? deadline.toDate() : new Date(deadline);
+    const now = new Date();
+    const diff = date - now;
+    
+    if (diff < 0) return 'Expiré';
+    if (diff < 86400000) return 'Aujourd\'hui';
+    if (diff < 172800000) return 'Demain';
+    
+    return date.toLocaleDateString('fr-FR');
+}
+
+getQuestTypeLabel(type) {
+    const labels = {
+        daily: 'Quotidienne',
+        weekly: 'Hebdomadaire',
+        special: 'Spéciale'
+    };
+    return labels[type] || type;
+}
+
+getPriorityLabel(priority) {
+    const labels = {
+        low: 'Basse',
+        normal: 'Normale',
+        high: 'Haute',
+        urgent: 'Urgente'
+    };
+    return labels[priority] || priority;
+}
     // Analytics
     trackPageView(page) {
         if (window.firebaseManager?.analytics) {
