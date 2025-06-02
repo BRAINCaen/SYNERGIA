@@ -1138,93 +1138,55 @@
     <!-- Toast Container -->
     <div id="toast-container"></div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-analytics-compat.js"></script>
-
-<!-- App Scripts -->
-<script src="/js/firebase-manager.js"></script>
-<script src="/js/team-manager.js"></script>
-<script src="/js/quest-manager.js"></script>
-<script src="/js/ui-manager.js"></script>
-
-<!-- PAS de déclaration inline de FirebaseManager ici -->
-    
-// Attendre que les scripts externes soient chargés
-document.addEventListener('DOMContentLoaded', () => {
-    // Login handler
-    document.getElementById('login-form')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
+<script>
+    // Attendre que tous les scripts externes soient chargés
+    window.addEventListener('load', () => {
+        console.log('📱 Application SYNERGIA chargée');
         
-        try {
-            await window.firebaseManager.signIn(email, password);
-        } catch (error) {
-            alert('Erreur de connexion: ' + error.message);
+        // Gestionnaire de connexion
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+                
+                try {
+                    await window.firebaseManager.signIn(email, password);
+                } catch (error) {
+                    alert('Erreur de connexion: ' + error.message);
+                }
+            });
+        }
+        
+        // Écouter les changements d'authentification
+        if (window.firebaseManager) {
+            window.firebaseManager.on('authStateChanged', async (user) => {
+                if (user) {
+                    console.log('✅ Utilisateur connecté:', user.email);
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app-container').classList.add('active');
+                    
+                    // Charger les données utilisateur
+                    const userData = await window.firebaseManager.getCurrentUserData();
+                    if (userData) {
+                        document.dispatchEvent(new CustomEvent('user:updated', { detail: userData }));
+                    }
+                } else {
+                    console.log('❌ Utilisateur non connecté');
+                    document.getElementById('login-screen').style.display = 'flex';
+                    document.getElementById('app-container').classList.remove('active');
+                }
+            });
+        }
+        
+        // Service Worker pour PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ Service Worker enregistré'))
+                .catch(err => console.error('❌ Erreur Service Worker:', err));
         }
     });
-
-    // Auth state listener
-    if (window.firebaseManager) {
-        window.firebaseManager.on('authStateChanged', async (user) => {
-            if (user) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-container').classList.add('active');
-                
-                // Charger les données utilisateur
-                const userData = await window.firebaseManager.getCurrentUserData();
-                if (userData) {
-                    window.uiManager?.updateUserHeader(userData);
-                }
-            } else {
-                document.getElementById('login-screen').style.display = 'flex';
-                document.getElementById('app-container').classList.remove('active');
-            }
-        });
-    }
-});
-
-        // Login handler
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = e.target.email.value;
-            const password = e.target.password.value;
-            
-            try {
-                await window.firebaseManager.signIn(email, password);
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-container').classList.add('active');
-            } catch (error) {
-                alert('Erreur de connexion: ' + error.message);
-            }
-        });
-
-        // Auth state listener
-        window.firebaseManager.on('authStateChanged', async (user) => {
-            if (user) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-container').classList.add('active');
-                
-                // Charger les données utilisateur
-                const userData = await window.firebaseManager.getCurrentUserData();
-                if (userData) {
-                    window.uiManager?.updateUserHeader(userData);
-                }
-            } else {
-                document.getElementById('login-screen').style.display = 'flex';
-                document.getElementById('app-container').classList.remove('active');
-            }
-        });
-
-        // Initialiser les autres managers après Firebase
-        document.addEventListener('firebase:ready', () => {
-            // Les managers seront chargés ici
-            console.log('Firebase prêt, chargement des managers...');
-        });
-    </script>
+</script>
 </body>
 </html>
