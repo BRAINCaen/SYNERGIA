@@ -979,23 +979,22 @@ class UIManager {
     }
 
     // Utilitaires
-    getDefaultAvatar(name) {
-        return window.teamManager?.generateAvatar(name) || '/assets/images/default-avatar.jpg';
-    }
-
-    formatDeadline(deadline) {
-        if (!deadline) return '';
-        
-        const date = deadline.toDate ? deadline.toDate() : new Date(deadline);
-        const now = new Date();
-        const diff = date - now;
-        
-        if (diff < 0) return 'Expiré';
-        if (diff < 86400000) return 'Aujourd\'hui';
-        if (diff < 172800000) return 'Demain';
-        
-        return date.toLocaleDateString('fr-FR');
-    }
+getDefaultAvatar(name) {
+    // Si pas de nom, utiliser des initiales par défaut
+    if (!name) return '/images/avatars/default-avatar.jpg';
+    
+    // Générer un avatar SVG avec les initiales
+    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    const colors = ['#6d28d9', '#8b5cf6', '#10b981', '#f59e0b', '#06b6d4'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    
+    const svg = `<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100" height="100" fill="${color}" rx="50"/>
+        <text x="50" y="60" text-anchor="middle" font-family="Arial" font-size="40" font-weight="bold" fill="white">${initials}</text>
+    </svg>`;
+    
+    return `data:image/svg+xml;base64,${btoa(svg)}`;
+}
 
     getQuestTypeLabel(type) {
         const labels = {
