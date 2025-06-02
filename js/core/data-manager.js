@@ -1,14 +1,14 @@
-/* ===== SYNERGIA DATA MANAGER - VERSION CORRIGÉE COMPLÈTE ===== */
+/* ===== SYNERGIA DATA MANAGER - VERSION CORRIGÉE ===== */
 
-// Gestionnaire de données utilisateur
 class SynergiaDataManager {
     constructor() {
         this.initDefaultData();
         this.loadUserData();
     }
 
-    // Fonction utilitaire de sécurisation
+    // Utility function for sanitizing inputs
     sanitizeInput(input) {
+        if (typeof input !== 'string') return input;
         return String(input).replace(/[<>]/g, '');
     }
 
@@ -16,7 +16,7 @@ class SynergiaDataManager {
     initDefaultData() {
         this.defaultUser = {
             name: "Boss",
-            avatar: "./images/default-avatar.jpg",
+            avatar: "https://img.icons8.com/color/96/000000/user-male-circle--v1.png", // Fixed missing image
             level: 4,
             levelName: "Expert",
             currentXP: 750,
@@ -42,7 +42,7 @@ class SynergiaDataManager {
                 id: 1,
                 name: "Boss",
                 role: "Manager",
-                avatar: "./images/default-avatar.jpg",
+                avatar: "https://img.icons8.com/color/96/000000/user-male-circle--v1.png", // Fixed missing image
                 level: 4,
                 xp: 750,
                 status: "online",
@@ -151,6 +151,11 @@ class SynergiaDataManager {
             if (element) {
                 element.src = this.userData.avatar;
                 element.alt = this.sanitizeInput(this.userData.name);
+
+                // Add error handler for missing images
+                element.onerror = function() {
+                    this.src = 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
+                };
             }
         });
     }
@@ -202,9 +207,9 @@ class SynergiaDataManager {
             this.userData.lastActivity = new Date().toISOString();
         }
 
-        this.teamData.forEach((member, index) => {
+        this.teamData.forEach(function(member, index) {
             if (!member.avatar) {
-                member.avatar = './images/avatars/avatar-' + (index + 1) + '.jpg';
+                member.avatar = 'https://img.icons8.com/color/96/000000/user-male-circle--v1.png';
             }
             if (!member.status) {
                 member.status = Math.random() > 0.5 ? 'online' : 'away';
@@ -216,36 +221,11 @@ class SynergiaDataManager {
         this.updateUI();
     }
 
-    // Notification sécurisée
-    showNotification(message, type = 'info') {
-        // Supprimer anciennes notifications
-        document.querySelectorAll('.notification').forEach(n => n.remove());
-
-        const notification = document.createElement('div');
-        notification.className = 'notification notification-' + type;
-        
-        // Sécuriser le message
-        const safeMessage = this.sanitizeInput(message);
-        notification.innerHTML = '<i class="fas fa-info-circle"></i><span>' + safeMessage + '</span><button class="notification-close">&times;</button>';
-
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.remove();
-            }
-        }, 5000);
-
-        notification.querySelector('.notification-close').addEventListener('click', () => {
-            notification.remove();
-        });
-    }
-
     // Initialisation complète
     init() {
         console.log('🚀 Synergia Data Manager initialisé');
         this.updateUI();
-        
+
         setInterval(() => {
             this.saveData();
         }, 30000);
@@ -255,9 +235,36 @@ class SynergiaDataManager {
 // Instance globale
 const synergiaData = new SynergiaDataManager();
 
-// Fonction globale pour les notifications (rétrocompatibilité)
+// Fonction pour les notifications
 window.showNotification = function(message, type) {
-    synergiaData.showNotification(message, type);
+    type = type || 'info';
+
+    document.querySelectorAll('.notification').forEach(function(n) {
+        n.remove();
+    });
+
+    const notification = document.createElement('div');
+    notification.className = 'notification notification-' + type;
+
+    const sanitizedMessage = typeof message === 'string' ? 
+        message.replace(/[<>]/g, '') : 
+        'Notification';
+
+    notification.innerHTML = '<i class="fas fa-info-circle"></i><span>' + 
+        sanitizedMessage + 
+        '</span><button class="notification-close">&times;</button>';
+
+    document.body.appendChild(notification);
+
+    setTimeout(function() {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+
+    notification.querySelector('.notification-close').addEventListener('click', function() {
+        notification.remove();
+    });
 };
 
 // API globale
@@ -266,31 +273,30 @@ window.SynergiaAPI = {
         const user = synergiaData.getUser();
         user.currentXP += amount;
         user.stats.totalXP += amount;
-        
+
         if (user.currentXP >= user.requiredXP) {
             user.level++;
             user.currentXP = user.currentXP - user.requiredXP;
             user.requiredXP = Math.floor(user.requiredXP * 1.2);
-            synergiaData.showNotification('🎉 Level Up ! Niveau ' + user.level + ' atteint !', 'success');
+            showNotification('🎉 Level Up ! Niveau ' + user.level + ' atteint !', 'success');
         }
-        
+
         synergiaData.updateUser(user);
     },
-    
+
     getUserData: function() { return synergiaData.getUser(); },
     getTeamData: function() { return synergiaData.getTeam(); },
     getQuestsData: function() { return synergiaData.getQuests(); }
 };
 
-// Export global
-window.SynergiaDataManager = SynergiaDataManager;
-
-// Initialisation automatique
+// Initialize on document load
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         synergiaData.init();
         synergiaData.initAdvancedFeatures();
         console.log('🚀 Synergia Data Manager démarré');
-        synergiaData.showNotification('✨ Application initialisée !', 'success');
-    }, 500);
+    }, 1500);
 });
+
+// Export global
+window.SynergiaDataManager = SynergiaDataManager;
