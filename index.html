@@ -3,1223 +3,847 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYNERGIA - Gestion d'équipe gamifiée</title>
+    <meta name="description" content="SYNERGIA v3.0 - Plateforme collaborative de gestion d'équipe">
+    <title>SYNERGIA v3.0 - Plateforme Collaborative</title>
     
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#6d28d9">
-    <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="/images/icons/icon-192x192.png">
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SYNERGIA">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    
+    <!-- CSS Imports -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/modules/planning.css">
+    <link rel="stylesheet" href="css/modules/notifications.css">
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Styles -->
-    <style>
-        /* Variables CSS */
-        :root {
-            --primary-color: #6d28d9;
-            --primary-light: #8b5cf6;
-            --primary-dark: #5b21b6;
-            --secondary-color: #7c3aed;
-            --accent-color: #a78bfa;
-            
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
-            --info-color: #3b82f6;
-            
-            --bg-primary: #0a0a0f;
-            --bg-secondary: rgba(10, 10, 20, 0.98);
-            --bg-card: rgba(15, 15, 25, 0.95);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            
-            --border-color: rgba(139, 92, 246, 0.2);
-            --shadow-color: rgba(109, 40, 217, 0.3);
-            
-            --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            --transition: all 0.3s ease;
-            
-            --nav-height: 60px;
-            --header-height: 80px;
-        }
-
-        /* Reset & Base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* Utilities */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--shadow-color);
-        }
-
-        .btn-secondary {
-            background: rgba(139, 92, 246, 0.1);
-            color: var(--primary-light);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(139, 92, 246, 0.2);
-        }
-
-        .btn-success {
-            background: var(--success-color);
-        }
-
-        .btn-danger {
-            background: var(--error-color);
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
-
-        .btn-icon {
-            padding: 0.5rem;
-            background: transparent;
-            color: var(--text-secondary);
-        }
-
-        .btn-icon:hover {
-            color: var(--text-primary);
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        /* Login Screen */
-        .login-screen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-        }
-
-        .login-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .login-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .login-header p {
-            color: var(--text-secondary);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            color: var(--text-primary);
-            font-family: var(--font-family);
-            transition: var(--transition);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        /* Main App */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-            padding-bottom: var(--nav-height);
-        }
-
-        .app-container.active {
-            display: block;
-        }
-
-        /* Header */
-        .app-header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid var(--primary-light);
-            object-fit: cover;
-        }
-
-        .user-info h3 {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .user-info .role {
-            font-size: 0.875rem;
-            color: var(--primary-light);
-        }
-
-        .user-stats {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-item .value {
-            display: block;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary-light);
-        }
-
-        .stat-item .label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .xp-bar {
-            width: 200px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 0.25rem;
-        }
-
-        .xp-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
-            transition: width 0.5s ease;
-        }
-
-        /* Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            z-index: 1000;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: var(--nav-height);
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.25rem;
-            padding: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            font-size: 1.25rem;
-        }
-
-        .nav-item span {
-            font-size: 0.75rem;
-        }
-
-        .nav-item.active,
-        .nav-item:hover {
-            color: var(--primary-light);
-        }
-
-        .nav-item.active {
-            position: relative;
-        }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 20%;
-            right: 20%;
-            height: 2px;
-            background: var(--primary-light);
-        }
-
-        /* Pages */
-        .page-content {
-            display: none;
-            padding: 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .page-content.active {
-            display: block;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .page-header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        /* Dashboard */
-        .dashboard-grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-2px);
-        }
-
-        .stat-card i {
-            font-size: 2rem;
-            color: var(--primary-light);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card .stat-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: block;
-        }
-
-        .stat-card .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        /* Cards */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .card-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        /* Quests */
-        .quest-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .quest-tab {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .quest-tab.active {
-            color: var(--primary-light);
-        }
-
-        .quest-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary-light);
-        }
-
-        .quest-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: var(--transition);
-        }
-
-        .quest-card:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-2px);
-        }
-
-        .quest-card.completed {
-            opacity: 0.6;
-        }
-
-        .quest-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.75rem;
-        }
-
-        .quest-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .quest-xp {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .quest-description {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
-
-        .quest-meta {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .quest-meta span {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .quest-type.daily {
-            color: var(--info-color);
-            border: 1px solid var(--info-color);
-        }
-
-        .quest-type.weekly {
-            color: var(--warning-color);
-            border: 1px solid var(--warning-color);
-        }
-
-        .quest-type.special {
-            color: var(--accent-color);
-            border: 1px solid var(--accent-color);
-        }
-
-        .quest-priority.urgent {
-            color: var(--error-color);
-        }
-
-        .quest-priority.high {
-            color: var(--warning-color);
-        }
-
-        .quest-progress {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success-color), #34d399);
-            transition: width 0.5s ease;
-        }
-
-        .quest-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .quest-completed-badge {
-            color: var(--success-color);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Team */
-        .team-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .team-tab {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .team-tab.active {
-            color: var(--primary-light);
-        }
-
-        .team-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--primary-light);
-        }
-
-        .team-members-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .member-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            transition: var(--transition);
-        }
-
-        .member-card:hover {
-            border-color: var(--primary-light);
-            transform: translateY(-2px);
-        }
-
-        .member-avatar {
-            position: relative;
-            display: inline-block;
-        }
-
-        .member-avatar img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .member-status {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid var(--bg-card);
-        }
-
-        .member-status.active {
-            background: var(--success-color);
-        }
-
-        .member-status.inactive {
-            background: var(--error-color);
-        }
-
-        .member-info h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .member-role {
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .member-stats {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .member-stats .stat {
-            text-align: center;
-        }
-
-        .member-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: auto;
-        }
-
-        /* Modals */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow: auto;
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-
-        .modal.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            padding: 1.5rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* Toast Notifications */
-        #toast-container {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .toast {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            min-width: 250px;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast-success {
-            border-color: var(--success-color);
-        }
-
-        .toast-success i {
-            color: var(--success-color);
-        }
-
-        .toast-error {
-            border-color: var(--error-color);
-        }
-
-        .toast-error i {
-            color: var(--error-color);
-        }
-
-        .toast-warning {
-            border-color: var(--warning-color);
-        }
-
-        .toast-warning i {
-            color: var(--warning-color);
-        }
-
-        .toast-info {
-            border-color: var(--info-color);
-        }
-
-        .toast-info i {
-            color: var(--info-color);
-        }
-
-        /* Empty States */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Coming Soon */
-        .coming-soon {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-
-        .coming-soon i {
-            font-size: 4rem;
-            color: var(--primary-light);
-            margin-bottom: 1.5rem;
-        }
-
-        .coming-soon h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .coming-soon p {
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-            }
-
-            .user-stats {
-                width: 100%;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .team-members-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .quest-meta {
-                font-size: 0.7rem;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 1rem;
-            }
-        }
-
-        /* Loading */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .loading::after {
-            content: '';
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--primary-light);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease;
-        }
-    </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="login-screen" class="login-screen">
-        <div class="login-card">
-            <div class="login-header">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-users-cog fa-3x"></i>
                 <h1>SYNERGIA</h1>
-                <p>Gestion d'équipe gamifiée</p>
+                <p>v3.0</p>
             </div>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="btn" style="width: 100%">
-                    <i class="fas fa-sign-in-alt"></i> Se connecter
-                </button>
-            </form>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+            <p class="loading-text">Initialisation de la plateforme...</p>
         </div>
     </div>
 
-    <!-- Main App -->
-    <div id="app-container" class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content container">
-                <div class="user-profile">
-                   <img id="user-avatar" class="user-avatar" src="/images/avatars/default-avatar.jpg" alt="Avatar" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjOGI1Y2Y2IiByeD0iNTAiLz4KICAgIDx0ZXh0IHg9IjUwIiB5PSI2MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjQwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiPj8/PC90ZXh0Pgo8L3N2Zz4='">
-                    <div class="user-info">
-                        <h3 id="user-name">Chargement...</h3>
-                        <span id="user-role" class="role">...</span>
-                    </div>
+    <!-- Navigation Header -->
+    <header class="main-header" id="main-header">
+        <div class="header-container">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-users-cog"></i>
+                    <span>SYNERGIA</span>
                 </div>
-                <div class="user-stats">
-                    <div class="stat-item">
-                        <span id="user-level" class="value">1</span>
-                        <span class="label">Niveau</span>
-                    </div>
-                    <div class="stat-item">
-                        <span id="user-xp" class="value">0 XP</span>
-                        <span class="label">Expérience</span>
-                        <div class="xp-bar">
-                            <div id="user-xp-bar" class="xp-fill" style="width: 0%"></div>
+            </div>
+            
+            <nav class="main-nav" id="main-nav">
+                <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="#team" class="nav-link" data-page="team">
+                    <i class="fas fa-users"></i>
+                    <span>Équipe</span>
+                </a>
+                <a href="#quests" class="nav-link" data-page="quests">
+                    <i class="fas fa-tasks"></i>
+                    <span>Missions</span>
+                </a>
+                <a href="#planning" class="nav-link" data-page="planning">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Planning</span>
+                </a>
+                <a href="#badging" class="nav-link" data-page="badging">
+                    <i class="fas fa-id-card"></i>
+                    <span>Badgeage</span>
+                </a>
+                <a href="#chat" class="nav-link" data-page="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat</span>
+                    <span class="badge" id="chat-badge">0</span>
+                </a>
+            </nav>
+            
+            <div class="header-right">
+                <!-- Notifications -->
+                <div class="notification-center" id="notification-center">
+                    <button class="notification-btn" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <div class="notification-dropdown" id="notification-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-all-read" id="mark-all-read">
+                                <i class="fas fa-check-double"></i>
+                            </button>
+                        </div>
+                        <div class="notification-list" id="notification-list">
+                            <!-- Notifications dynamiques -->
                         </div>
                     </div>
-                    <div class="stat-item">
-                        <button id="logout-btn" class="btn btn-icon" title="Déconnexion">
+                </div>
+                
+                <!-- Profil utilisateur -->
+                <div class="user-profile" id="user-profile">
+                    <img src="assets/images/default-avatar.jpg" alt="Profil" class="avatar" id="user-avatar">
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="user-info">
+                            <img src="assets/images/default-avatar.jpg" alt="Profil" class="avatar">
+                            <div>
+                                <h4 id="user-name">Utilisateur</h4>
+                                <p id="user-role">Membre</p>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#profile" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Mon Profil
+                        </a>
+                        <a href="#settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Paramètres
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#logout" class="dropdown-item logout" id="logout-btn">
                             <i class="fas fa-sign-out-alt"></i>
+                            Déconnexion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <!-- Dashboard Page -->
+        <div class="page active" id="page-dashboard">
+            <div class="page-header">
+                <h1>Tableau de bord</h1>
+                <p>Vue d'ensemble de votre activité</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="team-count">0</h3>
+                            <p>Membres d'équipe</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="active-quests">0</h3>
+                            <p>Missions actives</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="hours-today">0h</h3>
+                            <p>Heures aujourd'hui</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="achievements">0</h3>
+                            <p>Succès débloqués</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h2>Actions rapides</h2>
+                    <div class="action-grid">
+                        <button class="action-btn" data-action="badge-in">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Pointer arrivée</span>
+                        </button>
+                        <button class="action-btn" data-action="new-quest">
+                            <i class="fas fa-plus"></i>
+                            <span>Nouvelle mission</span>
+                        </button>
+                        <button class="action-btn" data-action="team-chat">
+                            <i class="fas fa-comments"></i>
+                            <span>Chat équipe</span>
+                        </button>
+                        <button class="action-btn" data-action="view-planning">
+                            <i class="fas fa-calendar"></i>
+                            <span>Planning</span>
                         </button>
                     </div>
                 </div>
+                
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h2>Activité récente</h2>
+                    <div class="activity-list" id="activity-list">
+                        <!-- Activités dynamiques -->
+                    </div>
+                </div>
+                
+                <!-- Team Status -->
+                <div class="team-status">
+                    <h2>Statut de l'équipe</h2>
+                    <div class="team-list" id="team-status-list">
+                        <!-- Statuts dynamiques -->
+                    </div>
+                </div>
             </div>
-        </header>
+        </div>
 
-        <!-- Dashboard Page -->
-        <div id="dashboard-page" class="page-content active">
+        <!-- Team Page -->
+        <div class="page" id="page-team">
             <div class="page-header">
-                <h1>Tableau de bord</h1>
+                <h1>Gestion d'équipe</h1>
+                <button class="btn btn-primary" id="add-member-btn">
+                    <i class="fas fa-plus"></i>
+                    Ajouter un membre
+                </button>
             </div>
-
-            <div class="dashboard-grid">
-                <!-- Stats -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <i class="fas fa-tasks"></i>
-                        <span class="stat-value" data-stat="questsCompleted">0</span>
-                        <span class="stat-label">Quêtes terminées</span>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-star"></i>
-                        <span class="stat-value" data-stat="totalXP">0</span>
-                        <span class="stat-label">XP Total</span>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-fire"></i>
-                        <span class="stat-value" data-stat="streak">0</span>
-                        <span class="stat-label">Série en cours</span>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-medal"></i>
-                        <span class="stat-value" data-stat="badges">0</span>
-                        <span class="stat-label">Badges obtenus</span>
-                    </div>
+            
+            <div class="team-container">
+                <div class="team-filters">
+                    <input type="text" class="search-input" placeholder="Rechercher un membre..." id="team-search">
+                    <select class="filter-select" id="role-filter">
+                        <option value="">Tous les rôles</option>
+                        <option value="admin">Administrateur</option>
+                        <option value="manager">Manager</option>
+                        <option value="member">Membre</option>
+                    </select>
+                    <select class="filter-select" id="status-filter">
+                        <option value="">Tous les statuts</option>
+                        <option value="online">En ligne</option>
+                        <option value="busy">Occupé</option>
+                        <option value="away">Absent</option>
+                        <option value="offline">Hors ligne</option>
+                    </select>
                 </div>
-
-                <!-- Daily Quests -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Quêtes du jour</h2>
-                        <a href="#" class="btn btn-sm" data-page="quests">Voir tout</a>
-                    </div>
-                    <div id="daily-quests-container" class="loading"></div>
-                </div>
-
-                <!-- Team Activity -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Activité de l'équipe</h2>
-                        <a href="#" class="btn btn-sm" data-page="team">Voir l'équipe</a>
-                    </div>
-                    <div id="team-activity-container" class="loading"></div>
+                
+                <div class="team-grid" id="team-grid">
+                    <!-- Membres d'équipe dynamiques -->
                 </div>
             </div>
         </div>
 
         <!-- Quests Page -->
-        <div id="quests-page" class="page-content">
+        <div class="page" id="page-quests">
             <div class="page-header">
-                <h1>Quêtes</h1>
-                <button id="create-quest-btn" class="btn">
-                    <i class="fas fa-plus"></i> Nouvelle quête
+                <h1>Gestion des missions</h1>
+                <button class="btn btn-primary" id="create-quest-btn">
+                    <i class="fas fa-plus"></i>
+                    Créer une mission
                 </button>
             </div>
-
-            <div class="quest-tabs">
-                <button class="quest-tab active" data-tab="daily">Quotidiennes</button>
-                <button class="quest-tab" data-tab="weekly">Hebdomadaires</button>
-                <button class="quest-tab" data-tab="special">Spéciales</button>
+            
+            <div class="quests-container">
+                <div class="quest-filters">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">Toutes</button>
+                        <button class="filter-tab" data-filter="todo">À faire</button>
+                        <button class="filter-tab" data-filter="in-progress">En cours</button>
+                        <button class="filter-tab" data-filter="completed">Terminées</button>
+                    </div>
+                    
+                    <div class="quest-search">
+                        <input type="text" class="search-input" placeholder="Rechercher une mission..." id="quest-search">
+                        <select class="filter-select" id="priority-filter">
+                            <option value="">Toutes les priorités</option>
+                            <option value="low">Faible</option>
+                            <option value="medium">Moyenne</option>
+                            <option value="high">Élevée</option>
+                            <option value="urgent">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="quest-board" id="quest-board">
+                    <div class="quest-column" data-status="todo">
+                        <h3>À faire <span class="count">0</span></h3>
+                        <div class="quest-list" id="todo-quests"></div>
+                    </div>
+                    <div class="quest-column" data-status="in-progress">
+                        <h3>En cours <span class="count">0</span></h3>
+                        <div class="quest-list" id="in-progress-quests"></div>
+                    </div>
+                    <div class="quest-column" data-status="completed">
+                        <h3>Terminées <span class="count">0</span></h3>
+                        <div class="quest-list" id="completed-quests"></div>
+                    </div>
+                </div>
             </div>
-
-            <div id="quests-container" class="loading"></div>
-        </div>
-
-        <!-- Team Page -->
-        <div id="team-page" class="page-content">
-            <div class="page-header">
-                <h1>Équipe</h1>
-                <button id="add-member-btn" class="btn">
-                    <i class="fas fa-plus"></i> Ajouter un membre
-                </button>
-            </div>
-
-            <div class="team-tabs">
-                <button class="team-tab active" data-tab="members">Membres</button>
-                <button class="team-tab" data-tab="roles">Rôles</button>
-                <button class="team-tab" data-tab="stats">Statistiques</button>
-            </div>
-
-            <div id="team-members-container" style="display: block;">
-                <div id="team-members-grid" class="team-members-grid loading"></div>
-            </div>
-
-            <div id="team-roles-container" style="display: none;"></div>
-            <div id="team-stats-container" style="display: none;"></div>
         </div>
 
         <!-- Planning Page -->
-        <div id="planning-page" class="page-content">
-            <div class="coming-soon">
-                <i class="fas fa-calendar-alt"></i>
-                <h2>Planning & Calendrier</h2>
-                <p>Cette fonctionnalité sera bientôt disponible.</p>
+        <div class="page" id="page-planning">
+            <div class="page-header">
+                <h1>Planning</h1>
+                <div class="planning-controls">
+                    <div class="view-selector">
+                        <button class="view-btn active" data-view="week">Semaine</button>
+                        <button class="view-btn" data-view="month">Mois</button>
+                        <button class="view-btn" data-view="day">Jour</button>
+                    </div>
+                    <button class="btn btn-primary" id="add-event-btn">
+                        <i class="fas fa-plus"></i>
+                        Nouvel événement
+                    </button>
+                </div>
+            </div>
+            
+            <div class="planning-container">
+                <div class="planning-navigation">
+                    <button class="nav-btn" id="prev-period">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h2 id="current-period">Janvier 2025</h2>
+                    <button class="nav-btn" id="next-period">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="nav-btn today-btn" id="today-btn">Aujourd'hui</button>
+                </div>
+                
+                <div class="planning-calendar" id="planning-calendar">
+                    <!-- Calendrier dynamique -->
+                </div>
+                
+                <div class="planning-sidebar">
+                    <div class="mini-calendar">
+                        <h3>Navigation rapide</h3>
+                        <div id="mini-calendar"></div>
+                    </div>
+                    
+                    <div class="event-legend">
+                        <h3>Légende</h3>
+                        <div class="legend-item">
+                            <span class="legend-color shift"></span>
+                            <span>Shifts de travail</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color meeting"></span>
+                            <span>Réunions</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color vacation"></span>
+                            <span>Congés</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color event"></span>
+                            <span>Événements</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badging Page -->
+        <div class="page" id="page-badging">
+            <div class="page-header">
+                <h1><i class="fas fa-clock"></i> Système de Pointage</h1>
+                <div class="current-time-display">
+                    <div class="live-clock" id="clock">--:--:--</div>
+                    <div class="current-date" id="current-date"></div>
+                </div>
+            </div>
+            
+            <div class="badging-container">
+                <!-- Statut Principal -->
+                <div class="status-main-card" id="status-card">
+                    <div class="status-indicator">
+                        <div class="status-icon" id="status-icon">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                        <div class="status-info">
+                            <h2 class="status-title" id="status-text">Non pointé</h2>
+                            <p class="status-subtitle" id="status-subtitle">En attente de pointage</p>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Temps travaillé</span>
+                            <span class="stat-value" id="work-hours">0h 00m</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Temps total</span>
+                            <span class="stat-value" id="total-hours">0h 00m</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Pauses</span>
+                            <span class="stat-value" id="break-hours">0h 00m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions de Pointage -->
+                <div class="badging-actions-grid">
+                    <!-- Arrivée -->
+                    <div class="action-card clock-in-card">
+                        <button class="action-btn primary-action hidden" id="btn-clock-in">
+                            <div class="action-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Pointer l'arrivée</h3>
+                                <p>Commencer votre journée de travail</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Départ -->
+                    <div class="action-card clock-out-card">
+                        <button class="action-btn danger-action hidden" id="btn-clock-out">
+                            <div class="action-icon">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Pointer le départ</h3>
+                                <p>Terminer votre journée de travail</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Début de pause -->
+                    <div class="action-card break-start-card">
+                        <button class="action-btn warning-action hidden" id="btn-break-start">
+                            <div class="action-icon">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Commencer une pause</h3>
+                                <p>Pause déjeuner, courte ou personnelle</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Fin de pause -->
+                    <div class="action-card break-end-card">
+                        <button class="action-btn success-action hidden" id="btn-break-end">
+                            <div class="action-icon">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Reprendre le travail</h3>
+                                <p>Terminer votre pause</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Shift du jour -->
+                <div class="today-shift-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-day"></i> Planning du jour</h3>
+                    </div>
+                    <div class="card-content" id="today-shift-info">
+                        <div class="loading-placeholder">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Chargement du planning...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historique du jour -->
+                <div class="badging-history-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> Historique du jour</h3>
+                        <div class="history-controls">
+                            <button class="btn btn-sm" id="refresh-history">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="btn btn-sm" id="export-history">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="history-timeline" id="badging-history-list">
+                            <div class="empty-state">
+                                <i class="fas fa-clock"></i>
+                                <p>Aucun pointage aujourd'hui</p>
+                                <small>Commencez par pointer votre arrivée</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistiques détaillées -->
+                <div class="detailed-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-calendar-week"></i>
+                            <h4>Cette semaine</h4>
+                        </div>
+                        <div class="stat-body">
+                            <div class="stat-number" id="week-hours">0h 00m</div>
+                            <div class="stat-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="week-progress" style="width: 0%"></div>
+                                </div>
+                                <span class="progress-text">0% de l'objectif</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h4>Ce mois</h4>
+                        </div>
+                        <div class="stat-body">
+                            <div class="stat-number" id="month-hours">0h 00m</div>
+                            <div class="stat-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="month-progress" style="width: 0%"></div>
+                                </div>
+                                <span class="progress-text">0% de l'objectif</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-trophy"></i>
+                            <h4>Performance</h4>
+                        </div>
+                        <div class="stat-body">
+                            <div class="performance-badges">
+                                <div class="badge-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Ponctuel</span>
+                                </div>
+                                <div class="badge-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Régulier</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Chat Page -->
-        <div id="chat-page" class="page-content">
-            <div class="coming-soon">
-                <i class="fas fa-comments"></i>
-                <h2>Chat d'Équipe</h2>
-                <p>Cette fonctionnalité sera bientôt disponible.</p>
+        <div class="page" id="page-chat">
+            <div class="chat-container">
+                <div class="chat-sidebar">
+                    <div class="chat-header">
+                        <h2>Conversations</h2>
+                        <button class="btn btn-sm" id="new-chat-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="chat-search">
+                        <input type="text" placeholder="Rechercher..." class="search-input" id="chat-search">
+                    </div>
+                    
+                    <div class="chat-list" id="chat-list">
+                        <!-- Liste des conversations -->
+                    </div>
+                </div>
+                
+                <div class="chat-main" id="chat-main">
+                    <div class="chat-welcome">
+                        <i class="fas fa-comments fa-3x"></i>
+                        <h3>Sélectionnez une conversation</h3>
+                        <p>Choisissez une conversation existante ou créez-en une nouvelle</p>
+                    </div>
+                </div>
             </div>
         </div>
+    </main>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <div class="nav-container">
-                <a class="nav-item active" data-page="dashboard">
-                    <i class="fas fa-home"></i>
-                    <span>Accueil</span>
-                </a>
-                <a class="nav-item" data-page="quests">
-                    <i class="fas fa-scroll"></i>
-                    <span>Quêtes</span>
-                </a>
-                <a class="nav-item" data-page="team">
-                    <i class="fas fa-users"></i>
-                    <span>Équipe</span>
-                </a>
-                <a class="nav-item" data-page="planning">
-                    <i class="fas fa-calendar"></i>
-                    <span>Planning</span>
-                </a>
-                <a class="nav-item" data-page="chat">
-                    <i class="fas fa-comments"></i>
-                    <span>Chat</span>
-                </a>
-            </div>
-        </nav>
+    <!-- Modals -->
+    <div class="modal" id="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <!-- Contenu dynamique des modales -->
+        </div>
     </div>
 
-    <!-- Toast Container -->
-    <div id="toast-container"></div>
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container">
+        <!-- Notifications toast dynamiques -->
+    </div>
 
-<!-- Toast Container -->
-    <div id="toast-container"></div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-analytics-compat.js"></script>
-
-    <!-- App Scripts - CHARGER EN PREMIER -->
-    <script src="/js/firebase-manager.js"></script>
-    <script src="/js/team-manager.js"></script>
-    <script src="/js/quest-manager.js"></script>
-    <script src="/js/ui-manager.js"></script>
-
-    <!-- Script d'initialisation - APRÈS le chargement des managers -->
+    <!-- JavaScript Core -->
+    <script src="js/utils/constants.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/validators.js"></script>
+    
+    <!-- JavaScript Modules -->
+    <script src="js/core/firebase-manager.js"></script>
+    <script src="js/core/data-manager.js"></script>
+    <script src="js/core/ui-manager.js"></script>
+    <script src="js/core/router.js"></script>
+    
+    <!-- Feature Modules -->
+    <script src="js/modules/notifications/notification-manager.js"></script>
+    <script src="js/modules/team/team-manager.js"></script>
+    <script src="js/modules/quests/quest-manager.js"></script>
+    <script src="js/modules/planning/planning-manager.js"></script>
+    <script src="js/modules/badging/badging-manager.js"></script>
+    <script src="js/modules/chat/chat-manager.js"></script>
+    
+    <!-- Main Application -->
     <script>
-        // Attendre que tous les scripts soient chargés
-        window.addEventListener('load', () => {
-            console.log('📱 Application SYNERGIA chargée');
-            
-            // Vérifier que les managers sont chargés
-            if (!window.firebaseManager) {
-                console.error('❌ FirebaseManager non chargé !');
-                return;
+        // Application initialization
+        class SynergiaApp {
+            constructor() {
+                this.modules = {};
+                this.isInitialized = false;
             }
             
-            // Gestionnaire de connexion
-            const loginForm = document.getElementById('login-form');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const email = e.target.email.value;
-                    const password = e.target.password.value;
+            async init() {
+                try {
+                    // Afficher l'écran de chargement
+                    this.showLoadingScreen();
                     
-                    try {
-                        await window.firebaseManager.signIn(email, password);
-                        console.log('✅ Connexion réussie');
-                    } catch (error) {
-                        console.error('❌ Erreur de connexion:', error.message);
-                        alert('Erreur de connexion: ' + error.message);
+                    // Initialiser Firebase
+                    await FirebaseManager.init();
+                    
+                    // Initialiser les modules core
+                    this.modules.dataManager = new DataManager();
+                    this.modules.uiManager = new UIManager();
+                    this.modules.router = new Router();
+                    this.modules.notificationManager = new NotificationManager();
+                    
+                    // Initialiser les modules métier
+                    this.modules.teamManager = new TeamManager();
+                    this.modules.questManager = new QuestManager();
+                    this.modules.planningManager = new PlanningManager();
+                    this.modules.badgingManager = new BadgingManager();
+                    this.modules.chatManager = new ChatManager();
+                    
+                    // Initialiser tous les modules
+                    for (const [name, module] of Object.entries(this.modules)) {
+                        if (module.init && typeof module.init === 'function') {
+                            await module.init();
+                        }
+                    }
+                    
+                    // Configurer les événements globaux
+                    this.setupGlobalEvents();
+                    
+                    // Charger les données initiales
+                    await this.loadInitialData();
+                    
+                    // Masquer l'écran de chargement
+                    this.hideLoadingScreen();
+                    
+                    this.isInitialized = true;
+                    console.log('✅ SYNERGIA v3.0 initialisé avec succès');
+                    
+                } catch (error) {
+                    console.error('❌ Erreur lors de l\'initialisation:', error);
+                    this.showError('Erreur lors du chargement de l\'application');
+                }
+            }
+            
+            showLoadingScreen() {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.style.display = 'flex';
+                }
+            }
+            
+            hideLoadingScreen() {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                        }, 300);
+                    }, 1000);
+                }
+            }
+            
+            setupGlobalEvents() {
+                // Menu toggle
+                const menuToggle = document.getElementById('menu-toggle');
+                const mainNav = document.getElementById('main-nav');
+                
+                if (menuToggle && mainNav) {
+                    menuToggle.addEventListener('click', () => {
+                        mainNav.classList.toggle('active');
+                    });
+                }
+                
+                // Navigation
+                document.addEventListener('click', (e) => {
+                    if (e.target.matches('.nav-link') || e.target.closest('.nav-link')) {
+                        e.preventDefault();
+                        const link = e.target.matches('.nav-link') ? e.target : e.target.closest('.nav-link');
+                        const page = link.dataset.page;
+                        if (page && this.modules.router) {
+                            this.modules.router.navigateTo(page);
+                        }
                     }
                 });
-            }
-            
-            // Écouter les changements d'authentification
-            window.firebaseManager.on('authStateChanged', async (user) => {
-                if (user) {
-                    console.log('✅ Utilisateur connecté:', user.email);
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('app-container').classList.add('active');
-                    
-                    // Charger les données utilisateur
-                    try {
-                        const userData = await window.firebaseManager.getCurrentUserData();
-                        if (userData) {
-                            document.dispatchEvent(new CustomEvent('user:updated', { detail: userData }));
-                        }
-                    } catch (error) {
-                        console.error('❌ Erreur chargement données utilisateur:', error);
-                        
-                        // Si pas de document utilisateur, le créer
-                        if (error.code === 'not-found' || !userData) {
-                            console.log('📝 Création du profil utilisateur...');
-                            await window.firebaseManager.createUserDocument(user);
-                            location.reload(); // Recharger pour récupérer les données
-                        }
+                
+                // Gestion des clics sur les actions rapides
+                document.addEventListener('click', (e) => {
+                    if (e.target.matches('[data-action]') || e.target.closest('[data-action]')) {
+                        const btn = e.target.matches('[data-action]') ? e.target : e.target.closest('[data-action]');
+                        const action = btn.dataset.action;
+                        this.handleQuickAction(action);
                     }
-                } else {
-                    console.log('❌ Utilisateur non connecté');
-                    document.getElementById('login-screen').style.display = 'flex';
-                    document.getElementById('app-container').classList.remove('active');
-                }
-            });
-            
-            // Service Worker pour PWA
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('✅ Service Worker enregistré'))
-                    .catch(err => console.error('❌ Erreur Service Worker:', err));
+                });
+                
+                // Mise à jour de l'heure
+                this.updateCurrentTime();
+                setInterval(() => this.updateCurrentTime(), 1000);
             }
-        });
+            
+            async loadInitialData() {
+                try {
+                    // Charger les données utilisateur
+                    if (this.modules.dataManager) {
+                        await this.modules.dataManager.loadUserData();
+                    }
+                    
+                    // Mettre à jour les statistiques du dashboard
+                    this.updateDashboardStats();
+                    
+                    // Charger l'activité récente
+                    this.loadRecentActivity();
+                    
+                } catch (error) {
+                    console.error('Erreur lors du chargement des données:', error);
+                }
+            }
+            
+            updateCurrentTime() {
+                const timeElement = document.getElementById('current-time');
+                if (timeElement) {
+                    const now = new Date();
+                    timeElement.textContent = now.toLocaleTimeString('fr-FR');
+                }
+            }
+            
+            updateDashboardStats() {
+                // Statistiques factices pour la démo
+                document.getElementById('team-count').textContent = '12';
+                document.getElementById('active-quests').textContent = '8';
+                document.getElementById('hours-today').textContent = '7h 30m';
+                document.getElementById('achievements').textContent = '15';
+            }
+            
+            loadRecentActivity() {
+                const activityList = document.getElementById('activity-list');
+                if (!activityList) return;
+                
+                // Activités factices pour la démo
+                const activities = [
+                    { icon: 'fas fa-check', text: 'Mission "Optimisation API" terminée', time: 'Il y a 2h' },
+                    { icon: 'fas fa-users', text: 'Marie Dubois a rejoint l\'équipe', time: 'Il y a 3h' },
+                    { icon: 'fas fa-clock', text: 'Pointage: Arrivée à 09:00', time: 'Il y a 6h' },
+                    { icon: 'fas fa-comments', text: 'Nouveau message dans #general', time: 'Il y a 1j' }
+                ];
+                
+                activityList.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="${activity.icon}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p>${activity.text}</p>
+                            <span class="activity-time">${activity.time}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            handleQuickAction(action) {
+                switch (action) {
+                    case 'badge-in':
+                        if (this.modules.badgingManager) {
+                            this.modules.badgingManager.badgeIn();
+                        }
+                        break;
+                    case 'new-quest':
+                        if (this.modules.router) {
+                            this.modules.router.navigateTo('quests');
+                        }
+                        break;
+                    case 'team-chat':
+                        if (this.modules.router) {
+                            this.modules.router.navigateTo('chat');
+                        }
+                        break;
+                    case 'view-planning':
+                        if (this.modules.router) {
+                            this.modules.router.navigateTo('planning');
+                        }
+                        break;
+                }
+            }
+            
+            showError(message) {
+                if (this.modules.notificationManager) {
+                    this.modules.notificationManager.show({
+                        type: 'error',
+                        title: 'Erreur',
+                        message: message
+                    });
+                } else {
+                    alert(message);
+                }
+            }
+        }
+        
+        // Initialisation de l'application
+        const app = new SynergiaApp();
+        
+        // Démarrer l'application une fois le DOM chargé
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => app.init());
+        } else {
+            app.init();
+        }
+        
+        // Exposer l'application globalement pour le debug
+        window.SynergiaApp = app;
     </script>
 </body>
 </html>
