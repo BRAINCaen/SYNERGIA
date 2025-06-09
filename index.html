@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
     <!-- Firebase SDK v9 Modular -->
-    <script type="module" src="js/firebase-init.js"></script>
+
     
     <!-- Google APIs pour Calendar -->
     <script src="https://apis.google.com/js/api.js"></script>
@@ -2057,9 +2057,13 @@
 
    <!-- Container pour les notifications -->
    <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 3000;"></div>
-
-<script src="js/main-app.js"></script>
-  
+<script type="module" src="js/firebase-init.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service worker enregistré'));
+  }
+    <script src="js/main-app.js"></script>
 </script>
 </body>
 </html>
