@@ -1,26 +1,32 @@
 # API Firebase
 
-Ce document présente les principaux modules de SYNERGIA et quelques exemples d'appels vers Firebase.
+Ce document présente l'organisation des modules de **SYNERGIA** ainsi que plusieurs exemples d'appels vers Firebase. Les modules sont regroupés dans le dossier `js` et assurent la communication avec Firestore, le stockage, l'authentification et l'interface.
 
 ## Modules principaux
 
-- `FirebaseManager` – initialisation de Firebase, authentification et accès à Firestore/Storage.
-- `DataManager` – logique métier et cache local.
-- `UIManager` – gestion de l'interface et des notifications.
-- `PlanningManager` – manipulation du calendrier et des shifts.
-- `BadgingManager` – suivi du pointage.
-- `QuestManager` – gestion des quêtes et missions.
-- `ChatManager` – messagerie temps réel.
-- `NotificationManager` – notifications locales et push.
-- `TeamManager` – organisation des équipes et des membres.
+Chaque module se trouve dans `js/core` ou `js/modules` et est chargé dynamiquement par `app-loader.js` :
 
-## Exemples d'appels Firebase
+- **FirebaseManager** – initialisation de Firebase, authentification et accès à Firestore/Storage.
+- **DataManager** – logique métier et mise en cache locale.
+- **UIManager** – gestion de l'interface utilisateur et des notifications.
+- **PlanningManager** – manipulation du calendrier et des shifts.
+- **BadgingManager** – suivi du pointage et des pauses.
+- **QuestManager** – gestion des quêtes et missions gamifiées.
+- **ChatManager** – messagerie temps réel.
+- **NotificationManager** – notifications locales et push.
+- **TeamManager** – organisation des équipes et des membres.
 
+await firebaseManager.signIn('utilisateur@example.com', 'motdepasse');
+```
 ### Se connecter
 ```javascript
 await firebaseManager.signIn('utilisateur@example.com', 'motdepasse');
 ```
 
+### Se déconnecter
+```javascript
+await firebaseManager.signOut();
+```
 ### Ajouter un document
 ```javascript
 const questId = await firebaseManager.addDocument('quests', {
@@ -62,4 +68,11 @@ await firebaseManager.updateDocument('quests', questId, {
 await firebaseManager.deleteDocument('quests', questId);
 ```
 
+### Mettre en ligne un fichier
+```javascript
+const url = await firebaseManager.uploadFile('avatars', file);
+console.log('Fichier disponible à', url);
+```
+
 Appelez `unsubscribe()` pour arrêter l'écoute temps réel.
+
