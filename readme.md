@@ -51,4 +51,6 @@ Installez un petit serveur HTTP puis lancez-le :
 npm install -g serve  # ou utilisez `npx serve`
 serve .
 ```
-Ouvrez ensuite <http://localhost:3000> dans votre navigateur.
+
+### 3. Lancer l'application
+Ouvrez ensuite <http://localhost:3000> dans votre navigateur pour accéder à l'interface.
