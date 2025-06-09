@@ -43,3 +43,12 @@ SYNERGIA v3.0 est une application web moderne de gestion d'équipe qui révoluti
 ```bash
 git clone https://github.com/BRAINCaen/synergia-app-V3.git
 cd synergia-app-V3
+```
+
+### 2. Servir l'application
+Installez un petit serveur HTTP puis lancez-le :
+```bash
+npm install -g serve  # ou utilisez `npx serve`
+serve .
+```
+Ouvrez ensuite <http://localhost:3000> dans votre navigateur.
