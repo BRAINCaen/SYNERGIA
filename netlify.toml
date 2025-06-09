@@ -23,6 +23,8 @@
         https://firebaseinstallations.googleapis.com
         https://firebaseremoteconfig.googleapis.com
         https://firebaselogging-pa.googleapis.com
+        https://fonts.gstatic.com
+        https://cdnjs.cloudflare.com
         wss://*.firebaseio.com
         wss://*.firebaseapp.com;
       frame-src 'self'
