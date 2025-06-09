@@ -2482,4 +2482,8 @@ console.log('✅ SYNERGIA initialisé après Firebase');
 }
 
 initializeApp();
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js")
+            .then(() => console.log("Service worker enregistré"));
+    }
 });
