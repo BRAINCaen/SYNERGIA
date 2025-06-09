@@ -551,69 +551,8 @@ const DEPLOYMENT_INSTRUCTIONS = `
 # Instructions de déploiement SYNERGIA v3.0
 
 ## 1. Configuration Firebase
+`;
 
-### Créer un projet Firebase
-1. Aller sur https://console.firebase.google.com
-2. Créer un nouveau projet "synergia-app"
-3. Activer Authentication (Email/Password)
-4. Activer Firestore Database
-5. Activer Storage
-6. Activer Cloud Messaging
-7. Configurer les règles de sécurité
-
-### Configuration Web App
-1. Ajouter une application Web dans le projet
-2. Copier la configuration dans firebase-config.js
-3. Remplacer les valeurs d'exemple par les vraies clés
-
-## 2. Structure Firestore
-
-### Créer les collections avec les indexes suivants :
-- users: index composite sur (teamIds, status)
-- quests: index composite sur (teamId, status, priority)
-- planning: index composite sur (teamId, startDate, endDate)
-- badging: index composite sur (userId, timestamp)
-- messages: index composite sur (chatRoomId, createdAt)
-
-## 3. Déploiement
-
-### Option 1: Netlify (Recommandé)
-1. Fork le repository GitHub
-2. Connecter Netlify au repository
-3. Configurer les variables d'environnement
-4. Déployer automatiquement
-
-### Option 2: Firebase Hosting
-\`\`\`bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-firebase deploy
-\`\`\`
-
-### Option 3: Autre hébergeur
-1. Uploader tous les fichiers
-2. Configurer le serveur web
-3. Activer HTTPS (obligatoire pour PWA)
-
-## 4. Configuration finale
-
-### Service Worker
-1. Vérifier que sw.js est accessible
-2. Enregistrer le Service Worker
-3. Tester les notifications push
-
-### PWA
-1. Vérifier le manifest.json
-2. Générer les icônes manquantes
-3. Tester l'installation PWA
-
-### Tests
-1. Tester sur différents navigateurs
-2. Vérifier le mode hors ligne
-3. Tester les notifications
-4. Valider la sécurité Firestore
-\`\`\`
 
 export {
   firebaseConfig,
